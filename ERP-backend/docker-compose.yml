@@ -1,0 +1,15 @@
+services:
+  nest-backend:
+    build:
+      context: .  # Point to the directory containing your Dockerfile
+      dockerfile: Dockerfile  # Specify Dockerfile if it's named differently
+    ports:
+      - "3000:3000"  # Expose the NestJS application port
+    volumes:
+      - .:/app  # Mount the current directory to /app in the container for hot reloading
+      - /app/node_modules  # Avoid mounting node_modules from the host machine
+    environment:
+      - NODE_ENV=development  # Set the environment to development
+    command: npm run start:dev  # Start the NestJS app with hot reloading
+    stdin_open: true  # Keep stdin open
+    tty: true  # Allocate a pseudo-TTY
