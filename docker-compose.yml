@@ -15,7 +15,7 @@ services:
     build:
       context: ./API-gateway
     networks:
-      # - outside
+      - outside
       # - backend
       - frontend
     ports:
@@ -25,8 +25,8 @@ services:
     build:
       context: ./ERP-frontend  # Specify the build context (directory where the Dockerfile is located)
       dockerfile: Dockerfile  # Specify the Dockerfile name (if it's named differently)
-    ports:
-      - "8080:8080"
+    # ports:
+    #   - "8080:8080"
     volumes:
       - ./ERP-frontend:/app
       - /app/node_modules
