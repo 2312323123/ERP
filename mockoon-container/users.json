@@ -1,0 +1,113 @@
+{
+  "uuid": "6eb15eb3-e53a-46e7-902a-ceba57c81202",
+  "lastMigration": 32,
+  "name": "Users",
+  "endpointPrefix": "",
+  "latency": 0,
+  "port": 3003,
+  "hostname": "",
+  "folders": [],
+  "routes": [
+      {
+          "uuid": "57278a32-b871-4086-9a01-a020eb71132f",
+          "type": "http",
+          "documentation": "",
+          "method": "get",
+          "endpoint": "",
+          "responses": [
+              {
+                  "uuid": "1b1770d1-4896-44d5-8eea-adc20c76f519",
+                  "body": "{}",
+                  "latency": 0,
+                  "statusCode": 404,
+                  "label": "",
+                  "headers": [],
+                  "bodyType": "INLINE",
+                  "filePath": "",
+                  "databucketID": "",
+                  "sendFileAsBody": false,
+                  "rules": [],
+                  "rulesOperator": "OR",
+                  "disableTemplating": false,
+                  "fallbackTo404": false,
+                  "default": true,
+                  "crudKey": "id",
+                  "callbacks": []
+              }
+          ],
+          "responseMode": null
+      },
+      {
+          "uuid": "fd7bc2b9-b389-4688-a784-75c7e2a0dec3",
+          "type": "http",
+          "documentation": "",
+          "method": "get",
+          "endpoint": "srusers",
+          "responses": [
+              {
+                  "uuid": "5c2b6c65-112f-463c-a506-507ad753457c",
+                  "body": "{\n  \"users\":[\n    {\n      \"id\": 1,\n      \"name\": \"John Doe\",\n      \"email\": \"john.doe@example.com\"\n    },\n    {\n      \"id\": 2,\n      \"name\": \"Jane Smith\",\n      \"email\": \"jane.smith@example.com\"\n    }\n  ]\n}",
+                  "latency": 0,
+                  "statusCode": 200,
+                  "label": "",
+                  "headers": [],
+                  "bodyType": "INLINE",
+                  "filePath": "",
+                  "databucketID": "",
+                  "sendFileAsBody": false,
+                  "rules": [],
+                  "rulesOperator": "OR",
+                  "disableTemplating": false,
+                  "fallbackTo404": false,
+                  "default": true,
+                  "crudKey": "id",
+                  "callbacks": []
+              }
+          ],
+          "responseMode": null
+      }
+  ],
+  "rootChildren": [
+      {
+          "type": "route",
+          "uuid": "57278a32-b871-4086-9a01-a020eb71132f"
+      },
+      {
+          "type": "route",
+          "uuid": "fd7bc2b9-b389-4688-a784-75c7e2a0dec3"
+      }
+  ],
+  "proxyMode": false,
+  "proxyHost": "",
+  "proxyRemovePrefix": false,
+  "tlsOptions": {
+      "enabled": false,
+      "type": "CERT",
+      "pfxPath": "",
+      "certPath": "",
+      "keyPath": "",
+      "caPath": "",
+      "passphrase": ""
+  },
+  "cors": true,
+  "headers": [
+      {
+          "key": "Content-Type",
+          "value": "application/json"
+      }
+  ],
+  "proxyReqHeaders": [
+      {
+          "key": "",
+          "value": ""
+      }
+  ],
+  "proxyResHeaders": [
+      {
+          "key": "",
+          "value": ""
+      }
+  ],
+  "data": [],
+  "callbacks": []
+}

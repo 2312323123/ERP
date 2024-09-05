@@ -1,0 +1,113 @@
+{
+  "uuid": "79a7b110-dd33-4c0b-bceb-78127de1232c",
+  "lastMigration": 32,
+  "name": "Orders",
+  "endpointPrefix": "",
+  "latency": 0,
+  "port": 3005,
+  "hostname": "",
+  "folders": [],
+  "routes": [
+      {
+          "uuid": "36530751-ce7e-486e-92de-81fa16f00746",
+          "type": "http",
+          "documentation": "",
+          "method": "get",
+          "endpoint": "",
+          "responses": [
+              {
+                  "uuid": "db3725b8-7bbe-4c8e-9737-d4fd80413892",
+                  "body": "{}",
+                  "latency": 0,
+                  "statusCode": 404,
+                  "label": "",
+                  "headers": [],
+                  "bodyType": "INLINE",
+                  "filePath": "",
+                  "databucketID": "",
+                  "sendFileAsBody": false,
+                  "rules": [],
+                  "rulesOperator": "OR",
+                  "disableTemplating": false,
+                  "fallbackTo404": false,
+                  "default": true,
+                  "crudKey": "id",
+                  "callbacks": []
+              }
+          ],
+          "responseMode": null
+      },
+      {
+          "uuid": "63920cbc-dabe-4cbd-b3dc-c33ef5fd869c",
+          "type": "http",
+          "documentation": "",
+          "method": "get",
+          "endpoint": "dupa",
+          "responses": [
+              {
+                  "uuid": "f3230828-e962-46c0-8e72-1b8929261d54",
+                  "body": "{\n    \"orders\": [\n        {\n            \"id\": 1,\n            \"product\": \"Product A\",\n            \"quantity\": 2,\n            \"total_price\": 21.98\n        },\n        {\n            \"id\": 2,\n            \"product\": \"Product B\",\n            \"quantity\": 1,\n            \"total_price\": 19.99\n        }\n    ]\n}",
+                  "latency": 0,
+                  "statusCode": 200,
+                  "label": "",
+                  "headers": [],
+                  "bodyType": "INLINE",
+                  "filePath": "",
+                  "databucketID": "",
+                  "sendFileAsBody": false,
+                  "rules": [],
+                  "rulesOperator": "OR",
+                  "disableTemplating": false,
+                  "fallbackTo404": false,
+                  "default": true,
+                  "crudKey": "id",
+                  "callbacks": []
+              }
+          ],
+          "responseMode": null
+      }
+  ],
+  "rootChildren": [
+      {
+          "type": "route",
+          "uuid": "36530751-ce7e-486e-92de-81fa16f00746"
+      },
+      {
+          "type": "route",
+          "uuid": "63920cbc-dabe-4cbd-b3dc-c33ef5fd869c"
+      }
+  ],
+  "proxyMode": false,
+  "proxyHost": "",
+  "proxyRemovePrefix": false,
+  "tlsOptions": {
+      "enabled": false,
+      "type": "CERT",
+      "pfxPath": "",
+      "certPath": "",
+      "keyPath": "",
+      "caPath": "",
+      "passphrase": ""
+  },
+  "cors": true,
+  "headers": [
+      {
+          "key": "Content-Type",
+          "value": "application/json"
+      }
+  ],
+  "proxyReqHeaders": [
+      {
+          "key": "",
+          "value": ""
+      }
+  ],
+  "proxyResHeaders": [
+      {
+          "key": "",
+          "value": ""
+      }
+  ],
+  "data": [],
+  "callbacks": []
+}

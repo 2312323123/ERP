@@ -4,69 +4,72 @@ services:
   #   build:
   #     context: ./mockoon-container
   #   networks:
-  #     - backend
+  #     - backend_network
   #   ports:
   #     - "3003:3003" # Exposes port 3003 on the host and forwards it to port 3003 in the container.
   #     - "3004:3004" # Exposes port 3004 on the host and forwards it to port 3004 in the container.
   #     - "3005:3005" # Exposes port 3005 on the host and forwards it to port 3005 in the container.
 
-  # Defines the nginx container, which acts as the API gateway.
-  nginx:
-    build:
-      context: ./API-gateway
-    networks:
-      # - outside
-      # - backend
-      - frontend
-    ports:
-      - "80:80" # Exposes port 80 on the host and forwards it to port 80 in the container.
-
-  react-app:
-    build:
-      context: ./ERP-frontend  # Specify the build context (directory where the Dockerfile is located)
-      dockerfile: Dockerfile  # Specify the Dockerfile name (if it's named differently)
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./ERP-frontend:/app
-      - /app/node_modules
-    networks:
-      - frontend
-    stdin_open: true
-    tty: true
-
-  # erp-backend:
+  # # Defines the nginx container, which acts as the API gateway.
+  # nginx:
   #   build:
-  #     context: ./ERP-backend  # Point to the directory containing your Dockerfile
-  #     dockerfile: Dockerfile  # Specify Dockerfile if it's named differently
-  #   ports:
-  #     - "3000:3000"  # Expose the NestJS application port
-  #   volumes:
-  #     - ./ERP-backend:/app  # Mount the current directory to /app in the container for hot reloading
-  #     - /app/node_modules  # Avoid mounting node_modules from the host machine
+  #     context: ./API-gateway
   #   networks:
-  #     - frontend
-  #   environment:
-  #     - NODE_ENV=development  # Set the environment to development
-  #   command: npm run start:dev  # Start the NestJS app with hot reloading
-  #   stdin_open: true  # Keep stdin open
-  #   tty: true  # Allocate a pseudo-TTY
+  #     - outside_network
+  #     - backend_network
+  #     - frontend_network
+  #   ports:
+  #     - "80:80" # Exposes port 80 on the host and forwards it to port 80 in the container.
 
-#   # db: backend, db_admin_sql
-#   # p4admin: db_admin
-#   # mongo: backend, db_admin_mongo
+  # erp-frontend:
+  #   build:
+  #     context: ./ERP-frontend  # Specify the build context (directory where the Dockerfile is located)
+  #     dockerfile: Dockerfile  # Specify the Dockerfile name (if it's named differently)
+  #   ports:
+  #     - "8080:8080"
+  #   volumes:
+  #     - ./ERP-frontend:/app
+  #     - /app/node_modules
+  #   networks:
+  #     - frontend_network
+  #   stdin_open: true
+  #   tty: true
+
+  erp-backend:
+    build:
+      context: ./ERP-backend  # Point to the directory containing your Dockerfile
+      dockerfile: Dockerfile  # Specify Dockerfile if it's named differently
+    ports:
+      - "3000:3000"  # Expose the NestJS application port
+    volumes:
+      - ./ERP-backend:/app  # Mount the current directory to /app in the container for hot reloading
+      - /app/node_modules  # Avoid mounting node_modules from the host machine
+    networks:
+      - dupa
+    environment:
+      - NODE_ENV=development  # Set the environment to development
+    command: npm run start:dev  # Start the NestJS app with hot reloading
+    stdin_open: true  # Keep stdin open
+    tty: true  # Allocate a pseudo-TTY
+
+  # db: backend_network, db_admin_network_sql
+  # p4admin: db_admin_network
+  # mongo: backend_network, db_admin_network_mongo
 
 networks:
-  frontend: # if named frontend_network, for some reason does not work
-    # internal: true
-  outside:
-  backend:
-    driver: bridge
-    # internal: true
-  db_admin_sql:
-    # internal: true
-  db_admin_mongo:
-    # internal: true
+  dupa:
+# networks:
+#   Defines a custom network named backend_network.
+#   outside_network:
+#   backend_network:
+#     driver: bridge
+#     # internal: true
+#   frontend_network:
+#     # internal: true
+#   db_admin_network_sql:
+#     # internal: true
+#   db_admin_network_mongo:
+#     # internal: true
 
 
 
