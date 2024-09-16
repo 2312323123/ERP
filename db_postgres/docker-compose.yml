@@ -1,0 +1,12 @@
+services:
+  db:
+    image: postgres:latest
+    environment:
+      # POSTGRES_DB: main_db   # The default database
+      POSTGRES_USER: my_user
+      POSTGRES_PASSWORD: my_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./init-db:/docker-entrypoint-initdb.d/  # Mount the custom script
+      # - ./db_data:/var/lib/postgresql/data
