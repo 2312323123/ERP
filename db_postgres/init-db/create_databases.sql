@@ -12,6 +12,9 @@ to see effect you can do:
 docker exec -it db_postgres-db-1 psql -U <user_name_from_docker_compose_env_file>
 (it works without password because local connections are trusted by default)
 
+login to user:
+docker exec -it db_postgres-db-1 psql -U user_name_1 -d service_name_1
+
 WARNING: if you change this later on, you lose all data in the database (can't login)
 */
 
