@@ -1,4 +1,5 @@
-# you have to create .env file for it to work
+# you have to create .env file next to this file with credentials for it to work
+# also put microservices databases credentials here as well as in init-db/create_databases.sql
 services:
   db:
     image: postgres:latest
