@@ -1,3 +1,4 @@
+# you have to create .env file for it to work
 services:
   db:
     image: postgres:latest
