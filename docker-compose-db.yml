@@ -12,3 +12,15 @@ services:
     volumes:
       - ./db_postgres/init-db:/docker-entrypoint-initdb.d/  # Mount the custom script
       - ./db_postgres/db_data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}    # Admin email for pgAdmin login
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD} # Admin password for pgAdmin login
+    ports:
+      - "8080:80"  # Expose pgAdmin on port 8080
+    depends_on:
+      - db-psql    # Ensure that PostgreSQL starts before pgAdmin
+    volumes:
+      - ./pgadmin/pgadmin_data:/var/lib/pgadmin   # Optional: Persistent pgAdmin data
