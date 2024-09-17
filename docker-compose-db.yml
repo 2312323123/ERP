@@ -1,7 +1,7 @@
 # you have to create .env file next to this file with credentials for it to work
 # also put microservices databases credentials here as well as in init-db/create_databases.sql
 services:
-  db:
+  db-psql:
     image: postgres:latest
     environment:
       # POSTGRES_DB: main_db   # The default database
@@ -10,5 +10,5 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./init-db:/docker-entrypoint-initdb.d/  # Mount the custom script
-      # - ./db_data:/var/lib/postgresql/data
+      - ./db_postgres/init-db:/docker-entrypoint-initdb.d/  # Mount the custom script
+      - ./db_postgres/db_data:/var/lib/postgresql/data
