@@ -13,14 +13,68 @@ services:
       - ./db_postgres/init-db:/docker-entrypoint-initdb.d/  # Mount the custom script
       - ./db_postgres/db_data:/var/lib/postgresql/data
 
+  # pgadmin:
+  #   image: dpage/pgadmin4:latest
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}    # Admin email for pgAdmin login
+  #     PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD} # Admin password for pgAdmin login
+  #     PGPASSFILE: /pgpass
+  #   ports:
+  #     - "8080:80"  # Expose pgAdmin on port 8080
+  #   depends_on:
+  #     - db-psql    # Ensure that PostgreSQL starts before pgAdmin
+  #   # volumes:
+  #   #   - ./pgadmin/servers.json:/pgadmin4/servers.json  # Mount the custom server configuration
+  #   # volumes:
+  #   #   - ./pgadmin/pgadmin_data:/var/lib/pgadmin   # Optional: Persistent pgAdmin data
+  #   entrypoint: /bin/sh -c "chmod **0**600 /pgpass; /entrypoint.sh;"
+  #   configs:
+  #     - source: servers.json
+  #       target: /pgadmin4/servers.json
+  #     - source: pgpass
+  #       target: /pgpass
+
   pgadmin:
-    image: dpage/pgadmin4:latest
+    build:
+      context: .
+      dockerfile: ./pgadmin/dockerfile_for_pgadmin
     environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}    # Admin email for pgAdmin login
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD} # Admin password for pgAdmin login
+      PGADMIN_DEFAULT_EMAIL: admin@hello.com
+      PGADMIN_DEFAULT_PASSWORD: dupadupa321
+      # PGPASSFILE: /var/lib/pgadmin/storage/pgadmin_pgadmin.com/pgpass
+      DATABASE_HOST: db-psql
+      POSTGRES_PASSWORD: dupa123_44inofai4fuae9gyg9yhu
     ports:
-      - "8080:80"  # Expose pgAdmin on port 8080
-    depends_on:
-      - db-psql    # Ensure that PostgreSQL starts before pgAdmin
+       - "5050:80"
     volumes:
-      - ./pgadmin/pgadmin_data:/var/lib/pgadmin   # Optional: Persistent pgAdmin data
+       - ./pgadmin/servers.json:/pgadmin4/servers.json # preconfigured servers/connections
+       - ./pgadmin/dev.pgpass:/tmp/mountpoint.pgpass
+    entrypoint: >
+      /bin/sh -c "
+      mkdir -p /var/lib/pgadmin/storage/admin_hello.com/;
+      cp /tmp/mountpoint.pgpass /var/lib/pgadmin/storage/admin_hello.com/.pgpass;
+      chown pgadmin:root /var/lib/pgadmin/storage/admin_hello.com/.pgpass;
+      chmod 600 /var/lib/pgadmin/storage/admin_hello.com/.pgpass;
+      /entrypoint.sh
+      "
+    # configs:
+    #   - source: servers.json
+    #     target: /pgadmin4/servers.json
+    #   - source: pgpass
+    #     target: /pgpass
+
+configs:
+  pgpass:
+    content: db-psql:5432:*:super_user_hehe:dupa123_44inofai4fuae9gyg9yhu
+  servers.json:
+    content: |
+      {"Servers": {"1": {
+        "Name": "ERP Database",
+        "Group": "Servers",
+        "Host": "pdb-sql",
+        "Port": 5432,
+        "MaintenanceDB": "postgres",
+        "Username": "super_user_hehe",
+        "PassFile": "/pgpass",
+        "SSLMode": "prefer"
+      }}}

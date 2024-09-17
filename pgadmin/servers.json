@@ -1,0 +1,17 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "PostgreSQL",
+      "Group": "Servers",
+      "Host": "db-psql",
+      "Port": 5432,
+      "MaintenanceDB": "postgres",
+      "Username": "super_user_hehe",
+      "ConnectionParameters": {
+        "sslmode": "prefer",
+        "connect_timeout": "10",
+        "passfile": "/.pgpass"
+      }
+    }
+  }
+}
