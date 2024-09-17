@@ -48,7 +48,8 @@ services:
        - "5050:80"
     volumes:
        - ./pgadmin/servers.json:/pgadmin4/servers.json # preconfigured servers/connections
-       - ./pgadmin/dev.pgpass:/tmp/mountpoint.pgpass
+       - ./pgadmin/pgpass:/tmp/mountpoint.pgpass
+    # process to find this was pain
     entrypoint: >
       /bin/sh -c "
       mkdir -p /var/lib/pgadmin/storage/admin_hello.com/;
