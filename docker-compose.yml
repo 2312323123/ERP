@@ -7,7 +7,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
-      - ./db_postgres/init-db:/docker-entrypoint-initdb.d/  # Mount the custom script
+      - ./db_postgres/db_data:/var/lib/postgresql/data
     configs:
       - source: db-psql-create_databases.sql
         target: /docker-entrypoint-initdb.d/create_databases.sql
