@@ -39,11 +39,11 @@ services:
       context: .
       dockerfile: ./pgadmin/dockerfile_for_pgadmin
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@hello.com
-      PGADMIN_DEFAULT_PASSWORD: dupadupa321
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL_PART_BEFORE_AT}@${PGADMIN_DEFAULT_EMAIL_PART_AFTER_AT}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
       # PGPASSFILE: /var/lib/pgadmin/storage/pgadmin_pgadmin.com/pgpass
       DATABASE_HOST: db-psql
-      POSTGRES_PASSWORD: dupa123_44inofai4fuae9gyg9yhu
+      # POSTGRES_PASSWORD: dupa123_44inofai4fuae9gyg9yhu
     ports:
        - "5050:80"
     # volumes:
@@ -52,10 +52,10 @@ services:
     # process to find this was pain
     entrypoint: >
       /bin/sh -c "
-      mkdir -p /var/lib/pgadmin/storage/admin_hello.com/;
-      cp /tmp/mountpoint.pgpass /var/lib/pgadmin/storage/admin_hello.com/.pgpass;
-      chown pgadmin:root /var/lib/pgadmin/storage/admin_hello.com/.pgpass;
-      chmod 600 /var/lib/pgadmin/storage/admin_hello.com/.pgpass;
+      mkdir -p /var/lib/pgadmin/storage/${PGADMIN_DEFAULT_EMAIL_PART_BEFORE_AT}_${PGADMIN_DEFAULT_EMAIL_PART_AFTER_AT}/;
+      cp /tmp/mountpoint.pgpass /var/lib/pgadmin/storage/${PGADMIN_DEFAULT_EMAIL_PART_BEFORE_AT}_${PGADMIN_DEFAULT_EMAIL_PART_AFTER_AT}/.pgpass;
+      chown pgadmin:root /var/lib/pgadmin/storage/${PGADMIN_DEFAULT_EMAIL_PART_BEFORE_AT}_${PGADMIN_DEFAULT_EMAIL_PART_AFTER_AT}/.pgpass;
+      chmod 600 /var/lib/pgadmin/storage/${PGADMIN_DEFAULT_EMAIL_PART_BEFORE_AT}_${PGADMIN_DEFAULT_EMAIL_PART_AFTER_AT}/.pgpass;
       /entrypoint.sh
       "
     configs:
