@@ -41,19 +41,12 @@ configs:
   db-psql-create_databases.sql:
     content: |
       /*
-        login to superuser:
-        docker exec -it db_postgres-db-1 psql -U <user_name_from_docker_compose_env_file>
+        login to superuser: docker exec -it db_postgres-db-1 psql -U <user_name_from_docker_compose_env_file>
+        login to user: docker exec -it db_postgres-db-1 psql -U <user_name> -d <db_name>
 
-        login to user:
-        docker exec -it db_postgres-db-1 psql -U <user_name> -d <db_name>
-
+        using '-' in env variables here is discouraged as it requires escaping
         WARNING: if you change env variables later on, you can lose all data in the database (can't login)
-
-        used this to make file not tracked anymore by git:
-        git update-index --skip-worktree db_postgres/init-db/create_databases.sql
       */
-
-      /* using '-' in env variables here is discouraged as it requires escaping */
 
       -- first microservice
       CREATE DATABASE "${AUTH_SERVICE_DB_NAME}";
