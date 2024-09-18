@@ -8,7 +8,9 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - ./db_postgres/init-db:/docker-entrypoint-initdb.d/  # Mount the custom script
-      - ./db_postgres/db_data:/var/lib/postgresql/data
+    configs:
+      - source: db-psql-create_databases.sql
+        target: /docker-entrypoint-initdb.d/create_databases.sql
 
   pgadmin:
     build:
@@ -35,6 +37,27 @@ services:
         target: /tmp/mountpoint.pgpass
 
 configs:
+  db-psql-create_databases.sql:
+    content: |
+      /*
+        login to superuser:
+        docker exec -it db_postgres-db-1 psql -U <user_name_from_docker_compose_env_file>
+
+        login to user:
+        docker exec -it db_postgres-db-1 psql -U <user_name> -d <db_name>
+
+        WARNING: if you change env variables later on, you can lose all data in the database (can't login)
+
+        used this to make file not tracked anymore by git:
+        git update-index --skip-worktree db_postgres/init-db/create_databases.sql
+      */
+
+      /* using '-' in env variables here is discouraged as it requires escaping */
+
+      -- first microservice
+      CREATE DATABASE "${AUTH_SERVICE_DB_NAME}";
+      CREATE USER "${AUTH_SERVICE_DB_USER}" WITH PASSWORD '${AUTH_SERVICE_DB_PASSWORD}';
+      GRANT ALL PRIVILEGES ON DATABASE "${AUTH_SERVICE_DB_NAME}" TO "${AUTH_SERVICE_DB_USER}";
   pgadmin-pgpass:
     content: db-psql:5432:*:${POSTGRES_USER}:${POSTGRES_PASSWORD}
   pgadmin-servers.json:
