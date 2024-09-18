@@ -13,27 +13,6 @@ services:
       - ./db_postgres/init-db:/docker-entrypoint-initdb.d/  # Mount the custom script
       - ./db_postgres/db_data:/var/lib/postgresql/data
 
-  # pgadmin:
-  #   image: dpage/pgadmin4:latest
-  #   environment:
-  #     PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}    # Admin email for pgAdmin login
-  #     PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD} # Admin password for pgAdmin login
-  #     PGPASSFILE: /pgpass
-  #   ports:
-  #     - "8080:80"  # Expose pgAdmin on port 8080
-  #   depends_on:
-  #     - db-psql    # Ensure that PostgreSQL starts before pgAdmin
-  #   # volumes:
-  #   #   - ./pgadmin/servers.json:/pgadmin4/servers.json  # Mount the custom server configuration
-  #   # volumes:
-  #   #   - ./pgadmin/pgadmin_data:/var/lib/pgadmin   # Optional: Persistent pgAdmin data
-  #   entrypoint: /bin/sh -c "chmod **0**600 /pgpass; /entrypoint.sh;"
-  #   configs:
-  #     - source: servers.json
-  #       target: /pgadmin4/servers.json
-  #     - source: pgpass
-  #       target: /pgpass
-
   pgadmin:
     build:
       context: .
@@ -41,14 +20,9 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL_PART_BEFORE_AT}@${PGADMIN_DEFAULT_EMAIL_PART_AFTER_AT}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
-      # PGPASSFILE: /var/lib/pgadmin/storage/pgadmin_pgadmin.com/pgpass
-      DATABASE_HOST: db-psql
-      # POSTGRES_PASSWORD: dupa123_44inofai4fuae9gyg9yhu
+      # DATABASE_HOST: db-psql
     ports:
        - "5050:80"
-    # volumes:
-    #    - ./pgadmin/servers.json:/pgadmin4/servers.json # preconfigured servers/connections
-    #    - ./pgadmin/pgpass:/tmp/mountpoint.pgpass
     # process to find this was pain
     entrypoint: >
       /bin/sh -c "
