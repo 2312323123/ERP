@@ -6,8 +6,9 @@ services:
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    volumes:
-      - ./db_postgres/db_data:/var/lib/postgresql/data
+    # UNCOMMENT THIS TO PERSIST DATA
+    # volumes:
+      # - ./db_postgres/db_data:/var/lib/postgresql/data
     configs:
       - source: db-psql-create_databases.sql
         target: /docker-entrypoint-initdb.d/create_databases.sql
