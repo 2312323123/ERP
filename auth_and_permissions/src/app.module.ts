@@ -15,7 +15,7 @@ import { AccountCreationRequestsModule } from './account_creation_requests/accou
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
+      host: process.env.DB_PSQL_SERVICE_NAME,
       port: 5432,
       // username from env file
       username: process.env.DB_USERNAME,
@@ -23,9 +23,8 @@ import { AccountCreationRequestsModule } from './account_creation_requests/accou
       password: process.env.DB_PASSWORD,
       // database name from env file
       database: process.env.DB_NAME,
-      // entities: [],
       autoLoadEntities: true,
-      // synchronize: true,
+      synchronize: true,
     }),
     RolesModule,
     UsersModule,
