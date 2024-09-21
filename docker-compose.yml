@@ -28,6 +28,12 @@ services:
       - source: db-psql-create_databases.sql
         target: /docker-entrypoint-initdb.d/create_databases.sql
 
+  # psql-client:
+  #   image: postgres:13
+  #   entrypoint: ["tail", "-f", "/dev/null"]
+  #   networks:
+  #     - backend
+
   pgadmin:
     build:
       context: .
