@@ -11,7 +11,7 @@ services:
       - db_admin_sql
       - db_admin_mongo
     ports:
-      - "5243:80" # Exposes port 80 on the host and forwards it to port 80 in the container.
+      - "5555:80" # Exposes port 80 on the host and forwards it to port 80 in the container.
 
   db-psql:
     image: postgres:latest
@@ -23,7 +23,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     # UNCOMMENT THIS TO PERSIST DATA
     # volumes:
-      # - ./db_postgres/db_data:/var/lib/postgresql/data
+    # - ./db_postgres/db_data:/var/lib/postgresql/data
     configs:
       - source: db-psql-create_databases.sql
         target: /docker-entrypoint-initdb.d/create_databases.sql
@@ -37,8 +37,8 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL_PART_BEFORE_AT}@${PGADMIN_DEFAULT_EMAIL_PART_AFTER_AT}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
-    ports:
-       - "5050:80"
+    expose:
+      - "80"
     # process to find this was pain
     entrypoint: >
       /bin/sh -c "
@@ -67,13 +67,35 @@ services:
       - frontend
     stdin_open: true
     tty: true
+    expose:
+      - "8080"
+
+  # auth_and_permissions:
+  #   build:
+  #     context: ./auth_and_permissions
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3000:3000" # Expose the NestJS application port
+  #   volumes:
+  #     - ./auth_and_permissions:/app
+  #     - /app/node_modules
+  #   networks:
+  #     - backend
+  #   environment:
+  #     - NODE_ENV=development
+  #     # command: npm run start:dev
+  #     - DB_NAME=${AUTH_SERVICE_DB_NAME}
+  #     - DB_USERNAME=${AUTH_SERVICE_DB_USER}
+  #     - DB_PASSWORD=${AUTH_SERVICE_DB_PASSWORD}
+  #   stdin_open: true
+  #   tty: true
 
   erp-backend:
     build:
       context: ./ERP-backend # Point to the directory containing your Dockerfile
       dockerfile: Dockerfile # Specify Dockerfile if it's named differently
     # ports:
-    #   - "3000:3000"  # Expose the NestJS application port
+    #   - "3000:3000" # Expose the NestJS application port
     volumes:
       - ./ERP-backend:/app # Mount the current directory to /app in the container for hot reloading
       - /app/node_modules # Avoid mounting node_modules from the host machine
