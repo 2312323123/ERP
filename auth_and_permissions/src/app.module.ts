@@ -4,8 +4,6 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RolesModule } from './roles/roles.module';
 import { UsersModule } from './users/users.module';
-import { UserRolesModule } from './user_roles/user_roles.module';
-import { RoleAssignmentRightsModule } from './role_assignment_rights/role_assignment_rights.module';
 import { ValidJwtCachesModule } from './valid_jwt_caches/valid_jwt_caches.module';
 import { AccountCreationRequestsModule } from './account_creation_requests/account_creation_requests.module';
 
@@ -28,8 +26,6 @@ import { AccountCreationRequestsModule } from './account_creation_requests/accou
     }),
     RolesModule,
     UsersModule,
-    UserRolesModule,
-    RoleAssignmentRightsModule,
     ValidJwtCachesModule,
     AccountCreationRequestsModule,
   ],
