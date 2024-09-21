@@ -32,3 +32,16 @@ to have CRLF as the default end of line ending on Windows add "endOfLine" prop:
 ```
 
 #### Configuring Dockerfile and docker-compose.yml for the new service
+
+#### Some useful Docker commands:
+To completely remove and restart one service in running docker-compose (in this example nginx): \
+`docker-compose rm -svf nginx; docker-compose up -d --build nginx` \
+If you changed just ports: \
+`docker-compose up -d`
+
+#### Adding to nginx:
+remember about `rewrite ^/<the_path>/?(.*)$ /$1 break;` part, it might be needed
+
+#### Usage
+entry point -> look at what port 80 of nginx is exposed to in the main docker-compose.yml
+db admin panel -> /pgadmin
