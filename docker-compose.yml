@@ -11,7 +11,7 @@ services:
       - db_admin_sql
       - db_admin_mongo
     ports:
-      - "5555:80" # Exposes port 80 on the host and forwards it to port 80 in the container.
+      - "10016:80" # Exposes port 80 on the host and forwards it to port 80 in the container.
 
   db-psql:
     image: postgres:latest
