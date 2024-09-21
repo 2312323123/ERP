@@ -13,6 +13,7 @@ services:
     ports:
       - "10016:80" # Exposes port 80 on the host and forwards it to port 80 in the container.
 
+  # if you change this name, you have to change it in DB_PSQL_SERVICE_NAME as well
   db-psql:
     image: postgres:latest
     networks:
