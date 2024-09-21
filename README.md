@@ -21,4 +21,14 @@ One more thing is to add watchOptions to tsconfig.json on the same level as comp
   }
 ```
 
+#### .prettierrc
+to have CRLF as the default end of line ending on Windows add "endOfLine" prop:
+``` json
+{
+  "singleQuote": true,
+  "trailingComma": "all",
+  "endOfLine": "crlf"
+}
+```
+
 #### Configuring Dockerfile and docker-compose.yml for the new service
