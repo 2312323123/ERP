@@ -31,7 +31,24 @@ to have CRLF as the default end of line ending on Windows add "endOfLine" prop:
 }
 ```
 
+#### enabling cors
+You might need to do it for connection from frontend to work, it just needs `app.enableCors();` before listen(): \
+https://docs.nestjs.com/security/cors
+
+#### swagger (during development only!)
+It may only be used during development, as it allows anyone to use your enpoints, which is bad. \
+You can add it as described here: https://docs.nestjs.com/openapi/introduction \
+Best to keep it uncommented only when using it.
+
+---
+
 #### Configuring Dockerfile and docker-compose.yml for the new service
+- Remember to add new db info/actions to content of both db-psql-create_databases.sql and db-psql-init.sql of docker-compose.yml.
+- Add that it depends_on database service, like:
+```yml
+  depends_on:
+    - db-psql
+```
 
 #### Some useful Docker commands:
 To completely remove and restart one service in running docker-compose (in this example nginx): \
