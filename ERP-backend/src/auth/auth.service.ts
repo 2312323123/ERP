@@ -55,6 +55,7 @@ export class AuthService {
     return {
       isMember: this.isSystemMember(userData),
       roles: ['DUPA1', 'DUPA2', 'DUPA3'],
+      userData,
     };
   }
 }

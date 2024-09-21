@@ -14,14 +14,18 @@ export class LoginController {
     const userData = await this.authService.verifyGoogleToken(token);
 
     // See if user is authorised to enter
-    const { isMember, roles } =
-      await this.authService.checkAuthorisedToEnterSystem(userData);
+    const {
+      isMember,
+      roles,
+      userData: returnUserData,
+    } = await this.authService.checkAuthorisedToEnterSystem(userData);
 
     if (isMember) {
       // Authorised
       return {
         message: 'User authenticated successfully and is this Maciej',
         roles,
+        returnUserData,
       };
     } else {
       // Not authorised
