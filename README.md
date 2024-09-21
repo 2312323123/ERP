@@ -44,4 +44,5 @@ remember about `rewrite ^/<the_path>/?(.*)$ /$1 break;` part, it might be needed
 
 #### Usage
 entry point -> look at what port 80 of nginx is exposed to in the main docker-compose.yml
-db admin panel -> /pgadmin
+~~db admin panel -> /pgadmin~~ \
+until it's fixed, pgadmin will be at http://149.156.119.173:5050/

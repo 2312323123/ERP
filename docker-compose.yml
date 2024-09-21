@@ -37,8 +37,9 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL_PART_BEFORE_AT}@${PGADMIN_DEFAULT_EMAIL_PART_AFTER_AT}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
-    expose:
-      - "80"
+      PGADMIN_LISTEN_PORT: 5050
+    ports:
+      - "5050:5050"
     # process to find this was pain
     entrypoint: >
       /bin/sh -c "
