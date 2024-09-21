@@ -34,7 +34,6 @@ services:
       dockerfile: ./pgadmin/dockerfile_for_pgadmin
     networks:
       - db_admin_sql
-
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL_PART_BEFORE_AT}@${PGADMIN_DEFAULT_EMAIL_PART_AFTER_AT}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
@@ -57,8 +56,8 @@ services:
 
   react-app:
     build:
-      context: ./ERP-frontend  # Specify the build context (directory where the Dockerfile is located)
-      dockerfile: Dockerfile  # Specify the Dockerfile name (if it's named differently)
+      context: ./ERP-frontend # Specify the build context (directory where the Dockerfile is located)
+      dockerfile: Dockerfile # Specify the Dockerfile name (if it's named differently)
     # ports:
     #   - "8080:8080"
     volumes:
@@ -71,20 +70,20 @@ services:
 
   erp-backend:
     build:
-      context: ./ERP-backend  # Point to the directory containing your Dockerfile
-      dockerfile: Dockerfile  # Specify Dockerfile if it's named differently
+      context: ./ERP-backend # Point to the directory containing your Dockerfile
+      dockerfile: Dockerfile # Specify Dockerfile if it's named differently
     # ports:
     #   - "3000:3000"  # Expose the NestJS application port
     volumes:
-      - ./ERP-backend:/app  # Mount the current directory to /app in the container for hot reloading
-      - /app/node_modules  # Avoid mounting node_modules from the host machine
+      - ./ERP-backend:/app # Mount the current directory to /app in the container for hot reloading
+      - /app/node_modules # Avoid mounting node_modules from the host machine
     networks:
       - backend
     environment:
-      - NODE_ENV=development  # Set the environment to development
-    command: npm run start:dev  # Start the NestJS app with hot reloading
-    stdin_open: true  # Keep stdin open
-    tty: true  # Allocate a pseudo-TTY
+      - NODE_ENV=development # Set the environment to development
+    command: npm run start:dev # Start the NestJS app with hot reloading
+    stdin_open: true # Keep stdin open
+    tty: true # Allocate a pseudo-TTY
 
 #   # db: backend, db_admin_sql
 #   # p4admin: db_admin
@@ -101,8 +100,8 @@ configs:
   db-psql-create_databases.sql:
     content: |
       /*
-        login to superuser: docker exec -it db_postgres-db-1 psql -U <user_name_from_docker_compose_env_file>
-        login to user: docker exec -it db_postgres-db-1 psql -U <user_name> -d <db_name>
+        login to superuser: docker exec -it erp-db-psql-1 psql -U <user_name_from_docker_compose_env_file>
+        login to user: docker exec -it erp-db-psql-1 psql -U <user_name> -d <db_name>
 
         using '-' in env variables here is discouraged as it requires escaping
         WARNING: if you change env variables later on, you can lose all data in the database (can't login)
