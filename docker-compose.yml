@@ -79,25 +79,26 @@ services:
     expose:
       - "8080"
 
-  # auth_and_permissions:
-  #   build:
-  #     context: ./auth_and_permissions
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "3000:3000" # Expose the NestJS application port
-  #   volumes:
-  #     - ./auth_and_permissions:/app
-  #     - /app/node_modules
-  #   networks:
-  #     - backend
-  #   environment:
-  #     - NODE_ENV=development
-  #     # command: npm run start:dev
-  #     - DB_NAME=${AUTH_SERVICE_DB_NAME}
-  #     - DB_USERNAME=${AUTH_SERVICE_DB_USER}
-  #     - DB_PASSWORD=${AUTH_SERVICE_DB_PASSWORD}
-  #   stdin_open: true
-  #   tty: true
+  auth_and_permissions:
+    build:
+      context: ./auth_and_permissions
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000" # Expose the NestJS application port
+    volumes:
+      - ./auth_and_permissions:/app
+      - /app/node_modules
+    networks:
+      - backend
+    environment:
+      - NODE_ENV=development
+      - DB_PSQL_SERVICE_NAME=db-psql
+      # command: npm run start:dev
+      - DB_NAME=${AUTH_SERVICE_DB_NAME}
+      - DB_USERNAME=${AUTH_SERVICE_DB_USER}
+      - DB_PASSWORD=${AUTH_SERVICE_DB_PASSWORD}
+    stdin_open: true
+    tty: true
 
   erp-backend:
     build:
