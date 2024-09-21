@@ -41,6 +41,11 @@ You can add it as described here: https://docs.nestjs.com/openapi/introduction \
 Best to keep it uncommented only when using it.
 
 ---
+#### some more standard steps:
+* create database fields
+* if module's controllers/providers need schema, import it like `imports: [TypeOrmModule.forFeature([<schema_name>])],`
+
+---
 
 #### Configuring Dockerfile and docker-compose.yml for the new service
 - Remember to add new db info/actions to content of both db-psql-create_databases.sql and db-psql-init.sql of docker-compose.yml.
