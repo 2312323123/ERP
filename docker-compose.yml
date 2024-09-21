@@ -27,6 +27,8 @@ services:
     configs:
       - source: db-psql-create_databases.sql
         target: /docker-entrypoint-initdb.d/create_databases.sql
+      - source: db-psql-init.sql
+        target: /docker-entrypoint-initdb.d/init.sql
 
   # psql-client:
   #   image: postgres:13
@@ -137,9 +139,20 @@ configs:
       */
 
       -- first microservice
+      -- Create the database
       CREATE DATABASE "${AUTH_SERVICE_DB_NAME}";
+      -- Create the user if it doesn't exist
       CREATE USER "${AUTH_SERVICE_DB_USER}" WITH PASSWORD '${AUTH_SERVICE_DB_PASSWORD}';
+      -- Grant privileges on the database
       GRANT ALL PRIVILEGES ON DATABASE "${AUTH_SERVICE_DB_NAME}" TO "${AUTH_SERVICE_DB_USER}";
+  db-psql-init.sql:
+    content: |
+      -- first microservice
+      -- Connect to the newly created database
+      \c "${AUTH_SERVICE_DB_NAME}"
+      -- Grant privileges on the public schema
+      GRANT ALL PRIVILEGES ON SCHEMA public TO "${AUTH_SERVICE_DB_USER}";
+
   pgadmin-pgpass:
     content: db-psql:5432:*:${POSTGRES_USER}:${POSTGRES_PASSWORD}
   pgadmin-servers.json:
