@@ -84,8 +84,8 @@ services:
     build:
       context: ./auth_and_permissions
       dockerfile: Dockerfile
-    ports:
-      - "3000:3000" # Expose the NestJS application port
+    # ports:
+    #   - "3000:3000" # Expose the NestJS application port
     volumes:
       - ./auth_and_permissions:/app
       - /app/node_modules
@@ -93,13 +93,38 @@ services:
       - backend
     environment:
       - NODE_ENV=development
-      - DB_PSQL_SERVICE_NAME=db-psql
+      - DB_PSQL_SERVICE_NAME=${DB_PSQL_SERVICE_NAME}
       # command: npm run start:dev
       - DB_NAME=${AUTH_SERVICE_DB_NAME}
       - DB_USERNAME=${AUTH_SERVICE_DB_USER}
       - DB_PASSWORD=${AUTH_SERVICE_DB_PASSWORD}
     stdin_open: true
     tty: true
+    depends_on:
+      - db-psql
+
+  surveys_phase:
+    build:
+      context: ./recruitment_survey_phase
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000" # Expose the NestJS application port
+    volumes:
+      - ./recruitment_survey_phase:/app
+      - /app/node_modules
+    networks:
+      - backend
+    environment:
+      - NODE_ENV=development
+      - DB_PSQL_SERVICE_NAME=${DB_PSQL_SERVICE_NAME}
+      # command: npm run start:dev
+      - DB_NAME=${SURVEY_SERVICE_DB_NAME}
+      - DB_USERNAME=${SURVEY_SERVICE_DB_USER}
+      - DB_PASSWORD=${SURVEY_SERVICE_DB_PASSWORD}
+    stdin_open: true
+    tty: true
+    depends_on:
+      - db-psql
 
   erp-backend:
     build:
@@ -147,6 +172,14 @@ configs:
       CREATE USER "${AUTH_SERVICE_DB_USER}" WITH PASSWORD '${AUTH_SERVICE_DB_PASSWORD}';
       -- Grant privileges on the database
       GRANT ALL PRIVILEGES ON DATABASE "${AUTH_SERVICE_DB_NAME}" TO "${AUTH_SERVICE_DB_USER}";
+
+      -- survey_phase microservice
+      -- Create the database
+      CREATE DATABASE "${SURVEY_SERVICE_DB_NAME}";
+      -- Create the user if it doesn't exist
+      CREATE USER "${SURVEY_SERVICE_DB_USER}" WITH PASSWORD '${SURVEY_SERVICE_DB_PASSWORD}';
+      -- Grant privileges on the database
+      GRANT ALL PRIVILEGES ON DATABASE "${SURVEY_SERVICE_DB_NAME}" TO "${SURVEY_SERVICE_DB_USER}";
   db-psql-init.sql:
     content: |
       -- first microservice
@@ -154,6 +187,12 @@ configs:
       \c "${AUTH_SERVICE_DB_NAME}"
       -- Grant privileges on the public schema
       GRANT ALL PRIVILEGES ON SCHEMA public TO "${AUTH_SERVICE_DB_USER}";
+
+      -- survey_phase microservice
+      -- Connect to the newly created database
+      \c "${SURVEY_SERVICE_DB_NAME}"
+      -- Grant privileges on the public schema
+      GRANT ALL PRIVILEGES ON SCHEMA public TO "${SURVEY_SERVICE_DB_USER}";
 
   pgadmin-pgpass:
     content: db-psql:5432:*:${POSTGRES_USER}:${POSTGRES_PASSWORD}
