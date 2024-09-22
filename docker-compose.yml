@@ -84,8 +84,8 @@ services:
     build:
       context: ./auth_and_permissions
       dockerfile: Dockerfile
-    # ports:
-    #   - "3000:3000" # Expose the NestJS application port
+    ports:
+      - "3000:3000" # Expose the NestJS application port
     volumes:
       - ./auth_and_permissions:/app
       - /app/node_modules
@@ -107,8 +107,8 @@ services:
     build:
       context: ./recruitment_survey_phase
       dockerfile: Dockerfile
-    ports:
-      - "3000:3000" # Expose the NestJS application port
+    # ports:
+    #   - "3000:3000" # Expose the NestJS application port
     volumes:
       - ./recruitment_survey_phase:/app
       - /app/node_modules
@@ -130,8 +130,8 @@ services:
     build:
       context: ./ERP-backend # Point to the directory containing your Dockerfile
       dockerfile: Dockerfile # Specify Dockerfile if it's named differently
-    ports:
-      - "3001:3000" # Expose the NestJS application port
+    # ports:
+    #   - "3000:3000" # Expose the NestJS application port
     volumes:
       - ./ERP-backend:/app # Mount the current directory to /app in the container for hot reloading
       - /app/node_modules # Avoid mounting node_modules from the host machine
