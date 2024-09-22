@@ -143,6 +143,19 @@ export default defineConfig({
 }
 ```
 
+.prettierignore:
+
+```
+node_modules
+dist
+```
+
+enter correct folder and npm install:
+
+```
+npm install --save-dev prettier
+```
+
 settings.json:
 
 ```json
@@ -165,13 +178,6 @@ and additionally one of the following, or both if you're brave:
 
 ```json
   "editor.defaultFormatter": "esbenp.prettier-vscode"
-```
-
-.prettierignore:
-
-```
-node_modules
-dist
 ```
 
 #### frontend Dockerfile
