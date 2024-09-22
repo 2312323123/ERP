@@ -143,6 +143,32 @@ services:
     stdin_open: true # Keep stdin open
     tty: true # Allocate a pseudo-TTY
 
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: surveys_db # Set the default database name
+    # UNCOMMENT THIS TO PERSIST DATA
+    # volumes:
+    #   - mongo_data:/data/db                  # Persist data
+    networks:
+      - backend
+      - db_admin_mongo
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: ${ME_CONFIG_BASICAUTH_USERNAME}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${ME_CONFIG_BASICAUTH_PASSWORD}
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/
+    networks:
+      - db_admin_mongo
+
 #   # db: backend, db_admin_sql
 #   # p4admin: db_admin
 #   # mongo: backend, db_admin_mongo
