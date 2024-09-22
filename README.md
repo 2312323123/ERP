@@ -206,6 +206,8 @@ CMD [ "npm", "run", "dev" ]
 
 you may want to set up different Google clientId (here in main.tsx) in your frontend
 
+---
+
 #### .env notes
 
 - be aware that when you deploy on different url, it has to be specified in one of the variables
@@ -217,3 +219,15 @@ you may want to set up different Google clientId (here in main.tsx) in your fron
 - some other libraries:
   - `npm i @nestjs/sequelize` `npm i --save-dev @types/sequelize` - if you use sequelize
   - `npm i pg-hstore` - gives option to store unstructured data in pgsql
+
+### Google Cloud Console OAuth2 - how to
+
+- you go to google cloud console
+- new project (if don't have yet)
+- left sidebar, API & Services -> Library
+- enable chosen APIs (in our case Google Calendar API)
+- APIs & Services -> Credentials ("Dane logowania")
+- create credentials -> OAuth client ID
+- -> web app
+- set approved source URIs and redirect URI
+- you get the keys
