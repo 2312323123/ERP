@@ -11,7 +11,7 @@ I like to add this command to "scripts" for dev purposes: \
 
 #### Hot reload:
 We have already added --watch in package.json. \
-One more thing is to add watchOptions to tsconfig.json on the same level as compilerOptions are:
+One more thing is to add watchOptions to tsconfig.json at the same level as compilerOptions are:
 ``` json
   "watchOptions": {
     // Use a dynamic polling instead of system’s native events for file changes.
@@ -50,17 +50,26 @@ Best to keep it uncommented only when using it.
 ---
 
 #### Configuring Dockerfile and docker-compose.yml for the new service
-- Remember to add new db info/actions to content of both db-psql-create_databases.sql and db-psql-init.sql of docker-compose.yml.
+docker-compose.yml:
+- Add new db info/actions to content of both db-psql-create_databases.sql (take note that you have to paste db name and db user *twice*)
+- Add new db actions to db-psql-init.sql.
 - Add that it depends_on database service, like:
 ```yml
   depends_on:
     - db-psql
 ```
+* When you copy docker-compose.yml service, pay attention to set correct stuff
+
+Dockerfile:
+* create Dockerfile in new microservice folder
+* you probably can just copy some other working service Dockerfile contents
+
+---
 
 #### Some useful Docker commands:
 To completely remove and restart one service in running docker-compose (in this example nginx): \
 `docker-compose rm -svf nginx; docker-compose up -d --build nginx` \
-If you changed just ports: \
+If you changed just ports / or want to add newly created service to running docker compose: \
 `docker-compose up -d`
 
 #### Adding to nginx:
@@ -79,3 +88,6 @@ until it's fixed, pgadmin will be at http://149.156.119.173:5050/
 #### .env notes
 * be aware that when you deploy on different url, it has to be specified in one of the variables
 * backend was done with npm, frontend with yarn, which sits on top of that
+
+#### random helpful things:
+* in VSCode, in changes view, if you select some changes and right-click, there is an option to stage just them
