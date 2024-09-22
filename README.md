@@ -58,6 +58,7 @@ Best to keep it uncommented only when using it. Library: `npm i @nestjs/swagger`
 - create database fields
 - if module's controllers/providers need schema, import it like `imports: [TypeOrmModule.forFeature([<schema_name>])],`
 - make sure setup-roles endpoint of auth service isn't publicly visible from time to time
+- you may also update what nginx depends_on in docker-compose.yml from time to time
 - env variables should just work inside app if specified in docker-compose
 
 ---
