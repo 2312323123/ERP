@@ -42,7 +42,7 @@ Best to keep it uncommented only when using it. Library: `npm i @nestjs/swagger`
 
 ---
 #### some more standard steps:
-* install TypeORM and Postgres libraries: `npm i @nestjs/typeorm pg`
+* install TypeORM and Postgres libraries: `npm i @nestjs/typeorm typeorm pg`
 * create database fields
 * if module's controllers/providers need schema, import it like `imports: [TypeOrmModule.forFeature([<schema_name>])],`
 * make sure setup-roles endpoint of auth service isn't publicly visible from time to time
