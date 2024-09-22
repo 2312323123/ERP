@@ -44,6 +44,8 @@ Best to keep it uncommented only when using it.
 #### some more standard steps:
 * create database fields
 * if module's controllers/providers need schema, import it like `imports: [TypeOrmModule.forFeature([<schema_name>])],`
+* make sure setup-roles endpoint of auth service isn't publicly visible from time to time
+* env variables should just work inside app if specified in docker-compose
 
 ---
 
@@ -68,3 +70,12 @@ remember about `rewrite ^/<the_path>/?(.*)$ /$1 break;` part, it might be needed
 entry point -> look at what port 80 of nginx is exposed to in the main docker-compose.yml
 ~~db admin panel -> /pgadmin~~ \
 until it's fixed, pgadmin will be at http://149.156.119.173:5050/
+
+---
+
+### Frontend notes
+* custom port and hot reload were set in /vite.config.ts, all it had before that was `plugins: [react()],`
+
+#### .env notes
+* be aware that when you deploy on different url, it has to be specified in one of the variables
+* backend was done with npm, frontend with yarn, which sits on top of that
