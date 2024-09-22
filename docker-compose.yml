@@ -1,18 +1,6 @@
 # you have to create .env file next to this file with credentials for it to work
 # also put microservices databases credentials here as well as in init-db/create_databases.sql
 services:
-  nginx:
-    build:
-      context: ./API-gateway
-    networks:
-      - outside
-      - backend
-      - frontend
-      - db_admin_sql
-      - db_admin_mongo
-    ports:
-      - "10016:80" # Exposes port 80 on the host and forwards it to port 80 in the container.
-
   # if you change this name, you have to change it in DB_PSQL_SERVICE_NAME as well
   db-psql:
     image: postgres:latest
@@ -36,6 +24,20 @@ services:
   #   entrypoint: ["tail", "-f", "/dev/null"]
   #   networks:
   #     - backend
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: surveys_db # Set the default database name
+    # UNCOMMENT THIS TO PERSIST DATA
+    # volumes:
+    #   - mongo_data:/data/db # Persist data
+    networks:
+      - backend
+      - db_admin_mongo
 
   pgadmin:
     build:
@@ -63,22 +65,22 @@ services:
         target: /pgadmin4/servers.json
       - source: pgadmin-pgpass
         target: /tmp/mountpoint.pgpass
+    depends_on:
+      - db-psql
 
-  react-app:
-    build:
-      context: ./ERP-frontend # Specify the build context (directory where the Dockerfile is located)
-      dockerfile: Dockerfile # Specify the Dockerfile name (if it's named differently)
-    # ports:
-    #   - "8080:8080"
-    volumes:
-      - ./ERP-frontend:/app
-      - /app/node_modules
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: ${ME_CONFIG_BASICAUTH_USERNAME}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${ME_CONFIG_BASICAUTH_PASSWORD}
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/
     networks:
-      - frontend
-    stdin_open: true
-    tty: true
-    expose:
-      - "8080"
+      - db_admin_mongo
+    depends_on:
+      - mongo
 
   auth_and_permissions:
     build:
@@ -126,52 +128,53 @@ services:
     depends_on:
       - db-psql
 
-  erp-backend:
+  # erp-backend:
+  #   build:
+  #     context: ./ERP-backend # Point to the directory containing your Dockerfile
+  #     dockerfile: Dockerfile # Specify Dockerfile if it's named differently
+  #   # ports:
+  #   #   - "3000:3000" # Expose the NestJS application port
+  #   volumes:
+  #     - ./ERP-backend:/app # Mount the current directory to /app in the container for hot reloading
+  #     - /app/node_modules # Avoid mounting node_modules from the host machine
+  #   networks:
+  #     - backend
+  #   environment:
+  #     - NODE_ENV=development # Set the environment to development
+  #   command: npm run start:dev # Start the NestJS app with hot reloading
+  #   stdin_open: true # Keep stdin open
+  #   tty: true # Allocate a pseudo-TTY
+
+  frontend:
     build:
-      context: ./ERP-backend # Point to the directory containing your Dockerfile
-      dockerfile: Dockerfile # Specify Dockerfile if it's named differently
+      context: ./frontend # Specify the build context (directory where the Dockerfile is located)
+      dockerfile: Dockerfile # Specify the Dockerfile name (if it's named differently)
     # ports:
-    #   - "3000:3000" # Expose the NestJS application port
+    #   - "8080:8080"
     volumes:
-      - ./ERP-backend:/app # Mount the current directory to /app in the container for hot reloading
-      - /app/node_modules # Avoid mounting node_modules from the host machine
+      - ./frontend:/app
+      - /app/node_modules
     networks:
-      - backend
-    environment:
-      - NODE_ENV=development # Set the environment to development
-    command: npm run start:dev # Start the NestJS app with hot reloading
-    stdin_open: true # Keep stdin open
-    tty: true # Allocate a pseudo-TTY
+      - frontend
+    stdin_open: true
+    tty: true
+    expose:
+      - "8080"
 
-  mongo:
-    image: mongo
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-      MONGO_INITDB_DATABASE: surveys_db # Set the default database name
-    # UNCOMMENT THIS TO PERSIST DATA
-    # volumes:
-    #   - mongo_data:/data/db                  # Persist data
+  nginx:
+    build:
+      context: ./API-gateway
     networks:
+      - outside
       - backend
+      - frontend
+      - db_admin_sql
       - db_admin_mongo
-
-  mongo-express:
-    image: mongo-express
-    restart: always
     ports:
-      - 8081:8081
-    environment:
-      ME_CONFIG_BASICAUTH_USERNAME: ${ME_CONFIG_BASICAUTH_USERNAME}
-      ME_CONFIG_BASICAUTH_PASSWORD: ${ME_CONFIG_BASICAUTH_PASSWORD}
-      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/
-    networks:
-      - db_admin_mongo
-
-#   # db: backend, db_admin_sql
-#   # p4admin: db_admin
-#   # mongo: backend, db_admin_mongo
+      - "10016:80" # Exposes port 80 on the host and forwards it to port 80 in the container.
+    depends_on:
+      - auth_and_permissions
+      - frontend
 
 networks:
   frontend: # if named frontend_network, for some reason does not work
