@@ -202,6 +202,10 @@ COPY . .
 CMD [ "npm", "run", "dev" ]
 ```
 
+#### one more frontend note
+
+you may want to set up different Google clientId (here in main.tsx) in your frontend
+
 #### .env notes
 
 - be aware that when you deploy on different url, it has to be specified in one of the variables
