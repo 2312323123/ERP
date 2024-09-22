@@ -3,7 +3,8 @@ I have @nestjs/cli installed globally.
 
 #### creating a new Nest service
 In the main project folder: \
-`nest new --strict project-name --skip-git`
+`nest new --strict project-name`
+Then remove .git from newly created folder.
 
 #### package.json
 I like to add this command to "scripts" for dev purposes: \
