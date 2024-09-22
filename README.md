@@ -38,10 +38,11 @@ https://docs.nestjs.com/security/cors
 #### swagger (during development only!)
 It may only be used during development, as it allows anyone to use your enpoints, which is bad. \
 You can add it as described here: https://docs.nestjs.com/openapi/introduction \
-Best to keep it uncommented only when using it.
+Best to keep it uncommented only when using it. Library: `npm i @nestjs/swagger`
 
 ---
 #### some more standard steps:
+* install TypeORM and Postgres libraries: `npm i @nestjs/typeorm pg`
 * create database fields
 * if module's controllers/providers need schema, import it like `imports: [TypeOrmModule.forFeature([<schema_name>])],`
 * make sure setup-roles endpoint of auth service isn't publicly visible from time to time
@@ -91,3 +92,6 @@ until it's fixed, pgadmin will be at http://149.156.119.173:5050/
 
 #### random helpful things:
 * in VSCode, in changes view, if you select some changes and right-click, there is an option to stage just them
+* some other libraries:
+  * `npm i @nestjs/sequelize` `npm i --save-dev @types/sequelize` - if you use sequelize
+  * `npm i pg-hstore` - gives option to store unstructured data in pgsql
