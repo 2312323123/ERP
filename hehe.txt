@@ -1,0 +1,61 @@
+https://dev.to/webfaisalbd/consolelog-shortcut-in-vs-code-4jlg
+
+open the config file (option in right top corner)
+put in:
+```JSON
+{
+"key": "cmd+shift+l",
+"command": "editor.action.insertSnippet",
+"when": "editorTextFocus",
+"args": {
+"snippet": "console.log(`${TM_SELECTED_TEXT}$1`$2);"
+}
+}
+```
+enjoy cmd+shift+l even with smth selected
+also shortcut for fix all auto-fixable:
+```JSON
+{
+"key": "cmd+k f",
+"command": "editor.action.codeAction",
+"args": {
+"kind": "source.fixAll.tslint",
+"apply": "first"
+}
+}
+```
+
+
+
+
+// Place your key bindings in this file to override the defaults
+[
+  {
+      "key": "cmd+shift+l",
+      "command": "editor.action.insertSnippet",
+      "when": "editorTextFocus",
+      "args": {
+          "snippet": "console.log(${TM_SELECTED_TEXT}$1$2);"
+      }
+  },
+  {
+      "key": "cmd+shift+;",
+      "command": "editor.action.insertSnippet",
+      "when": "editorTextFocus",
+      "args": {
+          "snippet": "console.log('${TM_SELECTED_TEXT}:'$2);\nconsole.log(${TM_SELECTED_TEXT}$2);\n$1"
+      }
+  },
+  {
+    "key": "cmd+shift+k",
+    "command": "eslint.executeAutofix",
+    "args": {
+      "kind": "source.fixAll.tslint",
+      "apply": "first"
+    }
+  }
+]
+
+next had to:
+find /Users/maciej/Downloads/ERP -type d -exec chmod 755 {} \;
+find /Users/maciej/Downloads/ERP -type f -exec chmod 644 {} \;

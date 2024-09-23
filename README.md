@@ -208,8 +208,10 @@ you may want to set up different Google clientId (here in main.tsx) in your fron
 
 ---
 
-#### .env notes
+### .env notes
 
+- you need .env in the main ERP folder, like:
+TODO: add stuff here
 - be aware that when you deploy on different url, it has to be specified in one of the variables
 - backend was done with npm, frontend with yarn, which sits on top of that
 
