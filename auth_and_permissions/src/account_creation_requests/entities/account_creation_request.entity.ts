@@ -1,10 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class AccountCreationRequest {
-  @PrimaryGeneratedColumn('uuid')
-  ordinal_number: number;
-
   // aud - audience - we have one specific - check, don't store
 
   // email
@@ -36,6 +33,6 @@ export class AccountCreationRequest {
   picture: string;
 
   // sub goes here - subject - unique identifier for user
-  @Column({ unique: true })
+  @PrimaryColumn({ unique: true })
   id: string;
 }

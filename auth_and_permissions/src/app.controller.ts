@@ -1,6 +1,8 @@
 import { Body, Controller, Get, Headers, Post } from '@nestjs/common';
-import { AppService } from './app.service';
+import { AccountDecisionDto, AppService } from './app.service';
 import { Credentials, OAuth2Client } from 'google-auth-library';
+import { CreateRoleDto } from './roles/dto/create-role.dto';
+import { RolesService } from './roles/roles.service';
 
 @Controller()
 export class AppController {
@@ -10,7 +12,10 @@ export class AppController {
     'postmessage',
   );
 
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    private readonly appService: AppService,
+    private readonly rolesService: RolesService,
+  ) {}
 
   @Get('/api/auth')
   getHello(): string {
@@ -19,8 +24,7 @@ export class AppController {
 
   @Post('/api/auth/login')
   async login(@Body() { code }: { code: string }) {
-    const { tokens }: { tokens: Credentials } =
-      await this.oAuth2Client.getToken(code); // exchange code for tokens
+    const { tokens }: { tokens: Credentials } = await this.oAuth2Client.getToken(code); // exchange code for tokens
     // jwtDecode(tokens.id_token); // decode the id_token
     return tokens;
     // if (tokens.id_token) {
@@ -85,9 +89,23 @@ export class AppController {
   }
 
   @Post('/api/auth/ask-for-account')
-  dupa2() {
+  async askForAccount(@Headers('authorization') authHeader: string) {
     // remember to verify the id_token is valid and to check domain
-    return 'dupa2';
+    return await this.appService.askForAccount(authHeader);
+    // return 'dupa2';
+  }
+
+  // TODO: add guard here and everywhere else except /api/auth/setup-roles, which in turn has to be not shared to the world
+  @Post('/api/auth/account-creation-decision')
+  async accountCreationDecision(@Body() accountDecisionDto: AccountDecisionDto) {
+    return await this.appService.accountCreationDecision(accountDecisionDto);
+  }
+
+  @Post('/api/auth/setup-roles')
+  async setupRoles(@Body() { role, description = '' }: { role: string; description: string }) {
+    const createRoleDto = new CreateRoleDto(role, description);
+
+    return await this.rolesService.create(createRoleDto);
   }
 
   // @Post('/api/auth/verify')

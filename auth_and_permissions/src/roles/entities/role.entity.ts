@@ -1,20 +1,10 @@
 import { User } from 'src/users/entities/user.entity';
-import {
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class Role {
-  @PrimaryGeneratedColumn('uuid')
-  ordinal_number: number;
-
   // unique role name, also primary key, but not auto-increment
-
-  @Column({ unique: true })
+  @PrimaryColumn()
   role: string;
 
   // allow null for description

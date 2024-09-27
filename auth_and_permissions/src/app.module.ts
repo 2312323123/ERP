@@ -6,10 +6,12 @@ import { RolesModule } from './roles/roles.module';
 import { UsersModule } from './users/users.module';
 import { ValidJwtCachesModule } from './valid_jwt_caches/valid_jwt_caches.module';
 import { AccountCreationRequestsModule } from './account_creation_requests/account_creation_requests.module';
+import { InitRolesService } from './init_roles/init_roles.service';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, InitRolesService],
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -28,6 +30,7 @@ import { AccountCreationRequestsModule } from './account_creation_requests/accou
     UsersModule,
     ValidJwtCachesModule,
     AccountCreationRequestsModule,
+    HttpModule,
   ],
 })
 export class AppModule {}

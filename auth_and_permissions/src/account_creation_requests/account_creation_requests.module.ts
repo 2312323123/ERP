@@ -8,5 +8,6 @@ import { AccountCreationRequest } from './entities/account_creation_request.enti
   imports: [TypeOrmModule.forFeature([AccountCreationRequest])],
   controllers: [AccountCreationRequestsController],
   providers: [AccountCreationRequestsService],
+  exports: [AccountCreationRequestsService],
 })
 export class AccountCreationRequestsModule {}

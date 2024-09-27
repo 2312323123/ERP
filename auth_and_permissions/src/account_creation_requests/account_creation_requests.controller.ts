@@ -19,16 +19,16 @@ export class AccountCreationRequestsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.accountCreationRequestsService.findOne(+id);
+    return this.accountCreationRequestsService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateAccountCreationRequestDto: UpdateAccountCreationRequestDto) {
-    return this.accountCreationRequestsService.update(+id, updateAccountCreationRequestDto);
+    return this.accountCreationRequestsService.update(id, updateAccountCreationRequestDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.accountCreationRequestsService.remove(+id);
+    return this.accountCreationRequestsService.remove(id);
   }
 }
