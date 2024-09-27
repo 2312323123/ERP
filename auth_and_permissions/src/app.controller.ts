@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Headers, Post } from '@nestjs/common';
 import { AppService } from './app.service';
-import { OAuth2Client } from 'google-auth-library';
+import { Credentials, OAuth2Client } from 'google-auth-library';
 
 @Controller()
 export class AppController {
@@ -17,9 +17,94 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @Post('/api/auth/google')
-  async google(@Body() { code }: { code: string }) {
-    const { tokens } = await this.oAuth2Client.getToken(code); // exchange code for tokens
+  @Post('/api/auth/login')
+  async login(@Body() { code }: { code: string }) {
+    const { tokens }: { tokens: Credentials } =
+      await this.oAuth2Client.getToken(code); // exchange code for tokens
+    // jwtDecode(tokens.id_token); // decode the id_token
     return tokens;
+    // if (tokens.id_token) {
+    //   return this.appService.decodeToken(tokens.id_token);
+    // } else {
+    //   throw NotFoundException;
+    // }
   }
+
+  // this version gets code from bearer in header
+  @Get('/api/auth/login2')
+  async login2(@Headers('authorization') authHeader: string) {
+    return await this.appService.login(authHeader);
+    // return 'dupa';
+  }
+
+  // @Post('/api/auth/refresh')
+  // async refresh(@Body() { refreshToken }: { refreshToken: string }) {
+  //   try {
+  //     // Set the credentials with the refresh token
+  //     this.oAuth2Client.setCredentials({
+  //       refresh_token: refreshToken,
+  //     });
+
+  //     // Refresh the access token
+  //     const response = await this.oAuth2Client.getAccessToken();
+  //     const newAccessToken = response.token;
+
+  //     if (!newAccessToken) {
+  //       throw new HttpException(
+  //         'Failed to refresh tokens',
+  //         HttpStatus.UNAUTHORIZED,
+  //       );
+  //     }
+
+  //     // Get user info by validating the new access token
+  //     const ticket = await this.oAuth2Client.verifyIdToken({
+  //       idToken: newAccessToken, // Use the access token for verification
+  //       audience: process.env.AUTH_GOOGLE_CLIENT_ID, // Specify the CLIENT_ID of the app that accesses the backend
+  //     });
+
+  //     const payload = ticket.getPayload();
+  //     const newIdToken = ticket.getIdToken(); // Get the new ID token
+
+  //     return {
+  //       accessToken: newAccessToken,
+  //       idToken: newIdToken,
+  //       userInfo: payload, // Contains user information like email, name, etc.
+  //     };
+  //   } catch (error) {
+  //     console.error('Error refreshing tokens:', error);
+  //     throw new HttpException(
+  //       'Failed to refresh tokens',
+  //       HttpStatus.UNAUTHORIZED,
+  //     );
+  //   }
+  // }
+
+  @Post('/api/auth/logout')
+  dupa() {
+    return 'dupa';
+  }
+
+  @Post('/api/auth/ask-for-account')
+  dupa2() {
+    // remember to verify the id_token is valid and to check domain
+    return 'dupa2';
+  }
+
+  // @Post('/api/auth/verify')
+  // async verify(@Body() { idToken }: { idToken: string }) {
+  //   const ticket = await this.oAuth2Client.verifyIdToken({
+  //     idToken,
+  //     audience: process.env.AUTH_GOOGLE_CLIENT_ID,
+  //   });
+  //   const payload = ticket.getPayload();
+  //   return payload;
+  // }
+
+  // @Post('/api/auth/refresh')
+
+  // @Post('/api/auth/google')
+  // async google(@Body() { code }: { code: string }) {
+  //   const { tokens } = await this.oAuth2Client.getToken(code); // exchange code for tokens
+  //   return tokens;
+  // }
 }

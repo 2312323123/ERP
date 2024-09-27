@@ -1,16 +1,10 @@
 import { Role } from 'src/roles/entities/role.entity';
-import {
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn('uuid')
-  ordinal_number: number;
+  // @PrimaryGeneratedColumn('uuid')
+  // ordinal_number: number;
 
   // aud - audience - we have one specific - check, don't store
 
@@ -43,7 +37,7 @@ export class User {
   picture: string;
 
   // sub goes here - subject - unique identifier for user
-  @Column({ unique: true })
+  @PrimaryColumn()
   id: string;
 
   // user roles
