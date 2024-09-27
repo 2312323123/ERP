@@ -9,4 +9,6 @@ export interface AppContextInterface {
   apiPathBase: string
   accessTokens: AccessTokens
   setAccessTokens: (tokens: AccessTokens) => void
+  loggedIn: boolean
+  setLoggedIn: (param: boolean) => void
 }
