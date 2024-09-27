@@ -132,6 +132,13 @@ export default defineConfig({
 });
 ```
 
+- for hot reload, you might also want to add this in nginx.conf for your frontend service (it enables WebSocket support):
+
+```
+  proxy_set_header Upgrade $http_upgrade;  # Enable WebSocket support (for hmr purpose only)
+  proxy_set_header Connection "upgrade";  # Required for WebSocket (for hmr purpose only)
+```
+
 #### for prettier:
 
 .prettierrc:
@@ -211,7 +218,7 @@ you may want to set up different Google clientId (here in main.tsx) in your fron
 ### .env notes
 
 - you need .env in the main ERP folder, like:
-TODO: add stuff here
+  TODO: add stuff here
 - be aware that when you deploy on different url, it has to be specified in one of the variables
 - backend was done with npm, frontend with yarn, which sits on top of that
 
@@ -233,3 +240,17 @@ TODO: add stuff here
 - -> web app
 - set approved source URIs and redirect URI
 - you get the keys
+
+### RSA key for JWT issuing
+
+- should be replaced every 1-2 years in .env, before it make backup, after it restart the system, and it will result in currently issued keys to loose validity, so if someone is logged in, they won't be able to do anything until they re-login
+- I've used Windows Powershell 7 commands to generate them:
+
+```
+ssh-keygen -t rsa -b 4096 -f ./temp_key -N "" -m PEM
+Get-Content ./temp_key
+Get-Content ./temp_key.pub
+Remove-Item ./temp_key, ./temp_key.pub
+```
+
+and you still need to replace newlines in private key with \n, and then store both of them inside double quotes ("") as they contain spaces
