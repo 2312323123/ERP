@@ -35,7 +35,8 @@ to have CRLF as the default end of line ending on Windows add "endOfLine" prop:
 {
   "singleQuote": true,
   "trailingComma": "all",
-  "endOfLine": "crlf"
+  "endOfLine": "crlf",
+  "printWidth": 120
 }
 ```
 
@@ -147,7 +148,8 @@ export default defineConfig({
 {
   "semi": false,
   "singleQuote": true,
-  "trailingComma": "all"
+  "trailingComma": "all",
+  "printWidth": 120
 }
 ```
 
