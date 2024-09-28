@@ -1,3 +1,10 @@
+### First thing to know
+
+Everything is created automatically on startup except:
+
+- .env file variables in project's root directory, you set them yourself
+- db contents in postgres and mongo, they are created as system is used
+
 ### Configuring nest.js backend service:
 
 I have @nestjs/cli installed globally.
@@ -90,6 +97,8 @@ Dockerfile:
 
 To completely remove and restart one service in running docker-compose (in this example nginx): \
 `docker-compose rm -svf nginx; docker-compose up -d --build nginx` \
+`docker-compose rm -svf db-psql; docker-compose up -d --build db-psql` \
+`docker-compose rm -svf auth_and_permissions; docker-compose up -d --build auth_and_permissions` \
 If you changed just ports / or want to add newly created service to running docker compose: \
 `docker-compose up -d`
 
@@ -250,9 +259,10 @@ you may want to set up different Google clientId (here in main.tsx) in your fron
 
 ```
 ssh-keygen -t rsa -b 4096 -f ./temp_key -N "" -m PEM
+ssh-keygen -f ./temp_key -e -m PEM > ./temp_public_key.pem
 Get-Content ./temp_key
-Get-Content ./temp_key.pub
-Remove-Item ./temp_key, ./temp_key.pub
+Get-Content ./temp_public_key.pem
+Remove-Item ./temp_key, ./temp_key.pub, ./temp_public_key.pem
 ```
 
 and you still need to replace newlines in private key with \n, and then store both of them inside double quotes ("") as they contain spaces
