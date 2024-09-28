@@ -18,19 +18,15 @@ export class InitRolesService implements OnModuleInit {
   ];
 
   async onModuleInit() {
-    this.postDatas.forEach(async (postData) => {
-      try {
-        await lastValueFrom(this.httpService.post('http://auth_and_permissions:3000/api/auth/setup-roles', postData));
-      } catch {
-        console.log(`error 493r84t - role ${postData.role} already exists`);
-      }
-    });
+    // timeout to let the paths boot up before making requests
+    setTimeout(async () => {
+      this.postDatas.forEach(async (postData) => {
+        try {
+          await lastValueFrom(this.httpService.post('http://auth_and_permissions:3000/api/auth/setup-roles', postData));
+        } catch {
+          console.log(`error 493r84t - role ${postData.role} already exists`);
+        }
+      });
+    }, 0);
   }
-
-  // // onModuleInit(), but GET /api/auth
-  // async onModuleInit() {
-  //   this.postDatas.forEach(async (postData) => {
-  //     await lastValueFrom(this.httpService.get('http://auth_and_permissions:3000/api/auth'));
-  //   });
-  // }
 }
