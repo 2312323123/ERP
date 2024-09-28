@@ -8,10 +8,11 @@ import { ValidJwtCachesModule } from './valid_jwt_caches/valid_jwt_caches.module
 import { AccountCreationRequestsModule } from './account_creation_requests/account_creation_requests.module';
 import { InitRolesService } from './init_roles/init_roles.service';
 import { HttpModule } from '@nestjs/axios';
+import { JwtIssuerService } from './jwt_issuer/jwt_issuer.service';
 
 @Module({
   controllers: [AppController],
-  providers: [AppService, InitRolesService],
+  providers: [AppService, InitRolesService, JwtIssuerService],
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',

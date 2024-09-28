@@ -1,9 +1,10 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Role } from './entities/role.entity';
 import { Repository } from 'typeorm';
+import { checkIfExists } from 'src/app.service';
 
 @Injectable()
 export class RolesService {
@@ -12,29 +13,13 @@ export class RolesService {
     private roleRepository: Repository<Role>,
   ) {}
 
-  async checkIfExists(crudService: any, role: string): Promise<boolean> {
-    if (!role) {
-      return false;
-    }
-    try {
-      const result = await crudService.findOne(role);
-      return Boolean(result);
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return false;
-      } else {
-        throw new HttpException('Error fetching entity from db i68uy5y', HttpStatus.INTERNAL_SERVER_ERROR);
-      }
-    }
-  }
-
   async create(createRoleDto: CreateRoleDto): Promise<Role> {
     // if exists, 409, if doesn't, create
 
     // check if role exists
     let roleExists;
     try {
-      roleExists = await this.checkIfExists(this, createRoleDto.role);
+      roleExists = await checkIfExists(this, createRoleDto.role, '359ff8');
     } catch {
       throw new HttpException('Error fetching Role from db 5g46y7', HttpStatus.INTERNAL_SERVER_ERROR);
     }

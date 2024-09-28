@@ -37,11 +37,30 @@ export class UsersService {
     return user;
   }
 
-  update(id: string, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  /**
+   * Update a user's data by ID
+   */
+  async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { id } });
+
+    // Throw an error if the user is not found
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+
+    // Merge the new data with the existing user
+    const updatedUser = this.userRepository.merge(user, updateUserDto);
+
+    // Save the updated user to the database
+    return await this.userRepository.save(updatedUser);
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} user`;
+  async remove(id: string) {
+    const result = await this.userRepository.delete(id);
+
+    // Throw an error if no rows were affected (user was not found)
+    if (result.affected === 0) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
   }
 }

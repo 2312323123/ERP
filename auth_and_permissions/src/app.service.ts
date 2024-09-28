@@ -10,6 +10,7 @@ import { Credentials, OAuth2Client } from 'google-auth-library';
 import { UsersService } from './users/users.service';
 import { AccountCreationRequestsService } from './account_creation_requests/account_creation_requests.service';
 import { CreateAccountCreationRequestDto } from './account_creation_requests/dto/create-account_creation_request.dto';
+import { UpdateUserDto } from './users/dto/update-user.dto';
 
 export class AccountDecisionDto {
   action: 'accept' | 'reject';
@@ -99,6 +100,22 @@ function extractBearerToken(authHeader: string) {
   // You can now use the token for further processing, like verifying it
   return token;
 }
+
+export async function checkIfExists(crudService: any, value: string, errorSufix: string = '4r3r5t'): Promise<boolean> {
+  if (!value) {
+    return false;
+  }
+  try {
+    const result = await crudService.findOne(value);
+    return Boolean(result);
+  } catch (error) {
+    if (error instanceof NotFoundException) {
+      return false;
+    } else {
+      throw new HttpException(`Error fetching entity from db ${errorSufix}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+}
 @Injectable()
 export class AppService {
   private oAuth2Client = new OAuth2Client(
@@ -114,22 +131,6 @@ export class AppService {
 
   getHello(): string {
     return 'Hello World auth!';
-  }
-
-  async checkIfExists(crudService: any, id: string): Promise<boolean> {
-    if (!id) {
-      return false;
-    }
-    try {
-      const result = await crudService.findOne(id);
-      return Boolean(result);
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return false;
-      } else {
-        throw new HttpException('Error fetching entity from db 4r3r5t', HttpStatus.INTERNAL_SERVER_ERROR);
-      }
-    }
   }
 
   decodeToken(token: string) {
@@ -149,28 +150,44 @@ export class AppService {
       throw new HttpException('No id_token in response from Google u53i97', HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    const id = this.decodeToken(tokens.id_token).sub;
+    // decode id_token
+    const decodedIdToken = this.decodeToken(tokens.id_token);
+    const id = decodedIdToken.sub;
 
     // check if user exists in db
     let userExists;
     try {
-      userExists = await this.checkIfExists(this.usersService, id);
+      userExists = await checkIfExists(this.usersService, id);
     } catch {
       throw new HttpException('Error fetching user from db f56464', HttpStatus.INTERNAL_SERVER_ERROR);
     }
     if (userExists) {
-      // decode and update user info from access token
+      // update user info from access token
+      const updateUserDto = new UpdateUserDto();
+      updateUserDto.email = decodedIdToken.email;
+      updateUserDto.email_verified = decodedIdToken.email_verified;
+      updateUserDto.family_name = decodedIdToken.family_name;
+      updateUserDto.given_name = decodedIdToken.given_name;
+      updateUserDto.name = decodedIdToken.name;
+      updateUserDto.picture = decodedIdToken.picture;
+      updateUserDto.id = decodedIdToken.sub; // id in JWT nomenclature
+
+      this.usersService.update(id, updateUserDto);
+
       // store google api token and google refresh token in db
+      
+
       // issue jwt token with roles (and exp)
       // return jwt token and refresh token in response body
       // return tokens;
-      return 'dupa9842u34893';
+      return updateUserDto;
+      // return 'dupa9842u34893';
     }
 
     // check if account creation request exists - if does, serve different error than when not
     let accountCreationRequestExists;
     try {
-      accountCreationRequestExists = await this.checkIfExists(this.accountCreationRequestsService, id);
+      accountCreationRequestExists = await checkIfExists(this.accountCreationRequestsService, id);
     } catch {
       throw new HttpException('Error fetching AccountCreationRequest from db f56464', HttpStatus.INTERNAL_SERVER_ERROR);
     }
