@@ -35,6 +35,7 @@ export class JwtIssuerService {
     await this.addNewErpRefreshToken(id, refreshToken);
 
     return {
+      accountExists: true,
       accessToken,
       refreshToken,
     };

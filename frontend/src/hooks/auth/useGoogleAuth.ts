@@ -1,20 +1,10 @@
-import { AppContextInterface } from '../../App.interface'
+import { useGoogleLogin } from '@react-oauth/google'
 
-export const useGoogleAuth = () => {
-  const initialValue: AppContextInterface = {
-    apiPathBase: '',
-    accessTokens: {
-      access_token: '',
-      id_token: '',
-      refresh_token: '',
-      expiry_date: 0,
-    },
-    setAccessTokens: () => {},
-    loggedIn: false,
-    setLoggedIn: () => {},
-  }
+export const useGoogleAuth = (callback: (arg: string) => void) => {
+  const getAndProcessGoogleLoginOtpCode = useGoogleLogin({
+    onSuccess: ({ code }) => callback(code),
+    flow: 'auth-code',
+  })
 
-  
-
-  return initialValue
+  return { getAndProcessGoogleLoginOtpCode }
 }

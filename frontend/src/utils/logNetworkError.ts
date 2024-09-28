@@ -1,10 +1,10 @@
-interface NetworkError extends Error {
+export interface NetworkError {
   response?: {
     status: number
-    data: any
+    data: object
     statusText: string
   }
-  message: string
+  message?: string
 }
 
 export const logNetworkError = (error: NetworkError, prefix?: string): void => {
@@ -14,7 +14,7 @@ export const logNetworkError = (error: NetworkError, prefix?: string): void => {
   // Check if error contains a response (useful for Axios-like errors)
   if (error.response) {
     console.error('Error Message:', error.message)
-    console.error('Status Code:', error.response.status, error.response.statusText)
+    console.error('Status:', error.response.status, error.response.statusText)
     console.error('Response Data:', error.response.data)
     console.error('Full Error Response:', error.response)
   }

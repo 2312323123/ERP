@@ -188,33 +188,30 @@ export class AppService {
         this.tokensService.update(id, updateTokenDto);
       }
 
-      // issue jwt token with roles (and exp)
       // return jwt token and refresh token in response body
       return this.jwtIssuerService.login(id);
-
-      // return tokens;
-      // return updateUserDto;
-      // return 'dupa9842u34893';
+    } else {
+      // check if account creation request exists and if does - appropriate error, if not - return id_token
+      let accountCreationRequestExists;
+      try {
+        accountCreationRequestExists = await checkIfExists(this.accountCreationRequestsService, id);
+      } catch {
+        throw new HttpException(
+          'Error fetching AccountCreationRequest from db f56464',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
+      if (accountCreationRequestExists) {
+        // request exists
+        throw new HttpException('Account creation request exists 5f44t6', HttpStatus.CONFLICT);
+      } else {
+        // user doesn't exist - return id_token
+        return {
+          accountExists: false,
+          id_token: tokens.id_token,
+        };
+      }
     }
-
-    // check if account creation request exists - if does, serve different error than when not
-    let accountCreationRequestExists;
-    try {
-      accountCreationRequestExists = await checkIfExists(this.accountCreationRequestsService, id);
-    } catch {
-      throw new HttpException('Error fetching AccountCreationRequest from db f56464', HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-    if (accountCreationRequestExists) {
-      // request exists
-      throw new HttpException('Account creation request exists 5f44t6', HttpStatus.CONFLICT);
-    }
-
-    // user doesn't exist
-    // return some appropriate error and id_token
-    throw new NotFoundException({
-      message: "User doesn't exist yet 43rt5tt5",
-      id_token: tokens.id_token,
-    });
   }
 
   async askForAccount(authHeader: string) {
@@ -289,7 +286,6 @@ export class AppService {
     // create accountCreationRequest in DB
     await this.accountCreationRequestsService.create(accountCreationRequestDto);
 
-    // return some 201
     return;
   }
 
@@ -327,8 +323,5 @@ export class AppService {
       default:
         throw new BadRequestException('Invalid action provided 7844t4');
     }
-    // remember to verify the id_token is valid and to check domain
-    // return await this.appService.askForAccount(authHeader);
-    // return 'dupa2';}
   }
 }

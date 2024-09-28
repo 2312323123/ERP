@@ -2,83 +2,77 @@ import { GoogleOAuthProvider } from '@react-oauth/google'
 // import reactLogo from '../assets/react.svg'
 // import viteLogo from '/vite.svg'
 import { useState } from 'react'
-import { useGoogleLogin } from '@react-oauth/google'
 import axios from 'axios'
 import { AppContext } from '../App'
 import { useContext } from 'react'
-import { logNetworkError } from '../utils/logNetworkError'
+import { logNetworkError, NetworkError } from '../utils/logNetworkError'
+import { logNetworkSuccess } from '../utils/logNetworkSuccess'
+import { useGoogleAuth } from '../hooks/auth/useGoogleAuth'
 
 const Login = () => {
   const [receivedIdToken, setReceivedIdToken] = useState('')
   const { apiPathBase, setLoggedIn } = useContext(AppContext)
   const [askedForAccount, setAskedForAccount] = useState(false)
-  const [failedToAskForAccount, setFailedToAskForAccount] = useState(false)
   const [successfullyAskedForAccount, setSuccessfullyAskedForAccount] = useState(false)
   const [accountRequestAlreadyExists, setAccountRequestAlreadyExists] = useState(false)
 
-  const googleLoginSuccessCallback = async (code: string) => {
+  const erpGoogleCodeLogin = async (code: string) => {
+    const res = await axios.get(`${apiPathBase}/api/auth/login`, {
+      headers: {
+        Authorization: `Bearer ${code}`,
+      },
+    })
+    logNetworkSuccess(res, '430f394u0')
+    return res
+  }
+
+  const processGoogleCode = async (code: string) => {
+    setReceivedIdToken('')
+    setAskedForAccount(false)
+    setAccountRequestAlreadyExists(false)
+    setSuccessfullyAskedForAccount(false)
+
     try {
-      const res = await axios.get(`${apiPathBase}/api/auth/login`, {
-        headers: {
-          Authorization: `Bearer ${code}`,
-        },
-      })
+      const res = await erpGoogleCodeLogin(code)
 
-      console.log('res:')
-      console.log(res)
-
-      // setLoggedIn(true)
-      // setAccessTokens(tokens.data)
+      if (res.data.accountExists) {
+        // setLoggedIn(true)
+      } else {
+        setReceivedIdToken(res.data.id_token)
+      }
     } catch (error) {
       // You can also log specific properties of the error
       if (axios.isAxiosError(error)) {
         logNetworkError(error, '294ri44')
 
-        if (error.response?.data?.id_token) {
-          setReceivedIdToken(error.response.data.id_token)
-        }
         if (error.response?.status === 409) {
-          console.log('9r3u8934r8ye98r83yr894')
-          console.log('error.response?.status:')
-          console.log(error.response?.status)
           setAccountRequestAlreadyExists(true)
         }
       } else {
-        console.error('Unexpected error:', error)
+        console.error('t46y54r Unexpected error:', error)
       }
     }
   }
 
-  const googleLogin = useGoogleLogin({
-    onSuccess: ({ code }) => googleLoginSuccessCallback(code),
-    flow: 'auth-code',
-  })
+  const { getAndProcessGoogleLoginOtpCode } = useGoogleAuth(processGoogleCode)
+
+  const erpAskForAccount = async (googleIdToken: string) => {
+    const res = await axios.post(`${apiPathBase}/api/auth/ask-for-account`, null, {
+      headers: {
+        Authorization: `Bearer ${googleIdToken}`,
+      },
+    })
+    logNetworkSuccess(res, '45t3r2r4r')
+    return res
+  }
 
   const askForAccount = async () => {
     try {
       setAskedForAccount(true)
-      const res = await axios.post(`${apiPathBase}/api/auth/ask-for-account`, null, {
-        headers: {
-          Authorization: `Bearer ${receivedIdToken}`,
-        },
-      })
-      console.log('res:')
-      console.log(res)
+      await erpAskForAccount(receivedIdToken)
       setSuccessfullyAskedForAccount(true)
     } catch (error) {
-      // You can also log specific properties of the error
-      if (axios.isAxiosError(error)) {
-        console.error('Axios error message:', error.message)
-        console.error('Axios error response:', error.response?.data)
-        console.error('Axios error status:', error.response?.status)
-        if (error.response?.status === 409) {
-          setAccountRequestAlreadyExists(true)
-        } else {
-          setFailedToAskForAccount(true)
-        }
-      } else {
-        console.error('Unexpected error:', error)
-      }
+      logNetworkError(error as NetworkError, 'iu85545t')
     }
   }
 
@@ -92,17 +86,13 @@ const Login = () => {
       console.log(res)
     } catch (error) {
       // You can also log specific properties of the error
+      alert('Coś poszło bardzo nie tak. Zgłoś administratorowi.')
       if (axios.isAxiosError(error)) {
         console.error('Axios error message:', error.message)
         console.error('Axios error response:', error.response?.data)
         console.error('Axios error status:', error.response?.status)
-        if (error.response?.status === 409) {
-          setAccountRequestAlreadyExists(true)
-        } else {
-          setFailedToAskForAccount(true)
-        }
       } else {
-        console.error('Unexpected error:', error)
+        console.error('t457y6 Unexpected error:', error)
       }
     }
   }
@@ -112,7 +102,7 @@ const Login = () => {
       <GoogleOAuthProvider clientId={'630669205687-ukc7rkopmrfomse2g04uei1gkhdvo2o0.apps.googleusercontent.com'}>
         <div>
           <div>
-            <button onClick={googleLogin}>Zaloguj przy użyciu Google</button>
+            <button onClick={getAndProcessGoogleLoginOtpCode}>Zaloguj przy użyciu Google</button>
             <button onClick={acceptMaciek}>Accept Maciek as user</button>
           </div>
           {receivedIdToken && (
@@ -121,7 +111,6 @@ const Login = () => {
               <button disabled={askedForAccount} onClick={askForAccount}>
                 poproś o konto
               </button>
-              {failedToAskForAccount && <div>Coś poszło nie tak. Skontaktuj się z administratorem.</div>}
               {successfullyAskedForAccount && <div>Poprawnie poproszono o konto. Oczekuj na akceptację.</div>}
             </div>
           )}
