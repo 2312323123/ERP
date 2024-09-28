@@ -7,7 +7,7 @@ import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { Token } from 'src/tokens/entities/token.entity';
 import { CreateTokenDto } from 'src/tokens/dto/create-token.dto';
-// import { Token } from 'src/tokens/entities/token.entity';
+import { Role } from 'src/roles/entities/role.entity';
 
 @Injectable()
 export class UsersService {
@@ -74,5 +74,19 @@ export class UsersService {
     if (result.affected === 0) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
+  }
+
+  async getUserRolesById(id: string): Promise<Role[]> {
+    // Fetch the user by ID and include roles
+    const user = await this.userRepository.findOne({
+      where: { id },
+      relations: ['roles'], // Load the roles relation
+    });
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    return user.roles; // Return the user's roles
   }
 }

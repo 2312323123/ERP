@@ -17,8 +17,14 @@ export class TokensService {
     return `This action returns all tokens`;
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} token`;
+  async findOne(id: string): Promise<Token> {
+    const user = await this.tokenRepository.findOne({
+      where: { id },
+    });
+    if (!user) {
+      throw new NotFoundException(`Tokens entry with ID ${id} not found 95t8y9r4`);
+    }
+    return user;
   }
 
   async update(id: string, updateTokenDto: UpdateTokenDto) {

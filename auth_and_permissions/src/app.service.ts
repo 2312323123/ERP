@@ -13,6 +13,7 @@ import { CreateAccountCreationRequestDto } from './account_creation_requests/dto
 import { UpdateUserDto } from './users/dto/update-user.dto';
 import { TokensService } from './tokens/tokens.service';
 import { UpdateTokenDto } from './tokens/dto/update-token.dto';
+import { JwtIssuerService } from './jwt_issuer/jwt_issuer.service';
 
 export class AccountDecisionDto {
   action: 'accept' | 'reject';
@@ -65,7 +66,7 @@ function base64UrlDecode(str: string) {
   }
 }
 
-function jwtDecode(token: string, options: { header?: boolean } = {}) {
+export function jwtDecode(token: string, options: { header?: boolean } = {}) {
   if (typeof token !== 'string') {
     throw new InvalidTokenError('Invalid token specified: must be a string');
   }
@@ -130,6 +131,7 @@ export class AppService {
     private usersService: UsersService,
     private accountCreationRequestsService: AccountCreationRequestsService,
     private tokensService: TokensService,
+    private jwtIssuerService: JwtIssuerService,
   ) {}
 
   getHello(): string {
@@ -188,9 +190,11 @@ export class AppService {
 
       // issue jwt token with roles (and exp)
       // return jwt token and refresh token in response body
-      return tokens;
+      return this.jwtIssuerService.login(id);
+
+      // return tokens;
       // return updateUserDto;
-      return 'dupa9842u34893';
+      // return 'dupa9842u34893';
     }
 
     // check if account creation request exists - if does, serve different error than when not
@@ -208,7 +212,7 @@ export class AppService {
     // user doesn't exist
     // return some appropriate error and id_token
     throw new NotFoundException({
-      error: "User doesn't exist yet",
+      message: "User doesn't exist yet 43rt5tt5",
       id_token: tokens.id_token,
     });
   }

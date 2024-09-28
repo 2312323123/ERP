@@ -1,8 +1,9 @@
 import { Body, Controller, Get, Headers, Post } from '@nestjs/common';
 import { AccountDecisionDto, AppService } from './app.service';
-import { Credentials, OAuth2Client } from 'google-auth-library';
+import { OAuth2Client } from 'google-auth-library';
 import { CreateRoleDto } from './roles/dto/create-role.dto';
 import { RolesService } from './roles/roles.service';
+import { UsersService } from './users/users.service';
 
 @Controller()
 export class AppController {
@@ -15,6 +16,7 @@ export class AppController {
   constructor(
     private readonly appService: AppService,
     private readonly rolesService: RolesService,
+    private readonly usersService: UsersService,
   ) {}
 
   @Get('/api/auth')
@@ -28,6 +30,10 @@ export class AppController {
   @Get('/api/auth/dupa2')
   async getHello3(): Promise<any> {
     return await this.makeRequest();
+  }
+  @Get('/api/auth/dupa3')
+  async getHello4(): Promise<any> {
+    return await this.usersService.getUserRolesById('105887563550899714086');
   }
 
   async makeRequest() {
@@ -51,20 +57,8 @@ export class AppController {
     }
   }
 
-  @Post('/api/auth/login')
-  async login(@Body() { code }: { code: string }) {
-    const { tokens }: { tokens: Credentials } = await this.oAuth2Client.getToken(code); // exchange code for tokens
-    // jwtDecode(tokens.id_token); // decode the id_token
-    return tokens;
-    // if (tokens.id_token) {
-    //   return this.appService.decodeToken(tokens.id_token);
-    // } else {
-    //   throw NotFoundException;
-    // }
-  }
-
   // this version gets code from bearer in header
-  @Get('/api/auth/login2')
+  @Get('/api/auth/login')
   async login2(@Headers('authorization') authHeader: string) {
     return await this.appService.login(authHeader);
     // return 'dupa';

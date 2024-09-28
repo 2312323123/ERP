@@ -6,32 +6,19 @@ import { useGoogleLogin } from '@react-oauth/google'
 import axios from 'axios'
 import { AppContext } from '../App'
 import { useContext } from 'react'
+import { logNetworkError } from '../utils/logNetworkError'
 
 const Login = () => {
-  // const [receivedIdToken, setReceivedIdToken] = useState('')
   const [receivedIdToken, setReceivedIdToken] = useState('')
-  const { apiPathBase, accessTokens, setAccessTokens } = useContext(AppContext)
+  const { apiPathBase, setLoggedIn } = useContext(AppContext)
   const [askedForAccount, setAskedForAccount] = useState(false)
   const [failedToAskForAccount, setFailedToAskForAccount] = useState(false)
   const [successfullyAskedForAccount, setSuccessfullyAskedForAccount] = useState(false)
   const [accountRequestAlreadyExists, setAccountRequestAlreadyExists] = useState(false)
 
-  const googleLogin = useGoogleLogin({
-    onSuccess: async ({ code }) => {
-      const tokens = await axios.post(`${apiPathBase}/api/auth/login`, {
-        code,
-      })
-
-      console.log(tokens)
-
-      setAccessTokens(tokens.data)
-    },
-    flow: 'auth-code',
-  })
-
   const googleLoginSuccessCallback = async (code: string) => {
     try {
-      const res = await axios.get(`${apiPathBase}/api/auth/login2`, {
+      const res = await axios.get(`${apiPathBase}/api/auth/login`, {
         headers: {
           Authorization: `Bearer ${code}`,
         },
@@ -40,20 +27,18 @@ const Login = () => {
       console.log('res:')
       console.log(res)
 
+      // setLoggedIn(true)
       // setAccessTokens(tokens.data)
     } catch (error) {
       // You can also log specific properties of the error
       if (axios.isAxiosError(error)) {
-        console.error('Axios error message:', error.message)
-        console.error('Axios error response:', error.response?.data)
-        console.error('Axios error status:', error.response?.status)
+        logNetworkError(error, '294ri44')
 
         if (error.response?.data?.id_token) {
-          setReceivedIdToken(error.response?.data?.id_token)
-          console.log('id_token:', error.response?.data?.id_token)
+          setReceivedIdToken(error.response.data.id_token)
         }
         if (error.response?.status === 409) {
-          console.log('ddupa udpa upda dupa')
+          console.log('9r3u8934r8ye98r83yr894')
           console.log('error.response?.status:')
           console.log(error.response?.status)
           setAccountRequestAlreadyExists(true)
@@ -64,7 +49,7 @@ const Login = () => {
     }
   }
 
-  const googleLogin2 = useGoogleLogin({
+  const googleLogin = useGoogleLogin({
     onSuccess: ({ code }) => googleLoginSuccessCallback(code),
     flow: 'auth-code',
   })
@@ -97,14 +82,6 @@ const Login = () => {
     }
   }
 
-  const refresh = async () => {
-    const newAccessToken = await axios.post(`${apiPathBase}/api/auth/refresh`, {
-      refreshToken: accessTokens.refresh_token,
-    })
-
-    console.log(newAccessToken)
-  }
-
   const acceptMaciek = async () => {
     try {
       const res = await axios.post(`${apiPathBase}/api/auth/account-creation-decision`, {
@@ -132,17 +109,12 @@ const Login = () => {
 
   return (
     <div>
-      Login
       <GoogleOAuthProvider clientId={'630669205687-ukc7rkopmrfomse2g04uei1gkhdvo2o0.apps.googleusercontent.com'}>
         <div>
-          dupa
           <div>
-            <button onClick={googleLogin2}>Login2 with Google</button>
+            <button onClick={googleLogin}>Zaloguj przy użyciu Google</button>
             <button onClick={acceptMaciek}>Accept Maciek as user</button>
           </div>
-          <button onClick={googleLogin}>Login with Google</button>
-          <button onClick={() => console.log(accessTokens)}>console.log tokens</button>
-          <button onClick={refresh}>Refresh</button>
           {receivedIdToken && (
             <div>
               <div>Nie masz jeszcze konta!</div>

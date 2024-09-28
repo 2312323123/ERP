@@ -11,6 +11,7 @@ import { HttpModule } from '@nestjs/axios';
 import { JwtIssuerService } from './jwt_issuer/jwt_issuer.service';
 import { HstoreInitializerService } from './hstore_initializer/hstore_initializer.service';
 import { TokensModule } from './tokens/tokens.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   controllers: [AppController],
@@ -35,6 +36,14 @@ import { TokensModule } from './tokens/tokens.module';
     AccountCreationRequestsModule,
     HttpModule,
     TokensModule,
+    JwtModule.register({
+      privateKey: process.env.AUTH_RSA_PRIVATE_KEY_FOR_JWT, // Your private RSA key
+      publicKey: process.env.RSA_PUBLIC_KEY_FOR_JWT, // Your public RSA key
+      signOptions: {
+        expiresIn: '1h', // Set token expiration time
+        algorithm: 'RS256', // Use RS256 algorithm
+      },
+    }),
   ],
 })
 export class AppModule {}
