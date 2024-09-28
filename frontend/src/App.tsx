@@ -13,9 +13,8 @@ const initialValue: AppContextInterface = {
   apiPathBase: '',
   accessTokens: {
     access_token: '',
-    id_token: '',
     refresh_token: '',
-    expiry_date: 0,
+    access_token_exp: 0,
   },
   setAccessTokens: () => {},
   loggedIn: false,
@@ -28,9 +27,8 @@ function App() {
 
   const initialAccessTokens: GoogleTokensInterface = {
     access_token: '',
-    id_token: '',
     refresh_token: '',
-    expiry_date: 0,
+    access_token_exp: 0,
   }
   const [accessTokens, setAccessTokens] = useState(initialAccessTokens)
 

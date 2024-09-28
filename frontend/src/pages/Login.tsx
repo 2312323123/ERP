@@ -8,22 +8,21 @@ import { useContext } from 'react'
 import { logNetworkError, NetworkError } from '../utils/logNetworkError'
 import { logNetworkSuccess } from '../utils/logNetworkSuccess'
 import { useGoogleAuth } from '../hooks/auth/useGoogleAuth'
+import { jwtDecode } from 'jwt-decode'
 
 const Login = () => {
   const [receivedIdToken, setReceivedIdToken] = useState('')
-  const { apiPathBase, setLoggedIn } = useContext(AppContext)
+  const { apiPathBase, setLoggedIn, setAccessTokens } = useContext(AppContext)
   const [askedForAccount, setAskedForAccount] = useState(false)
   const [successfullyAskedForAccount, setSuccessfullyAskedForAccount] = useState(false)
   const [accountRequestAlreadyExists, setAccountRequestAlreadyExists] = useState(false)
 
   const erpGoogleCodeLogin = async (code: string) => {
-    const res = await axios.get(`${apiPathBase}/api/auth/login`, {
+    return await axios.get(`${apiPathBase}/api/auth/login`, {
       headers: {
         Authorization: `Bearer ${code}`,
       },
     })
-    logNetworkSuccess(res, '430f394u0')
-    return res
   }
 
   const processGoogleCode = async (code: string) => {
@@ -34,9 +33,19 @@ const Login = () => {
 
     try {
       const res = await erpGoogleCodeLogin(code)
+      logNetworkSuccess(res, '430f394u0')
 
-      if (res.data.accountExists) {
-        // setLoggedIn(true)
+      if (res.data.accountExists && res.data.accessToken && res.data.refreshToken) {
+        const { exp } = jwtDecode(res.data.accessToken)
+        if (!exp) {
+          throw new Error('Access token does not have exp field 54t3r4r')
+        }
+        setAccessTokens({
+          access_token: res.data.accessToken,
+          refresh_token: res.data.refreshToken,
+          access_token_exp: exp,
+        })
+        setLoggedIn(true)
       } else {
         setReceivedIdToken(res.data.id_token)
       }
@@ -57,22 +66,22 @@ const Login = () => {
   const { getAndProcessGoogleLoginOtpCode } = useGoogleAuth(processGoogleCode)
 
   const erpAskForAccount = async (googleIdToken: string) => {
-    const res = await axios.post(`${apiPathBase}/api/auth/ask-for-account`, null, {
+    return await axios.post(`${apiPathBase}/api/auth/ask-for-account`, null, {
       headers: {
         Authorization: `Bearer ${googleIdToken}`,
       },
     })
-    logNetworkSuccess(res, '45t3r2r4r')
-    return res
   }
 
   const askForAccount = async () => {
     try {
       setAskedForAccount(true)
-      await erpAskForAccount(receivedIdToken)
+      const res = await erpAskForAccount(receivedIdToken)
+      logNetworkSuccess(res, '45t3r2r4r')
       setSuccessfullyAskedForAccount(true)
     } catch (error) {
       logNetworkError(error as NetworkError, 'iu85545t')
+      alert('Coś poszło bardzo nie tak. Zgłoś administratorowi.')
     }
   }
 
@@ -82,18 +91,9 @@ const Login = () => {
         id: '105887563550899714086',
         action: 'accept',
       })
-      console.log('res:')
-      console.log(res)
+      logNetworkSuccess(res, 'i7764t4')
     } catch (error) {
-      // You can also log specific properties of the error
-      alert('Coś poszło bardzo nie tak. Zgłoś administratorowi.')
-      if (axios.isAxiosError(error)) {
-        console.error('Axios error message:', error.message)
-        console.error('Axios error response:', error.response?.data)
-        console.error('Axios error status:', error.response?.status)
-      } else {
-        console.error('t457y6 Unexpected error:', error)
-      }
+      logNetworkError(error as NetworkError, 'iu85545t')
     }
   }
 
