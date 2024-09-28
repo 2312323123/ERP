@@ -9,10 +9,11 @@ import { AccountCreationRequestsModule } from './account_creation_requests/accou
 import { InitRolesService } from './init_roles/init_roles.service';
 import { HttpModule } from '@nestjs/axios';
 import { JwtIssuerService } from './jwt_issuer/jwt_issuer.service';
+import { HstoreInitializerService } from './hstore_initializer/hstore_initializer.service';
 
 @Module({
   controllers: [AppController],
-  providers: [AppService, InitRolesService, JwtIssuerService],
+  providers: [AppService, InitRolesService, JwtIssuerService, HstoreInitializerService],
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
