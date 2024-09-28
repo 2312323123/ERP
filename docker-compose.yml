@@ -200,6 +200,7 @@ configs:
       -- first microservice
       -- Create the database
       CREATE DATABASE "${AUTH_SERVICE_DB_NAME}";
+      ALTER DATABASE "${AUTH_SERVICE_DB_NAME}" SET TIME ZONE 'Europe/Warsaw';
       -- Create the user if it doesn't exist
       CREATE USER "${AUTH_SERVICE_DB_USER}" WITH PASSWORD '${AUTH_SERVICE_DB_PASSWORD}';
       -- Grant privileges on the database
@@ -208,6 +209,7 @@ configs:
       -- survey_phase microservice
       -- Create the database
       CREATE DATABASE "${SURVEY_SERVICE_DB_NAME}";
+      ALTER DATABASE "${SURVEY_SERVICE_DB_NAME}" SET TIME ZONE 'Europe/Warsaw';
       -- Create the user if it doesn't exist
       CREATE USER "${SURVEY_SERVICE_DB_USER}" WITH PASSWORD '${SURVEY_SERVICE_DB_PASSWORD}';
       -- Grant privileges on the database
