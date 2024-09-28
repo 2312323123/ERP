@@ -10,6 +10,7 @@ import { InitRolesService } from './init_roles/init_roles.service';
 import { HttpModule } from '@nestjs/axios';
 import { JwtIssuerService } from './jwt_issuer/jwt_issuer.service';
 import { HstoreInitializerService } from './hstore_initializer/hstore_initializer.service';
+import { TokensModule } from './tokens/tokens.module';
 
 @Module({
   controllers: [AppController],
@@ -33,6 +34,7 @@ import { HstoreInitializerService } from './hstore_initializer/hstore_initialize
     ValidJwtCachesModule,
     AccountCreationRequestsModule,
     HttpModule,
+    TokensModule,
   ],
 })
 export class AppModule {}
