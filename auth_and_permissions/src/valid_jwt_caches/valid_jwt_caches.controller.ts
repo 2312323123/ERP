@@ -19,16 +19,16 @@ export class ValidJwtCachesController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.validJwtCachesService.findOne(+id);
+    return this.validJwtCachesService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateValidJwtCachDto: UpdateValidJwtCachDto) {
-    return this.validJwtCachesService.update(+id, updateValidJwtCachDto);
+    return this.validJwtCachesService.update(id, updateValidJwtCachDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.validJwtCachesService.remove(+id);
+    return this.validJwtCachesService.remove(id);
   }
 }

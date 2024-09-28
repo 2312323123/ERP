@@ -43,11 +43,11 @@ export class RolesService {
     });
   }
 
-  update(id: number, updateRoleDto: UpdateRoleDto) {
+  update(id: string, updateRoleDto: UpdateRoleDto) {
     return `This action updates a #${id} role`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} role`;
   }
 }

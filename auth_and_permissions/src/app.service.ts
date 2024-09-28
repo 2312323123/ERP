@@ -11,6 +11,8 @@ import { UsersService } from './users/users.service';
 import { AccountCreationRequestsService } from './account_creation_requests/account_creation_requests.service';
 import { CreateAccountCreationRequestDto } from './account_creation_requests/dto/create-account_creation_request.dto';
 import { UpdateUserDto } from './users/dto/update-user.dto';
+import { TokensService } from './tokens/tokens.service';
+import { UpdateTokenDto } from './tokens/dto/update-token.dto';
 
 export class AccountDecisionDto {
   action: 'accept' | 'reject';
@@ -127,6 +129,7 @@ export class AppService {
   constructor(
     private usersService: UsersService,
     private accountCreationRequestsService: AccountCreationRequestsService,
+    private tokensService: TokensService,
   ) {}
 
   getHello(): string {
@@ -170,18 +173,24 @@ export class AppService {
       updateUserDto.given_name = decodedIdToken.given_name;
       updateUserDto.name = decodedIdToken.name;
       updateUserDto.picture = decodedIdToken.picture;
-      updateUserDto.id = decodedIdToken.sub; // id in JWT nomenclature
-
+      // not updating id here as it makes no sense
       this.usersService.update(id, updateUserDto);
 
-      // store google api token and google refresh token in db
-      
+      // store google api token and google refresh token and their exp in db
+      if (tokens.access_token && tokens.refresh_token && tokens.expiry_date) {
+        const updateTokenDto = new UpdateTokenDto();
+        updateTokenDto.google_access_token = tokens.access_token;
+        updateTokenDto.google_refresh_token = tokens.refresh_token;
+        updateTokenDto.google_tokens_expiry = new Date(tokens.expiry_date);
+
+        this.tokensService.update(id, updateTokenDto);
+      }
 
       // issue jwt token with roles (and exp)
       // return jwt token and refresh token in response body
-      // return tokens;
-      return updateUserDto;
-      // return 'dupa9842u34893';
+      return tokens;
+      // return updateUserDto;
+      return 'dupa9842u34893';
     }
 
     // check if account creation request exists - if does, serve different error than when not

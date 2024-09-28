@@ -21,6 +21,35 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
+  @Get('/api/auth/dupa')
+  getHello2(): string {
+    return this.appService.getHello();
+  }
+  @Get('/api/auth/dupa2')
+  async getHello3(): Promise<any> {
+    return await this.makeRequest();
+  }
+
+  async makeRequest() {
+    try {
+      const response = await fetch('http://auth_and_permissions:3000/api/auth/dupa');
+
+      // Check if the content type is JSON
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        const data = await response.json();
+        console.log('Response data:', data);
+        return data;
+      } else {
+        // If the response is not JSON, treat it as text
+        const textData = await response.text();
+        console.log('Response is not JSON:', textData);
+        return textData;
+      }
+    } catch (error) {
+      console.error('Error making HTTP request hehe:', error);
+    }
+  }
 
   @Post('/api/auth/login')
   async login(@Body() { code }: { code: string }) {

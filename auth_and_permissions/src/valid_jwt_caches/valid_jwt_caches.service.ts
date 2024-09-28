@@ -12,15 +12,15 @@ export class ValidJwtCachesService {
     return `This action returns all validJwtCaches`;
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return `This action returns a #${id} validJwtCach`;
   }
 
-  update(id: number, updateValidJwtCachDto: UpdateValidJwtCachDto) {
+  update(id: string, updateValidJwtCachDto: UpdateValidJwtCachDto) {
     return `This action updates a #${id} validJwtCach`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} validJwtCach`;
   }
 }

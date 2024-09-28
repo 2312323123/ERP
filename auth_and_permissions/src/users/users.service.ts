@@ -5,10 +5,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
+import { Token } from 'src/tokens/entities/token.entity';
+import { CreateTokenDto } from 'src/tokens/dto/create-token.dto';
+// import { Token } from 'src/tokens/entities/token.entity';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectRepository(User) private userRepository: Repository<User>) {}
+  constructor(
+    @InjectRepository(User) private userRepository: Repository<User>,
+    @InjectRepository(Token) private tokenRepository: Repository<Token>,
+  ) {}
 
   // create(createUserDto: CreateUserDto) {
   //   return 'This action adds a new user';
@@ -17,9 +23,15 @@ export class UsersService {
   async create(createUserDto: CreateUserDto): Promise<User> {
     // Create a new User instance using the CreateUserDto
     const newUser = this.userRepository.create(createUserDto);
+    // const newUserTokens;
 
-    // Save the new user in the database
-    return await this.userRepository.save(newUser);
+    const tokensDto = new CreateTokenDto(createUserDto.id);
+    const tokens = this.tokenRepository.create(tokensDto);
+
+    // Save the new user in the
+    const newUserMaybe = await this.userRepository.save(newUser);
+    await this.tokenRepository.save(tokens);
+    return newUserMaybe;
   }
 
   findAll() {

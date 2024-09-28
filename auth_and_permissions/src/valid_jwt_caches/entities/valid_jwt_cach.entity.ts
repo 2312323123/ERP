@@ -10,6 +10,6 @@ export class ValidJwtCach {
   id: string;
 
   // expiration date
-  @Column()
-  exp: number;
+  @Column({ type: 'timestamptz' })
+  exp: Date;
 }
