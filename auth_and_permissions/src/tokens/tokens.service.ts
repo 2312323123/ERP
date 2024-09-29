@@ -45,4 +45,8 @@ export class TokensService {
   remove(id: string) {
     return `This action removes a #${id} token`;
   }
+
+  async updateRefreshTokens(id: string, in_app_refresh_tokens: Record<string, number>): Promise<void> {
+    await this.tokenRepository.update({ id }, { in_app_refresh_tokens });
+  }
 }

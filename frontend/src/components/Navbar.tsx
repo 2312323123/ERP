@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 import { AppContext } from '../App'
+import Logout from './auth/Logout'
 
 const Navbar: React.FC = () => {
   const { loggedIn } = useContext(AppContext)
@@ -20,7 +21,7 @@ const Navbar: React.FC = () => {
       <Link onClick={handleClick} to="/other-page">
         Other page
       </Link>
-      {!loggedIn ? <Link to="/login">Login</Link> : <button>Logout</button>}
+      {!loggedIn ? <Link to="/login">Login</Link> : <Logout />}
       <Outlet />
     </div>
   )

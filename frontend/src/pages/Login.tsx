@@ -41,9 +41,9 @@ const Login = () => {
           throw new Error('Access token does not have exp field 54t3r4r')
         }
         setAccessTokens({
-          access_token: res.data.accessToken,
-          refresh_token: res.data.refreshToken,
-          access_token_exp: exp,
+          accessToken: res.data.accessToken,
+          refreshToken: res.data.refreshToken,
+          accessTokenExp: exp,
         })
         setLoggedIn(true)
       } else {

@@ -76,9 +76,13 @@ export class AppController {
   }
 
   @Post('/api/auth/logout')
-  dupa() {
-    return 'dupa';
+  async logout(@Body() body: { id: string; refresh_token: string }) {
+    await this.appService.logout(body.id, body.refresh_token);
+    return { message: 'Logged out successfully' };
   }
 
-  // @Post('/api/auth/refresh')
+  @Post('/api/auth/refresh')
+  async refresh(@Body() body: { id: string; refresh_token: string }) {
+    return await this.appService.refresh(body.id, body.refresh_token);
+  }
 }

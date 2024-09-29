@@ -1,7 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { jwtDecode } from 'src/app.service';
 import { Token } from 'src/tokens/entities/token.entity';
 import { TokensService } from 'src/tokens/tokens.service';
 import { UsersService } from 'src/users/users.service';
@@ -42,7 +41,7 @@ export class JwtIssuerService {
   }
 
   async addNewErpRefreshToken(id: string, token: string): Promise<void> {
-    const exp = jwtDecode(token).exp;
+    const exp = this.jwtService.decode(token).exp;
 
     // Retrieve the tokens entry from the database
     const tokens = await this.tokensService.findOne(id);
@@ -74,5 +73,50 @@ export class JwtIssuerService {
         delete in_app_refresh_tokens[token]; // Remove expired token
       }
     });
+  }
+
+  async removeRefreshToken(id: string, token: string): Promise<void> {
+    const tokens = await this.tokensService.findOne(id);
+    if (!tokens) {
+      throw new NotFoundException('Tokens entry not found 434r43r2');
+    }
+
+    const { in_app_refresh_tokens } = tokens;
+
+    // Check if the token exists
+    if (!in_app_refresh_tokens || !in_app_refresh_tokens[token]) {
+      throw new NotFoundException('Token not found yui8644e3');
+    }
+
+    // Remove the token
+    delete in_app_refresh_tokens[token];
+
+    // Save the updated tokens back to the database
+    await this.tokensService.updateRefreshTokens(id, in_app_refresh_tokens);
+  }
+
+  async refresh(id: string, refreshToken: string) {
+    const tokens = await this.tokensService.findOne(id);
+    if (!tokens) {
+      throw new NotFoundException('Tokens entry not found 5r3542');
+    }
+
+    const { in_app_refresh_tokens } = tokens;
+
+    // Check if the token exists
+    if (!in_app_refresh_tokens || !in_app_refresh_tokens[refreshToken]) {
+      throw new NotFoundException('Token not found 23r56yy7');
+    }
+
+    // Check if the token has expired
+    const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+    if (in_app_refresh_tokens[refreshToken] < currentTime) {
+      throw new UnauthorizedException('Token has expired 3de4fw4');
+    }
+
+    // Issue new access token
+    return {
+      access_token: this.jwtService.sign({ id }, { expiresIn: '1h' }),
+    };
   }
 }

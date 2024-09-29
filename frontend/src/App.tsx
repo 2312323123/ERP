@@ -1,43 +1,30 @@
 import { createContext, useEffect, useState } from 'react'
 import './App.css'
-import { AppContextInterface } from './App.interface'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider } from 'react-router-dom'
 import Login from './pages/Login'
 import OtherPage from './pages/OtherPage'
 import Home from './pages/Home'
 import Navbar from './components/Navbar'
-import { GoogleTokensInterface } from './hooks/auth/useGoogleAuth.interface'
+import { initialAppAccessTokensValue, initialAppContextValue } from './constants/initialStates'
+import { useRefreshAccessToken } from './hooks/auth/useRefreshAccessToken'
 
-const initialValue: AppContextInterface = {
-  apiPathBase: '',
-  accessTokens: {
-    access_token: '',
-    refresh_token: '',
-    access_token_exp: 0,
-  },
-  setAccessTokens: () => {},
-  loggedIn: false,
-  setLoggedIn: () => {},
-}
-export const AppContext = createContext(initialValue)
+export const AppContext = createContext(initialAppContextValue)
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false)
+  const apiPathBase = 'http://localhost:10016'
 
-  const initialAccessTokens: GoogleTokensInterface = {
-    access_token: '',
-    refresh_token: '',
-    access_token_exp: 0,
-  }
-  const [accessTokens, setAccessTokens] = useState(initialAccessTokens)
+  const [loggedIn, setLoggedIn] = useState(false)
+  const [accessTokens, setAccessTokens] = useState(initialAppAccessTokensValue)
+  const refreshAccessToken = useRefreshAccessToken(`${apiPathBase}/api/auth/refresh`, accessTokens, setAccessTokens)
 
   const value = {
-    apiPathBase: 'http://localhost:10016',
+    apiPathBase,
     accessTokens,
     setAccessTokens,
     loggedIn,
     setLoggedIn,
+    refreshAccessToken,
   }
 
   const router = createBrowserRouter(
