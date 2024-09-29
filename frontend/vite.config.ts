@@ -17,5 +17,12 @@ export default defineConfig({
     watch: {
       usePolling: true,
     },
+    // proxy: {
+    //   // All routes not matched by an existing file will be rewritten to `index.html`
+    //   '^/.*': {
+    //     target: '/',
+    //     rewrite: (path) => '/index.html',
+    //   },
+    // },
   },
 })

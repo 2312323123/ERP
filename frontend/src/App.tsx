@@ -1,15 +1,27 @@
 import { createContext, useEffect, useState } from 'react'
-import './App.css'
+// import './App.css'
 import { GoogleOAuthProvider } from '@react-oauth/google'
-import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider } from 'react-router-dom'
-import Login from './pages/Login'
-import OtherPage from './pages/OtherPage'
-import Home from './pages/Home'
-import Navbar from './components/Navbar'
+import { RouterProvider } from 'react-router-dom'
 import { initialAppAccessTokensValue, initialAppContextValue } from './constants/initialStates'
 import { useRefreshAccessToken } from './hooks/auth/useRefreshAccessToken'
+import { createTheme, ThemeProvider } from '@mui/material'
+import { router } from './router'
 
 export const AppContext = createContext(initialAppContextValue)
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#1976d2', // Primary color
+    },
+    secondary: {
+      main: '#f50057', // Secondary color
+    },
+  },
+  typography: {
+    fontFamily: 'Roboto, Arial, sans-serif',
+  },
+})
 
 function App() {
   const apiPathBase = 'http://localhost:10016'
@@ -27,16 +39,6 @@ function App() {
     refreshAccessToken,
   }
 
-  const router = createBrowserRouter(
-    createRoutesFromElements(
-      <Route path="/" element={<Navbar />}>
-        <Route index element={<Home />} />
-        <Route path="other-page" element={<OtherPage />} />
-        <Route path="login" element={<Login />} />
-      </Route>,
-    ),
-  )
-
   useEffect(() => {
     // if not logged in, redirect to login page
     if (!loggedIn) {
@@ -44,12 +46,14 @@ function App() {
     } else {
       router.navigate('/')
     }
-  }, [loggedIn, router])
+  }, [loggedIn])
 
   return (
     <AppContext.Provider value={value}>
       <GoogleOAuthProvider clientId={'630669205687-ukc7rkopmrfomse2g04uei1gkhdvo2o0.apps.googleusercontent.com'}>
-        <RouterProvider router={router} />
+        <ThemeProvider theme={theme}>
+          <RouterProvider router={router} />
+        </ThemeProvider>
       </GoogleOAuthProvider>
     </AppContext.Provider>
   )
