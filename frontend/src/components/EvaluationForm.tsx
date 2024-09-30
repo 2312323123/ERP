@@ -51,7 +51,6 @@ const EvaluationForm: React.FC<EvaluationFormProps> = ({ evalElements, gradeName
   return (
     <form onSubmit={handleSubmit}>
       <Box my={2}>
-        <Typography variant="h6">Formularz oceny</Typography>
         {evalElements.map((element, index) => (
           <Box key={index} my={1}>
             <Box display="flex" alignItems="center">

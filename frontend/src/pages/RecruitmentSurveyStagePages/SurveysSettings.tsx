@@ -23,6 +23,23 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
 import EvaluationForm from '../../components/EvaluationForm'
 import EvaluationDisplay from '../../components/EvaluationDisplay'
 
+// interface EvaluationCriteriaSetup {
+//   criteria: Array<{ name: string; description: string; weight: number }>
+//   markTags: {
+//     mark1Tag: string
+//     mark2Tag: string
+//     mark3Tag: string
+//     mark4Tag: string
+//     mark5Tag: string
+//   }
+// }
+
+// interface SurveysSettings {}
+
+// interface SurveysSettings {
+
+// }
+
 const SurveysSettings = () => {
   const [newRecruitment, setNewRecruitment] = useState('')
   const [recruitmentSettings, setRecruitmentSettings] = useState<string | 'none'>('none')
@@ -130,7 +147,7 @@ const SurveysSettings = () => {
   }
 
   function removeOrderAndSort(fields: CustomField[]): CustomFieldNoOrder[] {
-    return fields
+    return [...fields]
       .sort((a, b) => a.order - b.order) // Sort by 'order'
       .map((obj: CustomField) => ({
         name: obj.name,
@@ -145,6 +162,30 @@ const SurveysSettings = () => {
     console.log('customFields:')
     console.log(customFields)
   }, [customFields])
+
+  // priceless, but only while debugging
+  useEffect(() => {
+    setCustomFields([
+      {
+        order: 1,
+        name: 'Pierwsze kryterium',
+        description: 'Opis pierwszego kryterium',
+        weight: 1,
+      },
+      {
+        order: 2,
+        name: 'Drugie kryterium',
+        description: 'Opis drugiego kryterium',
+        weight: 2,
+      },
+      {
+        order: 3,
+        name: 'Trzecie kryterium',
+        description: 'Opis trzeciego kryterium',
+        weight: 3,
+      },
+    ])
+  }, [])
 
   const handleAddCustomField = () => {
     const newField = {
@@ -204,8 +245,69 @@ const SurveysSettings = () => {
       <Container maxWidth="md">
         {/* Settings Header */}
         <Typography variant="h4" gutterBottom>
-          Ustawienia - rekrutacja &lt;TODO:nazwa rekru&gt;
+          Rekrutacja &lt;TODO:nazwa rekru&gt;
         </Typography>
+      </Container>
+
+      {/* Divider */}
+      <Divider sx={{ my: 4 }} />
+
+      <Container maxWidth="md">
+        {/* Settings Header */}
+        <Typography variant="h4" gutterBottom>
+          Ustawienia zmieniane natychmiastowo
+        </Typography>
+
+        {/* Create New Recruitment */}
+        <Box my={3}>
+          {/* Active Recruitment Details */}
+          <Typography variant="h5" gutterBottom>
+            Aktywna rekrutacja: {activeRecruitment.name}, początek: {activeRecruitment.date}
+          </Typography>
+
+          {/* Choose Recruitment */}
+          <Box my={3}>
+            <FormControl fullWidth variant="outlined" margin="normal">
+              <InputLabel>Wybierz aktywną rekrutację</InputLabel>
+              <Select
+                value={selectedRecruitment}
+                onChange={(e) => trySettingSelectedRecruitment(e.target.value)}
+                label="Wybierz rekrutację"
+              >
+                <MenuItem value="recruitment1">Recruitment 1</MenuItem>
+                <MenuItem value="recruitment2">Recruitment 2</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+
+          {/* Token Output */}
+          <Box my={3}>
+            <Typography variant="body1">Token do wklejenia w skrypt od przesyłania ankiet:</Typography>
+            <code>hehe</code>
+          </Box>
+
+          {/* Można Oceniać Switch */}
+          <Box my={3} display="flex" alignItems="center">
+            <Typography variant="body1" mr={2}>
+              Można oceniać?
+            </Typography>
+            <Switch checked={canRate} onChange={handleRateChange} color="primary" />
+            <Typography variant="body1" ml={2}>
+              {canRate ? 'TAK' : 'NIE'}
+            </Typography>
+          </Box>
+        </Box>
+      </Container>
+
+      {/* Divider */}
+      <Divider sx={{ my: 4 }} />
+
+      <Container maxWidth="md">
+        {/* Settings Header */}
+        <Typography variant="h4" gutterBottom>
+          Ustawienia
+        </Typography>
+
         <Typography variant="body1" color="textSecondary" gutterBottom>
           (jak skończysz, kliknij 'Zapisz', albo się nie zapisze)
         </Typography>
@@ -218,8 +320,12 @@ const SurveysSettings = () => {
         {/* Divider */}
         <Divider sx={{ my: 2 }} />
 
-        {/* Create New Recruitment */}
         <Box my={3}>
+          {/* List of editable fields */}
+          <Typography variant="h5" gutterBottom>
+            Stwórz nową rekrutację
+          </Typography>
+
           <TextField
             fullWidth
             label="Stwórz nową rekrutację"
@@ -250,55 +356,18 @@ const SurveysSettings = () => {
         {/* Divider */}
         <Divider sx={{ my: 2 }} />
 
-        {/* Active Recruitment Details */}
-        <Typography variant="h5" gutterBottom>
-          Aktywna rekrutacja: {activeRecruitment.name}, początek: {activeRecruitment.date}
-        </Typography>
+        {/* Accordion */}
+        <Accordion expanded={expanded} onChange={() => setExpanded((expanded) => !expanded)}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>
+              Instrukcja oceniania (markdown) (Pokazywana na początku przy pierwszym wejściu i w zakładce 'Jak oceniać')
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <div>{/* This will be continued later */}dupa</div>
+          </AccordionDetails>
+        </Accordion>
 
-        {/* Choose Recruitment */}
-        <Box my={3}>
-          <FormControl fullWidth variant="outlined" margin="normal">
-            <InputLabel>Wybierz aktywną rekrutację</InputLabel>
-            <Select
-              value={selectedRecruitment}
-              onChange={(e) => trySettingSelectedRecruitment(e.target.value)}
-              label="Wybierz rekrutację"
-            >
-              <MenuItem value="recruitment1">Recruitment 1</MenuItem>
-              <MenuItem value="recruitment2">Recruitment 2</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
-
-        {/* Token Output */}
-        <Box my={3}>
-          <Typography variant="body1">Token do wklejenia w skrypt od przesyłania ankiet:</Typography>
-          <code>hehe</code>
-        </Box>
-
-        {/* Można Oceniać Switch */}
-        <Box my={3} display="flex" alignItems="center">
-          <Typography variant="body1" mr={2}>
-            Można oceniać?
-          </Typography>
-          <Switch checked={canRate} onChange={handleRateChange} color="primary" />
-          <Typography variant="body1" ml={2}>
-            {canRate ? 'TAK' : 'NIE'}
-          </Typography>
-        </Box>
-      </Container>
-
-      {/* Accordion */}
-      <Accordion expanded={expanded} onChange={() => setExpanded((expanded) => !expanded)}>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography>Accordion Title</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <div>{/* This will be continued later */}dupa</div>
-        </AccordionDetails>
-      </Accordion>
-
-      <Container maxWidth="md">
         {/* Divider */}
         <Divider sx={{ my: 2 }} />
         <Box my={3}>
@@ -348,12 +417,17 @@ const SurveysSettings = () => {
 
         {/* Divider */}
         <Divider sx={{ my: 2 }} />
+      </Container>
 
-        {/* Info */}
-        <Typography variant="h4" gutterBottom>
-          Poniższe ustawienia można zmieniać do momentu wpadnięcia pierwszej oceny od dowolnego oceniającego. (czyli{' '}
-          {isThereAnyEvalutionAlready ? 'już nie można' : 'jeszcze można'}):
-        </Typography>
+      {/* Info */}
+      <Typography variant="h5" gutterBottom align="center">
+        Poniższe ustawienia można zmieniać do momentu wpadnięcia pierwszej oceny od dowolnego oceniającego. (czyli{' '}
+        {isThereAnyEvalutionAlready ? 'już nie można' : 'jeszcze można'}):
+      </Typography>
+
+      <Container maxWidth="md">
+        {/* Divider */}
+        <Divider sx={{ my: 2 }} />
 
         <Box my={3}>
           {/* Custom fields info */}
@@ -377,14 +451,14 @@ const SurveysSettings = () => {
                 value={field.name}
                 onChange={(e) => handleCustomFieldChange(index, 'name', e.target.value)}
                 variant="outlined"
-                label="Name"
-                sx={{ marginX: 1 }}
+                label="Nazwa"
+                sx={{ marginX: 1, alignSelf: 'start' }}
               />
               <TextField
                 value={field.description}
                 onChange={(e) => handleCustomFieldChange(index, 'description', e.target.value)}
                 variant="outlined"
-                label="Description"
+                label="Opis (wyświetlany po najechaniu na info)"
                 multiline // Set to true for a long input text area
                 rows={4} // Number of visible rows
                 sx={{ marginX: 1, flexGrow: 1 }}
@@ -394,7 +468,7 @@ const SurveysSettings = () => {
                 value={field.weight}
                 onChange={(e) => handleCustomFieldChange(index, 'weight', Number(e.target.value))}
                 variant="outlined"
-                label="Weight"
+                label="Waga"
                 sx={{ marginX: 1, width: '80px' }} // Set width to a specific value
               />
 
@@ -404,7 +478,6 @@ const SurveysSettings = () => {
               </IconButton>
             </Box>
           ))}
-
           {/* Button to add a new custom field */}
           <Button variant="contained" color="primary" onClick={handleAddCustomField}>
             Stwórz kryterium oceniania
@@ -417,7 +490,6 @@ const SurveysSettings = () => {
             <Typography variant="h6" gutterBottom>
               Nazwy przy ocenach:
             </Typography>
-
             {/* Grade Names */}
             <Box>
               {Array.from({ length: 5 }, (_, index) => (
@@ -438,11 +510,17 @@ const SurveysSettings = () => {
           </Box>
 
           <Box my={3}>
-            <Typography variant="h6" gutterBottom>
+            <Typography variant="h5" gutterBottom>
               Jak to wygląda przy ocenianiu:
             </Typography>
 
-            <Divider sx={{ my: 2 }} />
+            <Divider sx={{ my: 3 }} />
+
+            <Typography variant="h6" gutterBottom>
+              Formularz oceny:
+            </Typography>
+
+            <Divider sx={{ my: 1 }} />
 
             <EvaluationForm
               evalElements={customFields
@@ -455,12 +533,14 @@ const SurveysSettings = () => {
               }}
             />
 
-            <Divider sx={{ my: 2 }} />
+            <Divider sx={{ my: 3 }} />
 
             <Typography variant="h6" gutterBottom>
               Jak to widzą inni:
             </Typography>
-            {/* dupadupadupa */}
+
+            <Divider sx={{ my: 1 }} />
+
             <EvaluationDisplay
               result={{
                 user: {
@@ -481,12 +561,17 @@ const SurveysSettings = () => {
             <Divider sx={{ my: 2 }} />
           </Box>
         </Box>
+      </Container>
 
-        {/* Info */}
-        <Typography variant="h4" gutterBottom>
-          Poniższe ustawienia można zmieniać do momentu wpadnięcia pierwszej ankietki. (czyli{' '}
-          {isThereAnySurveyAlready ? 'już nie można' : 'jeszcze można'}):
-        </Typography>
+      {/* Info */}
+      <Typography variant="h5" gutterBottom align="center">
+        Poniższe ustawienia można zmieniać do momentu wpadnięcia pierwszej ankietki. (czyli{' '}
+        {isThereAnySurveyAlready ? 'już nie można' : 'jeszcze można'}):
+      </Typography>
+
+      <Container maxWidth="md">
+        {/* Divider */}
+        <Divider sx={{ my: 2 }} />
 
         {/* Button to delete a recruitment */}
         <Button
