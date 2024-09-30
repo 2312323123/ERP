@@ -8,7 +8,7 @@ const MinimumReduxUseExample = () => {
   return (
     <>
       <div>{count}</div>
-      <button onClick={() => dispatch(increment())}>Increment</button>
+      <button onClick={() => dispatch(increment(2))}>Increment</button>
     </>
   )
 }
