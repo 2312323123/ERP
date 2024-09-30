@@ -1,24 +1,11 @@
 // src/store.ts
-import { configureStore, createSlice } from '@reduxjs/toolkit'
-
-// Create a simple slice with an initial state and one reducer
-const counterSlice = createSlice({
-  name: 'counter',
-  initialState: { value: 0 },
-  reducers: {
-    increment: (state) => {
-      state.value += 1
-    },
-  },
-})
-
-// Export the action for dispatching
-export const { increment } = counterSlice.actions
+import { configureStore } from '@reduxjs/toolkit'
+import counterReducer from './slices/counterSlice'
 
 // Create the Redux store
 export const store = configureStore({
   reducer: {
-    counter: counterSlice.reducer,
+    counter: counterReducer,
   },
 })
 
