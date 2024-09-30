@@ -84,6 +84,9 @@ const surveySettingsPageSlice = createSlice({
     handleDeleteFieldsNotToShow: (state, { payload: { index } }) => {
       state.currentRecruitment.fieldsNotToShow.splice(index, 1)
     },
+    setFieldToDistinctTheSurvey: (state, action) => {
+      state.currentRecruitment.fieldToDistinctTheSurvey = action.payload
+    },
   },
 })
 
@@ -95,6 +98,7 @@ export const {
   handleFieldsNotToShowChange,
   handleAddFieldsNotToShow,
   handleDeleteFieldsNotToShow,
+  setFieldToDistinctTheSurvey,
 } = surveySettingsPageSlice.actions
 
 // Reducer to be added to the store
@@ -105,3 +109,5 @@ export const getEvaluatorsCanEvaluate = (state: RootState) => state.surveySettin
 export const getGradingInstruction = (state: RootState) =>
   state.surveySettingsPage.currentRecruitment.gradingInstruction
 export const getFieldsNotToShow = (state: RootState) => state.surveySettingsPage.currentRecruitment.fieldsNotToShow
+export const getFieldToDistinctTheSurvey = (state: RootState) =>
+  state.surveySettingsPage.currentRecruitment.fieldToDistinctTheSurvey

@@ -20,6 +20,7 @@ import EvaluationForm from '../../../components/EvaluationForm'
 import EvaluationDisplay from '../../../components/EvaluationDisplay'
 import MarkdownEditor from './components/MarkdownEditor'
 import HiddenFieldsSetup from './components/HiddenFieldsSetup'
+import FieldToDistinctTheSurveySetup from './components/FieldToDistinctTheSurveySetup'
 
 // interface EvaluationCriteriaSetup {
 //   criteria: Array<{ name: string; description: string; weight: number }>
@@ -80,9 +81,6 @@ const SurveysSettings = () => {
   const handleRateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCanRate(event.target.checked)
   }
-
-  // State for the identifier field
-  const [identifierField, setIdentifierField] = useState<string>('')
 
   // State for the evaluation and survey statuses
   const [isThereAnyEvalutionAlready, setIsThereAnyEvalutionAlready] = useState<boolean>(false)
@@ -347,19 +345,7 @@ const SurveysSettings = () => {
         <Divider sx={{ my: 2 }} />
 
         {/* Identifier Field */}
-        <Box my={3}>
-          <Typography variant="h5" gutterBottom>
-            Pole z ankiety, którego zawartość widać w liście ankiet, np. imię:
-          </Typography>
-          <TextField
-            fullWidth
-            label="pole"
-            value={identifierField}
-            onChange={(e) => setIdentifierField(e.target.value)}
-            variant="outlined"
-            margin="normal"
-          />
-        </Box>
+        <FieldToDistinctTheSurveySetup />
 
         {/* Divider */}
         <Divider sx={{ my: 2 }} />
