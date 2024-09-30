@@ -7,6 +7,7 @@ import { takeMeToSurveyPhase } from '../utils/takeMeToSurveyPhase'
 import { logNetworkError, NetworkError } from '../utils/logNetworkError'
 import { logNetworkSuccess } from '../utils/logNetworkSuccess'
 import axios from 'axios'
+import MinimumReduxUseExample from '../components/MinimumReduxUseExample'
 
 const Home = () => {
   const { refreshAccessToken, accessTokens, apiPathBase } = useContext(AppContext)
@@ -65,6 +66,8 @@ const Home = () => {
             Zabierz Dwaćkowi superadmina
           </Button>
         </ListItem>
+
+        <MinimumReduxUseExample />
       </Stack>
     </>
   )
