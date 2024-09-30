@@ -29,7 +29,7 @@ const initialState = {
     canEvaluatorsEvaluate: false,
     gradingInstruction: `# Hi, *Pluto*!
 Rekru czy coś`,
-    fieldsNotToShow: [] as Array<string>,
+    fieldsNotToShow: [''] as Array<string>,
     fieldToDistinctTheSurvey: '',
     evaluationCriteriaSetup: {
       criteria: [
@@ -72,11 +72,30 @@ const surveySettingsPageSlice = createSlice({
     setGradingInstruction: (state, action) => {
       state.currentRecruitment.gradingInstruction = action.payload
     },
+    setFieldsNotToShow: (state, action) => {
+      state.currentRecruitment.fieldsNotToShow = action.payload
+    },
+    handleFieldsNotToShowChange: (state, { payload: { index, value } }) => {
+      state.currentRecruitment.fieldsNotToShow[index] = value
+    },
+    handleAddFieldsNotToShow: (state) => {
+      state.currentRecruitment.fieldsNotToShow.push('')
+    },
+    handleDeleteFieldsNotToShow: (state, { payload: { index } }) => {
+      state.currentRecruitment.fieldsNotToShow.splice(index, 1)
+    },
   },
 })
 
 // Export actions for dispatching
-export const { setEvaluatorsCanEvaluate, setGradingInstruction } = surveySettingsPageSlice.actions
+export const {
+  setEvaluatorsCanEvaluate,
+  setGradingInstruction,
+  setFieldsNotToShow,
+  handleFieldsNotToShowChange,
+  handleAddFieldsNotToShow,
+  handleDeleteFieldsNotToShow,
+} = surveySettingsPageSlice.actions
 
 // Reducer to be added to the store
 export default surveySettingsPageSlice.reducer
@@ -85,3 +104,4 @@ export default surveySettingsPageSlice.reducer
 export const getEvaluatorsCanEvaluate = (state: RootState) => state.surveySettingsPage.evaluatorsCanEvaluate
 export const getGradingInstruction = (state: RootState) =>
   state.surveySettingsPage.currentRecruitment.gradingInstruction
+export const getFieldsNotToShow = (state: RootState) => state.surveySettingsPage.currentRecruitment.fieldsNotToShow

@@ -1,7 +1,4 @@
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
   Box,
   Button,
   Container,
@@ -16,15 +13,13 @@ import {
   Typography,
 } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
 import EvaluationForm from '../../../components/EvaluationForm'
 import EvaluationDisplay from '../../../components/EvaluationDisplay'
-import { useDispatch, useSelector } from 'react-redux'
-import { getGradingInstruction, setGradingInstruction } from '../../../store/slices/surveySettingsPageSlice'
-import Markdown from 'react-markdown'
+import MarkdownEditor from './components/MarkdownEditor'
+import HiddenFieldsSetup from './components/HiddenFieldsSetup'
 
 // interface EvaluationCriteriaSetup {
 //   criteria: Array<{ name: string; description: string; weight: number }>
@@ -51,9 +46,6 @@ const SurveysSettings = () => {
     name: 'no name',
     date: '01-01-2024',
   })
-
-  const dispatch = useDispatch()
-  const gradingInstruction = useSelector(getGradingInstruction)
 
   const trySettingSelectedRecruitment = (value: string) => {
     const confirmSave = handleSaveChanges()
@@ -84,28 +76,9 @@ const SurveysSettings = () => {
   }
 
   const [canRate, setCanRate] = useState<boolean>(false)
-  const [expanded, setExpanded] = useState<boolean>(true) // To keep the accordion open
 
   const handleRateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCanRate(event.target.checked)
-  }
-
-  // State for managing the list of text fields
-  const [evaluatorHiddenFields, setEvaluatorHiddenFields] = useState<string[]>([''])
-
-  const handleEvaluatorHiddenFieldChange = (index: number, value: string) => {
-    const newFields = [...evaluatorHiddenFields]
-    newFields[index] = value
-    setEvaluatorHiddenFields(newFields)
-  }
-
-  const handleAddEvaluatorHiddenField = () => {
-    setEvaluatorHiddenFields([...evaluatorHiddenFields, '']) // Add a new empty field
-  }
-
-  const handleDeleteEvaluatorHiddenField = (index: number) => {
-    const newFields = evaluatorHiddenFields.filter((_, i) => i !== index)
-    setEvaluatorHiddenFields(newFields)
   }
 
   // State for the identifier field
@@ -363,65 +336,12 @@ const SurveysSettings = () => {
         <Divider sx={{ my: 2 }} />
 
         {/* Accordion */}
-        <Accordion expanded={expanded} onChange={() => setExpanded((expanded) => !expanded)}>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>
-              Instrukcja oceniania (markdown) (Pokazywana na początku przy pierwszym wejściu i w zakładce 'Jak oceniać')
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <TextField
-              multiline
-              variant="outlined"
-              fullWidth
-              minRows={3} // Set the initial height here
-              placeholder="Type your text here..."
-              value={gradingInstruction}
-              onChange={(e) => dispatch(setGradingInstruction(e.target.value))}
-              // onChange={(e) => alert(e.target.value)}
-            />
-          </AccordionDetails>
-          <Box
-            sx={{
-              border: '1px solid #ccc', // Set the border color
-              borderRadius: 1, // Round the corners
-              padding: 2, // Add padding inside the box
-              mt: 2, // Margin top to separate from the text field
-            }}
-          >
-            {/* Content for the box goes here */}
-            <Markdown>{gradingInstruction}</Markdown>
-          </Box>
-        </Accordion>
+        <MarkdownEditor />
 
         {/* Divider */}
         <Divider sx={{ my: 2 }} />
-        <Box my={3}>
-          {/* List of editable fields */}
-          <Typography variant="h5" gutterBottom>
-            Pola z ankiety, których nie pokazujemy
-          </Typography>
 
-          {evaluatorHiddenFields.map((field, index) => (
-            <Box key={index} display="flex" alignItems="center" mb={2}>
-              <TextField
-                value={field}
-                onChange={(e) => handleEvaluatorHiddenFieldChange(index, e.target.value)}
-                variant="outlined"
-                fullWidth
-                label={`Pole ${index + 1}`}
-              />
-              <IconButton onClick={() => handleDeleteEvaluatorHiddenField(index)} color="secondary">
-                <DeleteIcon />
-              </IconButton>
-            </Box>
-          ))}
-
-          {/* Button to add a new field */}
-          <Button variant="contained" color="primary" onClick={handleAddEvaluatorHiddenField}>
-            Add Field
-          </Button>
-        </Box>
+        <HiddenFieldsSetup />
 
         {/* Divider */}
         <Divider sx={{ my: 2 }} />
