@@ -10,7 +10,7 @@ import SurveysSurveys from './pages/RecruitmentSurveyStagePages/SurveysSurveys'
 import SurveysRanks from './pages/RecruitmentSurveyStagePages/SurveysRanks'
 import SurveysHelp from './pages/RecruitmentSurveyStagePages/SurveysHelp'
 import SurveysFeedback from './pages/RecruitmentSurveyStagePages/SurveysFeedback'
-import SurveysSettings from './pages/RecruitmentSurveyStagePages/SurveysSettings'
+import SurveysSettings from './pages/RecruitmentSurveyStagePages/SurveysSettings/SurveysSettings'
 import PathChangeListener from './utils/PathChangeListener'
 import AppRoles from './pages/AppRoles/AppRoles'
 

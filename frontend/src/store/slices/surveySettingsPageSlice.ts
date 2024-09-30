@@ -27,7 +27,8 @@ const initialState = {
     uuid: '',
     googleScriptsToken: '',
     canEvaluatorsEvaluate: false,
-    gradingInstruction: '',
+    gradingInstruction: `# Hi, *Pluto*!
+Rekru czy coś`,
     fieldsNotToShow: [] as Array<string>,
     fieldToDistinctTheSurvey: '',
     evaluationCriteriaSetup: {
@@ -75,7 +76,7 @@ const surveySettingsPageSlice = createSlice({
 })
 
 // Export actions for dispatching
-export const { setEvaluatorsCanEvaluate } = surveySettingsPageSlice.actions
+export const { setEvaluatorsCanEvaluate, setGradingInstruction } = surveySettingsPageSlice.actions
 
 // Reducer to be added to the store
 export default surveySettingsPageSlice.reducer

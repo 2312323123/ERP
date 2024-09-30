@@ -20,8 +20,11 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
-import EvaluationForm from '../../components/EvaluationForm'
-import EvaluationDisplay from '../../components/EvaluationDisplay'
+import EvaluationForm from '../../../components/EvaluationForm'
+import EvaluationDisplay from '../../../components/EvaluationDisplay'
+import { useDispatch, useSelector } from 'react-redux'
+import { getGradingInstruction, setGradingInstruction } from '../../../store/slices/surveySettingsPageSlice'
+import Markdown from 'react-markdown'
 
 // interface EvaluationCriteriaSetup {
 //   criteria: Array<{ name: string; description: string; weight: number }>
@@ -48,6 +51,9 @@ const SurveysSettings = () => {
     name: 'no name',
     date: '01-01-2024',
   })
+
+  const dispatch = useDispatch()
+  const gradingInstruction = useSelector(getGradingInstruction)
 
   const trySettingSelectedRecruitment = (value: string) => {
     const confirmSave = handleSaveChanges()
@@ -364,8 +370,28 @@ const SurveysSettings = () => {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <div>{/* This will be continued later */}dupa</div>
+            <TextField
+              multiline
+              variant="outlined"
+              fullWidth
+              minRows={3} // Set the initial height here
+              placeholder="Type your text here..."
+              value={gradingInstruction}
+              onChange={(e) => dispatch(setGradingInstruction(e.target.value))}
+              // onChange={(e) => alert(e.target.value)}
+            />
           </AccordionDetails>
+          <Box
+            sx={{
+              border: '1px solid #ccc', // Set the border color
+              borderRadius: 1, // Round the corners
+              padding: 2, // Add padding inside the box
+              mt: 2, // Margin top to separate from the text field
+            }}
+          >
+            {/* Content for the box goes here */}
+            <Markdown>{gradingInstruction}</Markdown>
+          </Box>
         </Accordion>
 
         {/* Divider */}
