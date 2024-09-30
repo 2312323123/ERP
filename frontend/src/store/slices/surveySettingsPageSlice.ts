@@ -87,6 +87,7 @@ const surveySettingsPageSlice = createSlice({
     setFieldToDistinctTheSurvey: (state, action) => {
       state.currentRecruitment.fieldToDistinctTheSurvey = action.payload
     },
+    // EvaluationPanelCreator.tsx
   },
 })
 
