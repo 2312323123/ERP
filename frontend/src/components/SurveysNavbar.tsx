@@ -163,9 +163,6 @@ const SurveysNavbar = (props: Props) => {
 
   return (
     <>
-      <div>SurveysNavbar</div>
-      <Outlet />
-
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <AppBar

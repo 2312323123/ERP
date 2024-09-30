@@ -22,7 +22,7 @@ const RoleButtonNotOwned = ({ user, role, buttonsBlocked, setButtonsBlocked, ref
     try {
       setButtonsBlocked(true)
       const res = await axios.post(`${apiPathBase}/api/auth/give-role`, {
-        userId: id,
+        id,
         role,
       })
       logNetworkSuccess(res, 'r46y7ut4')
