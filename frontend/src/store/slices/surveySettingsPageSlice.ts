@@ -121,6 +121,21 @@ const surveySettingsPageSlice = createSlice({
       }
     },
     // end of EvaluationPanelCreator.tsx
+    setMark1Tag: (state, action) => {
+      state.currentRecruitment.evaluationCriteriaSetup.markTags.mark1Tag = action.payload
+    },
+    setMark2Tag: (state, action) => {
+      state.currentRecruitment.evaluationCriteriaSetup.markTags.mark2Tag = action.payload
+    },
+    setMark3Tag: (state, action) => {
+      state.currentRecruitment.evaluationCriteriaSetup.markTags.mark3Tag = action.payload
+    },
+    setMark4Tag: (state, action) => {
+      state.currentRecruitment.evaluationCriteriaSetup.markTags.mark4Tag = action.payload
+    },
+    setMark5Tag: (state, action) => {
+      state.currentRecruitment.evaluationCriteriaSetup.markTags.mark5Tag = action.payload
+    },
   },
 })
 
@@ -138,6 +153,11 @@ export const {
   handleDeleteCriteria,
   handleMoveUp,
   handleMoveDown,
+  setMark1Tag,
+  setMark2Tag,
+  setMark3Tag,
+  setMark4Tag,
+  setMark5Tag,
 } = surveySettingsPageSlice.actions
 
 // Reducer to be added to the store
@@ -152,3 +172,13 @@ export const getFieldToDistinctTheSurvey = (state: RootState) =>
   state.surveySettingsPage.currentRecruitment.fieldToDistinctTheSurvey
 export const getEvaluationCriteriaSetup = (state: RootState) =>
   state.surveySettingsPage.currentRecruitment.evaluationCriteriaSetup
+export const getMark1Tag = (state: RootState) =>
+  state.surveySettingsPage.currentRecruitment.evaluationCriteriaSetup.markTags.mark1Tag
+export const getMark2Tag = (state: RootState) =>
+  state.surveySettingsPage.currentRecruitment.evaluationCriteriaSetup.markTags.mark2Tag
+export const getMark3Tag = (state: RootState) =>
+  state.surveySettingsPage.currentRecruitment.evaluationCriteriaSetup.markTags.mark3Tag
+export const getMark4Tag = (state: RootState) =>
+  state.surveySettingsPage.currentRecruitment.evaluationCriteriaSetup.markTags.mark4Tag
+export const getMark5Tag = (state: RootState) =>
+  state.surveySettingsPage.currentRecruitment.evaluationCriteriaSetup.markTags.mark5Tag

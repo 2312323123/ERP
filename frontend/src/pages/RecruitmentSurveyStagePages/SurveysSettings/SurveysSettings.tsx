@@ -4,7 +4,6 @@ import {
   Container,
   Divider,
   FormControl,
-  IconButton,
   InputLabel,
   MenuItem,
   Select,
@@ -19,6 +18,7 @@ import MarkdownEditor from './components/MarkdownEditor'
 import HiddenFieldsSetup from './components/HiddenFieldsSetup'
 import FieldToDistinctTheSurveySetup from './components/FieldToDistinctTheSurveySetup'
 import EvaluationPanelCreator from './components/EvaluationPanelCreator'
+import MarkTagsSetup from './components/MarkTagsSetup'
 
 // interface EvaluationCriteriaSetup {
 //   criteria: Array<{ name: string; description: string; weight: number }>
@@ -141,12 +141,6 @@ const SurveysSettings = () => {
 
   // State for the grade names
   const [gradeNames, setGradeNames] = useState<string[]>(Array(5).fill(''))
-
-  const handleGradeNameChange = (index: number, value: string) => {
-    const newGradeNames = [...gradeNames]
-    newGradeNames[index] = value
-    setGradeNames(newGradeNames)
-  }
 
   return (
     <>
@@ -299,20 +293,7 @@ const SurveysSettings = () => {
               Nazwy przy ocenach:
             </Typography>
             {/* Grade Names */}
-            <Box>
-              {Array.from({ length: 5 }, (_, index) => (
-                <Box key={index} display="flex" alignItems="center" mb={1}>
-                  <Typography variant="subtitle1">{index + 1} - </Typography>
-                  <TextField
-                    value={gradeNames[index]}
-                    onChange={(e) => handleGradeNameChange(index, e.target.value)}
-                    variant="outlined"
-                    size="small"
-                    sx={{ marginLeft: 1, width: '175px' }} // Adjust width as needed
-                  />
-                </Box>
-              ))}
-            </Box>
+            <MarkTagsSetup />
 
             <Divider sx={{ my: 2 }} />
           </Box>
