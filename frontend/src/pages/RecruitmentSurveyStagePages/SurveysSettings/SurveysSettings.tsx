@@ -13,14 +13,12 @@ import {
   Typography,
 } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import DeleteIcon from '@mui/icons-material/Delete'
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
 import EvaluationForm from '../../../components/EvaluationForm'
 import EvaluationDisplay from '../../../components/EvaluationDisplay'
 import MarkdownEditor from './components/MarkdownEditor'
 import HiddenFieldsSetup from './components/HiddenFieldsSetup'
 import FieldToDistinctTheSurveySetup from './components/FieldToDistinctTheSurveySetup'
+import EvaluationPanelCreator from './components/EvaluationPanelCreator'
 
 // interface EvaluationCriteriaSetup {
 //   criteria: Array<{ name: string; description: string; weight: number }>
@@ -38,6 +36,15 @@ import FieldToDistinctTheSurveySetup from './components/FieldToDistinctTheSurvey
 // interface SurveysSettings {
 
 // }
+
+// State for managing the list of custom fields
+
+export interface CustomField {
+  order: number
+  name: string
+  description: string
+  weight: number
+}
 
 const SurveysSettings = () => {
   const [newRecruitment, setNewRecruitment] = useState('')
@@ -109,14 +116,6 @@ const SurveysSettings = () => {
     }
   }
 
-  // State for managing the list of custom fields
-
-  interface CustomField {
-    order: number
-    name: string
-    description: string
-    weight: number
-  }
   interface CustomFieldNoOrder {
     name: string
     description: string
@@ -140,69 +139,6 @@ const SurveysSettings = () => {
     console.log(customFields)
   }, [customFields])
 
-  // priceless, but only while debugging
-  useEffect(() => {
-    setCustomFields([
-      {
-        order: 1,
-        name: 'Pierwsze kryterium',
-        description: 'Opis pierwszego kryterium',
-        weight: 1,
-      },
-      {
-        order: 2,
-        name: 'Drugie kryterium',
-        description: 'Opis drugiego kryterium',
-        weight: 2,
-      },
-      {
-        order: 3,
-        name: 'Trzecie kryterium',
-        description: 'Opis trzeciego kryterium',
-        weight: 3,
-      },
-    ])
-  }, [])
-
-  const handleAddCustomField = () => {
-    const newField = {
-      order: customFields.length + 1,
-      name: '',
-      description: '',
-      weight: 0,
-    }
-    setCustomFields([...customFields, newField])
-  }
-
-  const handleCustomFieldChange = (index: number, key: string, value: string | number) => {
-    const newFields = [...customFields]
-    newFields[index] = { ...newFields[index], [key]: value }
-    setCustomFields(newFields)
-  }
-
-  const handleDeleteCustomField = (index: number) => {
-    const newFields = customFields.filter((_, i) => i !== index).map((field, i) => ({ ...field, order: i + 1 }))
-    setCustomFields(newFields)
-  }
-
-  const handleMoveUp = (index: number) => {
-    if (index > 0) {
-      const newFields = [...customFields]
-      const [movedField] = newFields.splice(index, 1)
-      newFields.splice(index - 1, 0, movedField)
-      setCustomFields(newFields)
-    }
-  }
-
-  const handleMoveDown = (index: number) => {
-    if (index < customFields.length - 1) {
-      const newFields = [...customFields]
-      const [movedField] = newFields.splice(index, 1)
-      newFields.splice(index + 1, 0, movedField)
-      setCustomFields(newFields)
-    }
-  }
-
   // State for the grade names
   const [gradeNames, setGradeNames] = useState<string[]>(Array(5).fill(''))
 
@@ -211,9 +147,6 @@ const SurveysSettings = () => {
     newGradeNames[index] = value
     setGradeNames(newGradeNames)
   }
-
-  // State for the evaluation form submission
-  const [formResults, setFormResults] = useState<any>(null)
 
   return (
     <>
@@ -362,58 +295,7 @@ const SurveysSettings = () => {
         <Divider sx={{ my: 2 }} />
 
         <Box my={3}>
-          {/* Custom fields info */}
-          <Typography variant="h6" gutterBottom>
-            Te pola co wystawianie oceny polega na tym że je wypełniasz:
-          </Typography>
-
-          {/* List of custom fields */}
-          {customFields.map((field, index) => (
-            <Box key={index} display="flex" alignItems="center" mb={2} mt={2} border={1} borderRadius={2} padding={2}>
-              {/* Up/Down buttons */}
-              <IconButton onClick={() => handleMoveUp(index)} disabled={index === 0}>
-                <ArrowUpwardIcon />
-              </IconButton>
-              <IconButton onClick={() => handleMoveDown(index)} disabled={index === customFields.length - 1}>
-                <ArrowDownwardIcon />
-              </IconButton>
-
-              {/* Input fields */}
-              <TextField
-                value={field.name}
-                onChange={(e) => handleCustomFieldChange(index, 'name', e.target.value)}
-                variant="outlined"
-                label="Nazwa"
-                sx={{ marginX: 1, alignSelf: 'start' }}
-              />
-              <TextField
-                value={field.description}
-                onChange={(e) => handleCustomFieldChange(index, 'description', e.target.value)}
-                variant="outlined"
-                label="Opis (wyświetlany po najechaniu na info)"
-                multiline // Set to true for a long input text area
-                rows={4} // Number of visible rows
-                sx={{ marginX: 1, flexGrow: 1 }}
-              />
-              <TextField
-                type="number"
-                value={field.weight}
-                onChange={(e) => handleCustomFieldChange(index, 'weight', Number(e.target.value))}
-                variant="outlined"
-                label="Waga"
-                sx={{ marginX: 1, width: '80px' }} // Set width to a specific value
-              />
-
-              {/* Delete button */}
-              <IconButton onClick={() => handleDeleteCustomField(index)} color="secondary">
-                <DeleteIcon />
-              </IconButton>
-            </Box>
-          ))}
-          {/* Button to add a new custom field */}
-          <Button variant="contained" color="primary" onClick={handleAddCustomField}>
-            Stwórz kryterium oceniania
-          </Button>
+          <EvaluationPanelCreator />
 
           {/* Divider */}
           <Divider sx={{ my: 2 }} />
@@ -445,15 +327,11 @@ const SurveysSettings = () => {
             <Typography variant="h5" gutterBottom>
               Jak to wygląda przy ocenianiu:
             </Typography>
-
             <Divider sx={{ my: 3 }} />
-
             <Typography variant="h6" gutterBottom>
               Formularz oceny:
             </Typography>
-
             <Divider sx={{ my: 1 }} />
-
             <EvaluationForm
               evalElements={customFields
                 .slice() // Create a shallow copy to avoid mutating the original array
@@ -464,15 +342,12 @@ const SurveysSettings = () => {
                 alert(JSON.stringify(data, null, 2))
               }}
             />
-
+            (łączna waga: )
             <Divider sx={{ my: 3 }} />
-
             <Typography variant="h6" gutterBottom>
               Jak to widzą inni:
             </Typography>
-
             <Divider sx={{ my: 1 }} />
-
             <EvaluationDisplay
               result={{
                 user: {
@@ -489,7 +364,6 @@ const SurveysSettings = () => {
                 onSubmit: () => alert('dupaduuuuupa345'),
               }}
             />
-
             <Divider sx={{ my: 2 }} />
           </Box>
         </Box>
