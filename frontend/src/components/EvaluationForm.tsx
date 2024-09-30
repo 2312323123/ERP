@@ -2,16 +2,28 @@ import React, { useState } from 'react'
 import { Box, Button, TextField, MenuItem, Typography, Tooltip, IconButton } from '@mui/material'
 import InfoIcon from '@mui/icons-material/Info'
 
-interface EvalElement {
+// for use in result view
+interface EvaluationResult {
+  // picture is an url
+  user: { name: string; picture: string }
+  marks: { value: number }[]
+  comment: string
+}
+
+interface CustomFieldNoOrder {
   name: string
   description: string
   weight: number
 }
+interface EvaluationSubmission {
+  marks: { order: number; value: number }[]
+  comment: string
+}
 
 interface EvaluationFormProps {
-  evalElements: EvalElement[]
+  evalElements: CustomFieldNoOrder[]
   gradeNames: string[]
-  onSubmit: (data: { marks: { order: number; value: number }[]; comment: string }) => void
+  onSubmit: (data: EvaluationSubmission) => void
 }
 
 const EvaluationForm: React.FC<EvaluationFormProps> = ({ evalElements, gradeNames, onSubmit }) => {
@@ -39,7 +51,7 @@ const EvaluationForm: React.FC<EvaluationFormProps> = ({ evalElements, gradeName
   return (
     <form onSubmit={handleSubmit}>
       <Box my={2}>
-        <Typography variant="h6">Evaluation Form</Typography>
+        <Typography variant="h6">Formularz oceny</Typography>
         {evalElements.map((element, index) => (
           <Box key={index} my={1}>
             <Box display="flex" alignItems="center">
@@ -52,11 +64,12 @@ const EvaluationForm: React.FC<EvaluationFormProps> = ({ evalElements, gradeName
             </Box>
             <TextField
               select
-              label="Mark"
+              label="Ocena"
               value={marks[index]}
               onChange={(e) => handleMarkChange(index, Number(e.target.value))}
               variant="outlined"
               fullWidth
+              required
             >
               {[1, 2, 3, 4, 5].map((grade, gradeIndex) => (
                 <MenuItem key={gradeIndex} value={gradeIndex + 1}>
@@ -79,7 +92,7 @@ const EvaluationForm: React.FC<EvaluationFormProps> = ({ evalElements, gradeName
         />
 
         <Button type="submit" variant="contained" color="primary">
-          Submit
+          Zapisz ocenę
         </Button>
       </Box>
     </form>
