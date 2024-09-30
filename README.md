@@ -270,6 +270,11 @@ you may want to set up different Google clientId (here in main.tsx) in your fron
 - some other libraries:
   - `npm i @nestjs/sequelize` `npm i --save-dev @types/sequelize` - if you use sequelize
   - `npm i pg-hstore` - gives option to store unstructured data in pgsql
+  - to be able to import everything unimported after 'ctrl + .' settings.json:
+  ```json
+  "typescript.suggest.autoImports": true,
+  "javascript.suggest.autoImports": true
+  ```
 
 ### Google Cloud Console OAuth2 - how to
 
