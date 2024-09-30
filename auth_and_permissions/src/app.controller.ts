@@ -29,14 +29,6 @@ export class AppController {
   async getHello4(): Promise<any> {
     return await this.usersService.getUserRolesById('105887563550899714086');
   }
-  @Get('/api/auth/dupa4')
-  dupa4(): any {
-    return process.env.AUTH_NO_REPLY_EMAIL;
-  }
-  @Get('/api/auth/dupa5')
-  dupa5(): any {
-    return process.env.AUTH_NO_REPLY_EMAIL_PASSWORD;
-  }
 
   async makeRequest() {
     try {
