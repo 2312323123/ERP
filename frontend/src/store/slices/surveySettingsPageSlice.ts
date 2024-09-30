@@ -88,6 +88,39 @@ const surveySettingsPageSlice = createSlice({
       state.currentRecruitment.fieldToDistinctTheSurvey = action.payload
     },
     // EvaluationPanelCreator.tsx
+    handleAddCriteria(state) {
+      const newField = {
+        order: state.currentRecruitment.evaluationCriteriaSetup.criteria.length + 1,
+        name: '',
+        description: '',
+        weight: 0,
+      }
+      state.currentRecruitment.evaluationCriteriaSetup.criteria.push(newField)
+    },
+    handleCriteriaChange(state, { payload: { index, key, value } }) {
+      // @ts-expect-error: Type 'string' cannot be used to index type '{ name: string; description: string; weight: number; }'
+      state.currentRecruitment.evaluationCriteriaSetup.criteria[index][key] = value
+    },
+    handleDeleteCriteria(state, { payload: { index } }) {
+      state.currentRecruitment.evaluationCriteriaSetup.criteria.splice(index, 1)
+    },
+    handleMoveUp(state, { payload: { index } }) {
+      if (index > 0) {
+        const newFields = [...state.currentRecruitment.evaluationCriteriaSetup.criteria]
+        const [movedField] = newFields.splice(index, 1)
+        newFields.splice(index - 1, 0, movedField)
+        state.currentRecruitment.evaluationCriteriaSetup.criteria = newFields
+      }
+    },
+    handleMoveDown(state, { payload: { index } }) {
+      if (index < state.currentRecruitment.evaluationCriteriaSetup.criteria.length - 1) {
+        const newFields = [...state.currentRecruitment.evaluationCriteriaSetup.criteria]
+        const [movedField] = newFields.splice(index, 1)
+        newFields.splice(index + 1, 0, movedField)
+        state.currentRecruitment.evaluationCriteriaSetup.criteria = newFields
+      }
+    },
+    // end of EvaluationPanelCreator.tsx
   },
 })
 
@@ -100,6 +133,11 @@ export const {
   handleAddFieldsNotToShow,
   handleDeleteFieldsNotToShow,
   setFieldToDistinctTheSurvey,
+  handleAddCriteria,
+  handleCriteriaChange,
+  handleDeleteCriteria,
+  handleMoveUp,
+  handleMoveDown,
 } = surveySettingsPageSlice.actions
 
 // Reducer to be added to the store
@@ -112,3 +150,5 @@ export const getGradingInstruction = (state: RootState) =>
 export const getFieldsNotToShow = (state: RootState) => state.surveySettingsPage.currentRecruitment.fieldsNotToShow
 export const getFieldToDistinctTheSurvey = (state: RootState) =>
   state.surveySettingsPage.currentRecruitment.fieldToDistinctTheSurvey
+export const getEvaluationCriteriaSetup = (state: RootState) =>
+  state.surveySettingsPage.currentRecruitment.evaluationCriteriaSetup

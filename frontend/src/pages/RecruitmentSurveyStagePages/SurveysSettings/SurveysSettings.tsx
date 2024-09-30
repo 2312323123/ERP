@@ -209,7 +209,6 @@ const SurveysSettings = () => {
         </Box>
       </Container>
 
-      {/* Divider */}
       <Divider sx={{ my: 4 }} />
 
       <Container maxWidth="md">
@@ -227,7 +226,6 @@ const SurveysSettings = () => {
           Zapisz
         </Button>
 
-        {/* Divider */}
         <Divider sx={{ my: 2 }} />
 
         <Box my={3}>
@@ -263,24 +261,21 @@ const SurveysSettings = () => {
           </Button>
         </Box>
 
-        {/* Divider */}
         <Divider sx={{ my: 2 }} />
 
         {/* Accordion */}
         <MarkdownEditor />
 
-        {/* Divider */}
         <Divider sx={{ my: 2 }} />
 
+        {/* Hidden Fields Setup */}
         <HiddenFieldsSetup />
 
-        {/* Divider */}
         <Divider sx={{ my: 2 }} />
 
         {/* Identifier Field */}
         <FieldToDistinctTheSurveySetup />
 
-        {/* Divider */}
         <Divider sx={{ my: 2 }} />
       </Container>
 
@@ -291,13 +286,12 @@ const SurveysSettings = () => {
       </Typography>
 
       <Container maxWidth="md">
-        {/* Divider */}
         <Divider sx={{ my: 2 }} />
 
         <Box my={3}>
+          {/* Evaluation Panel Creator */}
           <EvaluationPanelCreator />
 
-          {/* Divider */}
           <Divider sx={{ my: 2 }} />
 
           <Box my={3}>
