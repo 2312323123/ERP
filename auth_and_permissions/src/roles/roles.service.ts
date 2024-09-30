@@ -33,8 +33,9 @@ export class RolesService {
     return await this.roleRepository.save(newRole);
   }
 
-  findAll() {
-    return `This action returns all roles`;
+  // role panel purposes
+  async findAll(): Promise<Role[]> {
+    return await this.roleRepository.find();
   }
 
   async findOne(role: string) {

@@ -9,6 +9,7 @@ import { logNetworkError, NetworkError } from '../utils/logNetworkError'
 import { logNetworkSuccess } from '../utils/logNetworkSuccess'
 import { useGoogleAuth } from '../hooks/auth/useGoogleAuth'
 import { jwtDecode } from 'jwt-decode'
+import { router } from '../router'
 
 const Login = () => {
   const [receivedIdToken, setReceivedIdToken] = useState('')
@@ -93,7 +94,16 @@ const Login = () => {
       })
       logNetworkSuccess(res, 'i7764t4')
     } catch (error) {
-      logNetworkError(error as NetworkError, 'iu85545t')
+      logNetworkError(error as NetworkError, 'u565t43r')
+    }
+  }
+
+  const acceptMaciekStupidWay = async () => {
+    try {
+      const res = await axios.post(`${apiPathBase}/api/auth/account-creation-decision-maciek`)
+      logNetworkSuccess(res, '6yi7i8uy')
+    } catch (error) {
+      logNetworkError(error as NetworkError, '23er46y')
     }
   }
 
@@ -104,6 +114,8 @@ const Login = () => {
           <div>
             <button onClick={getAndProcessGoogleLoginOtpCode}>Zaloguj przy użyciu Google</button>
             <button onClick={acceptMaciek}>Accept Maciek as user</button>
+            <button onClick={acceptMaciekStupidWay}>Accept Maciek as user (stupid way)</button>
+            <button onClick={() => router.navigate('/home')}>Go Home</button>
           </div>
           {receivedIdToken && (
             <div>

@@ -15,6 +15,8 @@ import { TokensService } from './tokens/tokens.service';
 import { UpdateTokenDto } from './tokens/dto/update-token.dto';
 import { JwtIssuerService } from './jwt_issuer/jwt_issuer.service';
 import { JwtService } from '@nestjs/jwt';
+import { RolesService } from './roles/roles.service';
+import { EmailService } from './email/email.service';
 
 export class AccountDecisionDto {
   action: 'accept' | 'reject';
@@ -63,6 +65,8 @@ export class AppService {
     private accountCreationRequestsService: AccountCreationRequestsService,
     private tokensService: TokensService,
     private jwtIssuerService: JwtIssuerService,
+    private rolesService: RolesService,
+    private emailService: EmailService,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -74,6 +78,7 @@ export class AppService {
     return extractBearerToken(header);
   }
 
+  // login purposes
   async login(authHeader: string) {
     const code = this.extractBearerToken(authHeader);
 
@@ -142,6 +147,7 @@ export class AppService {
     }
   }
 
+  // login purposes
   async askForAccount(authHeader: string) {
     // verify the id_token
     const id_token = this.extractBearerToken(authHeader);
@@ -217,13 +223,27 @@ export class AppService {
     return;
   }
 
+  // login purposes
   async acceptAccountCreation(id: string) {
     // find account creation request
     const accountCreationRequest = await this.accountCreationRequestsService.findOne(id);
 
+    // send email to user
+    const to = accountCreationRequest.email;
+    const subject = '[BEST ERP] Prośba o utworzenie konta została zaakceptowana.';
+    const text = `Cześć, <br/><br/>
+		Podaję Twoje dane do logowania do systemu do bestowania: <br/><br/>
+		Po prostu zaloguj się używając swojego konta Google. <br/><br/>
+		Znajduje się to tu: <a href="https://erp.best.krakow.pl">erp.best.krakow.pl</a> <br/><br/>
+		Pozdrawiamy<br/>
+		CT Rekrutacji<br/>`;
+    await this.emailService.sendEmail(to, subject, text);
+
     // create user in db
     await this.usersService.create(accountCreationRequest);
 
+    // TODO: send email to user
+
     // delete account creation request
     await this.accountCreationRequestsService.remove(id);
 
@@ -231,14 +251,30 @@ export class AppService {
     return;
   }
 
+  // login purposes
   async rejectAccountCreation(id: string) {
+    // save the things needed in the email some 10 lines from now
+    const accountCreationRequest = await this.accountCreationRequestsService.findOne(id);
+
     // delete account creation request
     await this.accountCreationRequestsService.remove(id);
+
+    // send email to user
+    const to = accountCreationRequest.email;
+    const subject = '[BEST ERP] Prośba o utworzenie konta zaginęła.';
+    const text = `Cześć, <br/><br/>
+		Wygląda na to, że dalej nie masz dostępu do systemu do bestowania. <br/><br/>
+    Jeśli uważasz, że to błąd, skontaktuj się z administratorem. <br/><br/>
+		Aplikacja znajduje się tu: <a href="https://erp.best.krakow.pl">erp.best.krakow.pl</a> <br/><br/>
+		Pozdrawiamy<br/>
+		CT Rekrutacji<br/>`;
+    await this.emailService.sendEmail(to, subject, text);
 
     // return some 201
     return;
   }
 
+  // login purposes
   async accountCreationDecision(accountDecisionDto: AccountDecisionDto) {
     const { action, id } = accountDecisionDto;
 
@@ -252,12 +288,43 @@ export class AppService {
         throw new BadRequestException('Invalid action provided 7844t4');
     }
   }
+  async accountCreationDecisionMaciek() {
+    const id = '105887563550899714086';
+    return await this.acceptAccountCreation(id);
+  }
 
+  // login purposes
   async logout(id: string, refreshToken: string) {
     await this.jwtIssuerService.removeRefreshToken(id, refreshToken);
   }
 
+  // login purposes
   async refresh(id: string, refreshToken: string) {
     return this.jwtIssuerService.refresh(id, refreshToken);
+  }
+
+  // role panel purposes
+  async giveRole(id: string, role: string) {
+    return this.usersService.assignRoleToUser(id, role);
+  }
+
+  // role panel purposes
+  async takeAwayRole(id: string, role: string) {
+    return this.usersService.removeRoleFromUser(id, role);
+  }
+
+  // role panel purposes
+  async getAllRoles() {
+    return this.rolesService.findAll();
+  }
+
+  // role panel purposes
+  async getUsersWithTheirRoles() {
+    return this.usersService.getUsersWithTheirRoles();
+  }
+
+  // role panel purposes
+  async getAccountCreationRequests() {
+    return this.accountCreationRequestsService.findAll();
   }
 }

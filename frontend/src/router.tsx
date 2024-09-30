@@ -11,20 +11,23 @@ import SurveysRanks from './pages/RecruitmentSurveyStagePages/SurveysRanks'
 import SurveysHelp from './pages/RecruitmentSurveyStagePages/SurveysHelp'
 import SurveysFeedback from './pages/RecruitmentSurveyStagePages/SurveysFeedback'
 import SurveysSettings from './pages/RecruitmentSurveyStagePages/SurveysSettings'
+import PathChangeListener from './utils/PathChangeListener'
+import AppRoles from './pages/AppRoles/AppRoles'
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/">
+    <Route path="/" element={<PathChangeListener />}>
       <Route path="login" element={<Login />} />
       <Route index element={<Navigate to="/home" replace />} />
       <Route path="/home" element={<Navbar />}>
         <Route index element={<Home />} />
         <Route path="other-page" element={<OtherPage />} />
       </Route>
+      <Route path="/app-roles" element={<AppRoles />}></Route>
       <Route path="/recrutiment-survey-stage">
         <Route path="/recrutiment-survey-stage/first-visit" element={<SurveysFirstVisit />} />
         <Route path="/recrutiment-survey-stage/app" element={<SurveysNavbar />}>
-          <Route index element={<SurveysDashboard />} />
+          <Route index path="/recrutiment-survey-stage/app/dashboard" element={<SurveysDashboard />} />
           <Route path="/recrutiment-survey-stage/app/surveys" element={<SurveysSurveys />} />
           <Route path="/recrutiment-survey-stage/app/ranks" element={<SurveysRanks />} />
           <Route path="/recrutiment-survey-stage/app/help" element={<SurveysHelp />} />

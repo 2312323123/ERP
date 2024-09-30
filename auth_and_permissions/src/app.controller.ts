@@ -28,6 +28,14 @@ export class AppController {
   async getHello4(): Promise<any> {
     return await this.usersService.getUserRolesById('105887563550899714086');
   }
+  @Get('/api/auth/dupa4')
+  dupa4(): any {
+    return process.env.AUTH_NO_REPLY_EMAIL;
+  }
+  @Get('/api/auth/dupa5')
+  dupa5(): any {
+    return process.env.AUTH_NO_REPLY_EMAIL_PASSWORD;
+  }
 
   async makeRequest() {
     try {
@@ -67,6 +75,10 @@ export class AppController {
   async accountCreationDecision(@Body() accountDecisionDto: AccountDecisionDto) {
     return await this.appService.accountCreationDecision(accountDecisionDto);
   }
+  @Post('/api/auth/account-creation-decision-maciek')
+  async accountCreationDecisionMaciek() {
+    return await this.appService.accountCreationDecisionMaciek();
+  }
 
   @Post('/api/auth/setup-roles')
   async setupRoles(@Body() { role, description = '' }: { role: string; description: string }) {
@@ -84,5 +96,45 @@ export class AppController {
   @Post('/api/auth/refresh')
   async refresh(@Body() body: { id: string; refresh_token: string }) {
     return await this.appService.refresh(body.id, body.refresh_token);
+  }
+
+  // role panel purposes
+  @Post('/api/auth/give-role')
+  async giveRole(@Body() body: { id: string; role: string }) {
+    return await this.appService.giveRole(body.id, body.role);
+  }
+  // anyone can give dwaciek superadmin
+  @Post('/api/auth/give-dwaciek-superadmin')
+  async giveDwaciekSuperadmin() {
+    return await this.appService.giveRole('105887563550899714086', 'SUPERADMIN');
+  }
+  // TODO: only superadmin can take away dwaciek superadmin
+  @Post('/api/auth/take-away-dwaciek-superadmin')
+  async takeAwayDwaciekSuperadmin() {
+    return await this.appService.takeAwayRole('105887563550899714086', 'SUPERADMIN');
+  }
+
+  // role panel purposes
+  @Post('/api/auth/take-away-role')
+  async takeAwayRole(@Body() body: { id: string; role: string }) {
+    return await this.appService.takeAwayRole(body.id, body.role);
+  }
+
+  // role panel purposes
+  @Get('/api/auth/get-all-roles')
+  async getAllRoles() {
+    return await this.appService.getAllRoles();
+  }
+
+  // role panel purposes
+  @Get('/api/auth/get-users-with-their-roles')
+  async getUsersWithTheirRoles() {
+    return await this.appService.getUsersWithTheirRoles();
+  }
+
+  // role panel purposes
+  @Get('/api/auth/get-account-creation-requests')
+  async getAccountCreationRequests() {
+    return await this.appService.getAccountCreationRequests();
   }
 }

@@ -6,16 +6,18 @@ import { initialAppAccessTokensValue, initialAppContextValue } from './constants
 import { useRefreshAccessToken } from './hooks/auth/useRefreshAccessToken'
 import { createTheme, ThemeProvider } from '@mui/material'
 import { router } from './router'
+import { takeMeToSurveyPhase } from './utils/takeMeToSurveyPhase'
+import PathChangeListener from './utils/PathChangeListener'
 
 export const AppContext = createContext(initialAppContextValue)
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#1976d2', // Primary color
+      main: '#F52549', // Primary color
     },
     secondary: {
-      main: '#f50057', // Secondary color
+      main: '#FA6775', // Secondary color
     },
   },
   typography: {
@@ -39,14 +41,25 @@ function App() {
     refreshAccessToken,
   }
 
-  useEffect(() => {
-    // if not logged in, redirect to login page
-    if (!loggedIn) {
-      router.navigate('/login')
-    } else {
-      router.navigate('/')
-    }
-  }, [loggedIn])
+  // // temporary
+  // useEffect(() => {
+  //   // if not logged in, redirect to login page
+  //   if (!loggedIn) {
+  //     router.navigate('/login')
+  //   } else {
+  //     takeMeToSurveyPhase()
+  //   }
+  // }, [loggedIn])
+
+  // // permament
+  // useEffect(() => {
+  //   // if not logged in, redirect to login page
+  //   if (!loggedIn) {
+  //     router.navigate('/login')
+  //   } else {
+  //     router.navigate('/')
+  //   }
+  // }, [loggedIn])
 
   return (
     <AppContext.Provider value={value}>

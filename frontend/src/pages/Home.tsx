@@ -3,22 +3,29 @@ import { AppContext } from '../App'
 import { Button, ListItem, Stack } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { router } from '../router'
+import { takeMeToSurveyPhase } from '../utils/takeMeToSurveyPhase'
+import { logNetworkError, NetworkError } from '../utils/logNetworkError'
+import { logNetworkSuccess } from '../utils/logNetworkSuccess'
+import axios from 'axios'
 
 const Home = () => {
-  const { refreshAccessToken, accessTokens } = useContext(AppContext)
+  const { refreshAccessToken, accessTokens, apiPathBase } = useContext(AppContext)
 
-  // TODO:
-  /*
-    po wejściu w localstorage jeśli jeszcze nie zapisane to domyślnie zakładka z instrukcją, localstorage jak (erp_recruitment_survey_instruction_seen_\*MD5z/(ID_usera)(UUID_rekru)/\*)
-  */
-  const surveysLinkClick = async () => {
-    const seen = localStorage.getItem('erp_recruitment_survey_instruction_seen_1234567890')
-    if (seen) {
-      router.navigate('/recrutiment-survey-stage/app')
-    } else {
-      // below thingy -> instruction panel confirmation
-      // localStorage.setItem('erp_recruitment_survey_instruction_seen_1234567890', 'true')
-      router.navigate('/recrutiment-survey-stage/first-visit')
+  const giveDwaciekSuperadmin = async () => {
+    try {
+      const res = await axios.post(`${apiPathBase}/api/auth/give-dwaciek-superadmin`)
+      logNetworkSuccess(res, '654534r4')
+    } catch (error) {
+      logNetworkError(error as NetworkError, '3r4ty76')
+    }
+  }
+
+  const takeAwayDwaciekSuperadmin = async () => {
+    try {
+      const res = await axios.post(`${apiPathBase}/api/auth/take-away-dwaciek-superadmin`)
+      logNetworkSuccess(res, '8iy65r3')
+    } catch (error) {
+      logNetworkError(error as NetworkError, 't568t33')
     }
   }
 
@@ -29,7 +36,7 @@ const Home = () => {
       <button onClick={() => console.log(accessTokens)}>log access tokens</button>
       <Stack spacing={2}>
         <ListItem>
-          <Button variant="contained" color="primary" onClick={surveysLinkClick}>
+          <Button variant="contained" color="primary" onClick={takeMeToSurveyPhase}>
             Oceniaczka
           </Button>
         </ListItem>
@@ -39,13 +46,23 @@ const Home = () => {
           </Button>
         </ListItem>
         <ListItem>
-          <Button variant="contained" color="primary">
+          <Button variant="contained" color="primary" onClick={() => router.navigate('/app-roles')}>
             Uprawnienia
           </Button>
         </ListItem>
         <ListItem>
           <Button variant="contained" color="primary">
             Wyloguj
+          </Button>
+        </ListItem>
+        <ListItem>
+          <Button onClick={giveDwaciekSuperadmin} variant="contained" color="primary">
+            Daj Dwaćkowi superadmina
+          </Button>
+        </ListItem>
+        <ListItem>
+          <Button onClick={takeAwayDwaciekSuperadmin} variant="contained" color="primary">
+            Zabierz Dwaćkowi superadmina
           </Button>
         </ListItem>
       </Stack>

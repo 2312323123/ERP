@@ -6,7 +6,7 @@ import { logNetworkSuccess } from '../../utils/logNetworkSuccess'
 import { logNetworkError, NetworkError } from '../../utils/logNetworkError'
 import { initialAppAccessTokensValue } from '../../constants/initialStates'
 
-const Logout = () => {
+const Logout = ({ children }) => {
   // component's goal is to ask api for logout, and if there's error, alert, if not, set logged in to false
   const {
     apiPathBase,
@@ -36,7 +36,7 @@ const Logout = () => {
     }
   }
 
-  return <button onClick={askForLogout}>Logout</button>
+  return <span onClick={askForLogout}>{children ? children : 'Logout'}</span>
 }
 
 export default Logout

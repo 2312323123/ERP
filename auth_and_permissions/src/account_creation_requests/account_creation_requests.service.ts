@@ -27,8 +27,9 @@ export class AccountCreationRequestsService {
   //   return await this.userRepository.save(newUser);
   // }
 
-  findAll() {
-    return `This action returns all accountCreationRequests`;
+  // role panel purposes
+  async findAll(): Promise<AccountCreationRequest[]> {
+    return await this.accountCreationRequestRepository.find();
   }
 
   async findOne(id: string): Promise<AccountCreationRequest> {

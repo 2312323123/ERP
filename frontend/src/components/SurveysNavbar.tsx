@@ -18,6 +18,16 @@ import { Outlet } from 'react-router-dom'
 import InboxIcon from '@mui/icons-material/MoveToInbox' // Import InboxIcon
 import MailIcon from '@mui/icons-material/Mail' // Import MailIcon
 import MenuIcon from '@mui/icons-material/Menu' // Import MenuIcon
+import bestLogoWhite from '../assets/best-logo-white.svg'
+import LogoutButton from './auth/Logout'
+import { Home, Logout } from '@mui/icons-material'
+import { Link } from 'react-router-dom'
+import DashboardIcon from '@mui/icons-material/Dashboard'
+import AssignmentIcon from '@mui/icons-material/Assignment'
+import StarsIcon from '@mui/icons-material/Stars'
+import HelpIcon from '@mui/icons-material/Help'
+import FeedbackIcon from '@mui/icons-material/Feedback'
+import SettingsIcon from '@mui/icons-material/Settings'
 
 const drawerWidth = 240
 
@@ -53,28 +63,97 @@ const SurveysNavbar = (props: Props) => {
 
   const drawer = (
     <div>
-      <Toolbar />
+      <Toolbar sx={{ backgroundColor: 'primary.main', justifyContent: 'center' }}>
+        <div style={{ maxWidth: '100%', height: '3.6em' }}>
+          <img style={{ objectFit: 'contain', maxWidth: '100%', maxHeight: '100%' }} src={bestLogoWhite} />
+        </div>
+      </Toolbar>
       <Divider />
+      {/* TODO: User icon + role shall go here */}
       <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem key={text} disablePadding>
+        <Link to="/recrutiment-survey-stage/app/dashboard" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <ListItem disablePadding>
             <ListItemButton>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemIcon>
+                <DashboardIcon />
+              </ListItemIcon>
+              <ListItemText primary={'Panel'} />
             </ListItemButton>
           </ListItem>
-        ))}
+        </Link>
+        <Link to="/recrutiment-survey-stage/app/surveys" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <AssignmentIcon />
+              </ListItemIcon>
+              <ListItemText primary={'Ankiety'} />
+            </ListItemButton>
+          </ListItem>
+        </Link>
+        <Link to="/recrutiment-survey-stage/app/ranks" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <StarsIcon />
+              </ListItemIcon>
+              <ListItemText primary={'Ranking'} />
+            </ListItemButton>
+          </ListItem>
+        </Link>
+        <Link to="/recrutiment-survey-stage/app/help" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <HelpIcon />
+              </ListItemIcon>
+              <ListItemText primary={'Jak oceniać'} />
+            </ListItemButton>
+          </ListItem>
+        </Link>
+        <Link to="/recrutiment-survey-stage/app/feedback" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <FeedbackIcon />
+              </ListItemIcon>
+              <ListItemText primary={'Feedback'} />
+            </ListItemButton>
+          </ListItem>
+        </Link>
+        <Link to="/recrutiment-survey-stage/app/settings" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <SettingsIcon />
+              </ListItemIcon>
+              <ListItemText primary={'Ustawienia'} />
+            </ListItemButton>
+          </ListItem>
+        </Link>
       </List>
       <Divider />
       <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem key={text} disablePadding>
+        <Link to="/home" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <ListItem disablePadding>
             <ListItemButton>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemIcon>
+                <Home />
+              </ListItemIcon>
+              <ListItemText primary={'Wróć do panelu głównego'} />
             </ListItemButton>
           </ListItem>
-        ))}
+        </Link>
+        <LogoutButton>
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <Logout />
+              </ListItemIcon>
+              <ListItemText primary={'Wyloguj'} />
+            </ListItemButton>
+          </ListItem>
+        </LogoutButton>
       </List>
     </div>
   )
@@ -107,7 +186,7 @@ const SurveysNavbar = (props: Props) => {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" noWrap component="div">
-              Responsive drawer
+              oceniaczka - rekrutacja &lt;TODO:nazwa rekru&gt;
             </Typography>
           </Toolbar>
         </AppBar>
@@ -142,6 +221,8 @@ const SurveysNavbar = (props: Props) => {
         </Box>
         <Box component="main" sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}>
           <Toolbar />
+          <Outlet />
+          <br />
           <Typography sx={{ marginBottom: 2 }}>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
             dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum facilisis leo vel. Risus at ultrices mi

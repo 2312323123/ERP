@@ -12,10 +12,11 @@ import { JwtIssuerService } from './jwt_issuer/jwt_issuer.service';
 import { HstoreInitializerService } from './hstore_initializer/hstore_initializer.service';
 import { TokensModule } from './tokens/tokens.module';
 import { JwtModule } from '@nestjs/jwt';
+import { EmailService } from './email/email.service';
 
 @Module({
   controllers: [AppController],
-  providers: [AppService, InitRolesService, JwtIssuerService, HstoreInitializerService],
+  providers: [AppService, InitRolesService, JwtIssuerService, HstoreInitializerService, EmailService],
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',

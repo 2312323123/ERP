@@ -14,6 +14,7 @@ export class UsersService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(Token) private tokenRepository: Repository<Token>,
+    @InjectRepository(Role) private roleRepository: Repository<Role>,
   ) {}
 
   // create(createUserDto: CreateUserDto) {
@@ -88,5 +89,73 @@ export class UsersService {
     }
 
     return user.roles; // Return the user's roles
+  }
+
+  // role panel purposes
+  async assignRoleToUser(id: string, roleName: string): Promise<void> {
+    // Find the user by ID
+    const user = await this.userRepository.findOne({
+      where: { id },
+      relations: ['roles'], // Ensure roles are loaded
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found 4r2t344');
+    }
+
+    // Find the role by name (or however you want to find the role)
+    const role = await this.roleRepository.findOne({ where: { role: roleName } });
+
+    if (!role) {
+      throw new NotFoundException('Role not found 6y55tre4r');
+    }
+
+    // Add the role to the user's roles array if it doesn't exist
+    if (!user.roles.some((r) => r.role === role.role)) {
+      user.roles.push(role);
+    }
+
+    await this.userRepository.save(user);
+
+    // Save the updated user entity
+    return;
+  }
+
+  // role panel purposes
+  async removeRoleFromUser(id: string, roleName: string): Promise<void> {
+    // Find the user by ID
+    const user = await this.userRepository.findOne({
+      where: { id },
+      relations: ['roles'], // Ensure roles are loaded
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found 5r46y4334');
+    }
+
+    // Find the role by name
+    const role = await this.roleRepository.findOne({ where: { role: roleName } });
+
+    if (!role) {
+      throw new NotFoundException('Role not found r42e4r5t5');
+    }
+
+    // Check if the user has the role, then remove it
+    const roleIndex = user.roles.findIndex((r) => r.role === role.role);
+    if (roleIndex !== -1) {
+      user.roles.splice(roleIndex, 1); // Remove the role from the user's roles array
+    } else {
+      throw new NotFoundException(`Role not assigned to the user ${id} r6yu554t`); // DUPA
+    }
+
+    // Save the updated user entity
+    await this.userRepository.save(user);
+
+    return;
+  }
+
+  // role panel purposes
+  async getUsersWithTheirRoles(): Promise<User[]> {
+    return this.userRepository.find({ relations: ['roles'] });
   }
 }
