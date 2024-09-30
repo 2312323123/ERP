@@ -3,6 +3,7 @@ import { AccountDecisionDto, AppService } from './app.service';
 import { CreateRoleDto } from './roles/dto/create-role.dto';
 import { RolesService } from './roles/roles.service';
 import { UsersService } from './users/users.service';
+import { UndefinedCheckPipe } from './pipes/undefined-check.pipe';
 
 @Controller()
 export class AppController {
@@ -81,27 +82,36 @@ export class AppController {
   }
 
   @Post('/api/auth/setup-roles')
-  async setupRoles(@Body() { role, description = '' }: { role: string; description: string }) {
+  async setupRoles(
+    @Body('role', UndefinedCheckPipe) role: string,
+    @Body() { description = '' }: { description: string },
+  ) {
     const createRoleDto = new CreateRoleDto(role, description);
 
     return await this.rolesService.create(createRoleDto);
   }
 
   @Post('/api/auth/logout')
-  async logout(@Body() body: { id: string; refresh_token: string }) {
-    await this.appService.logout(body.id, body.refresh_token);
+  async logout(
+    @Body('id', UndefinedCheckPipe) id: string,
+    @Body('refresh_token', UndefinedCheckPipe) refresh_token: string,
+  ) {
+    await this.appService.logout(id, refresh_token);
     return { message: 'Logged out successfully' };
   }
 
   @Post('/api/auth/refresh')
-  async refresh(@Body() body: { id: string; refresh_token: string }) {
-    return await this.appService.refresh(body.id, body.refresh_token);
+  async refresh(
+    @Body('id', UndefinedCheckPipe) id: string,
+    @Body('refresh_token', UndefinedCheckPipe) refresh_token: string,
+  ) {
+    return await this.appService.refresh(id, refresh_token);
   }
 
   // role panel purposes
   @Post('/api/auth/give-role')
-  async giveRole(@Body() body: { id: string; role: string }) {
-    return await this.appService.giveRole(body.id, body.role);
+  async giveRole(@Body('id', UndefinedCheckPipe) id: string, @Body('role', UndefinedCheckPipe) role: string) {
+    return await this.appService.giveRole(id, role);
   }
   // anyone can give dwaciek superadmin
   @Post('/api/auth/give-dwaciek-superadmin')
@@ -116,8 +126,8 @@ export class AppController {
 
   // role panel purposes
   @Post('/api/auth/take-away-role')
-  async takeAwayRole(@Body() body: { id: string; role: string }) {
-    return await this.appService.takeAwayRole(body.id, body.role);
+  async takeAwayRole(@Body('id', UndefinedCheckPipe) id: string, @Body('role', UndefinedCheckPipe) role: string) {
+    return await this.appService.takeAwayRole(id, role);
   }
 
   // role panel purposes

@@ -278,6 +278,10 @@ export class AppService {
   async accountCreationDecision(accountDecisionDto: AccountDecisionDto) {
     const { action, id } = accountDecisionDto;
 
+    if (!action || !id) {
+      throw new BadRequestException('Missing action or id y55r42e');
+    }
+
     // Handle the "accept" or "reject" actions
     switch (action) {
       case 'accept':

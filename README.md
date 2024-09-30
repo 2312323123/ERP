@@ -68,6 +68,32 @@ Best to keep it uncommented only when using it. Library: `npm i @nestjs/swagger`
 - make sure setup-roles endpoint of auth service isn't publicly visible from time to time
 - you may also update what nginx depends_on in docker-compose.yml from time to time
 - env variables should just work inside app if specified in docker-compose
+- it's kind of important to check input parameters are always defined or you might get compromised, in auth service this is done using UndefinedCheckPipe for each applicable controller input parameter, so this:
+
+```
+  @Post('/api/auth/setup-roles')
+  async setupRoles(@Body() { role, description = '' }: { role: string; description: string }) {
+    const createRoleDto = new CreateRoleDto(role, description);
+
+    return await this.rolesService.create(createRoleDto);
+  }
+```
+
+got replaced by this:
+
+```
+  @Post('/api/auth/setup-roles')
+  async setupRoles(
+    @Body('role', UndefinedCheckPipe) role: string,
+    @Body() { description = '' }: { description: string },
+  ) {
+    const createRoleDto = new CreateRoleDto(role, description);
+
+    return await this.rolesService.create(createRoleDto);
+  }
+```
+
+in some other cases checking this has been moves deeper to service.
 
 ---
 
@@ -223,6 +249,11 @@ CMD [ "npm", "run", "dev" ]
 #### one more frontend note
 
 you may want to set up different Google clientId (here in main.tsx) in your frontend
+
+#### some tech used in frontend
+
+- Mui https://mui.com/material-ui/getting-started/installation/
+- Mui icons https://fonts.google.com/icons?icon.set=Material+Icons
 
 ---
 

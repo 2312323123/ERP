@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -41,6 +41,10 @@ export class UsersService {
   }
 
   async findOne(id: string): Promise<User> {
+    if (!id) {
+      throw new BadRequestException('Invalid data i676yt4r');
+    }
+
     const user = await this.userRepository.findOne({
       where: { id },
     });
@@ -54,6 +58,10 @@ export class UsersService {
    * Update a user's data by ID
    */
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
+    if (!id) {
+      throw new BadRequestException('Invalid data 3e4er4t56');
+    }
+
     const user = await this.userRepository.findOne({ where: { id } });
 
     // Throw an error if the user is not found
@@ -69,6 +77,10 @@ export class UsersService {
   }
 
   async remove(id: string) {
+    if (!id) {
+      throw new BadRequestException('Invalid data u6y6t5re');
+    }
+
     const result = await this.userRepository.delete(id);
 
     // Throw an error if no rows were affected (user was not found)
@@ -78,6 +90,10 @@ export class UsersService {
   }
 
   async getUserRolesById(id: string): Promise<Role[]> {
+    if (!id) {
+      throw new BadRequestException('Invalid data u665tr43');
+    }
+
     // Fetch the user by ID and include roles
     const user = await this.userRepository.findOne({
       where: { id },
@@ -93,6 +109,10 @@ export class UsersService {
 
   // role panel purposes
   async assignRoleToUser(id: string, roleName: string): Promise<void> {
+    if (!id || !roleName) {
+      throw new BadRequestException('Invalid data 4r3ty65t');
+    }
+
     // Find the user by ID
     const user = await this.userRepository.findOne({
       where: { id },
@@ -123,6 +143,10 @@ export class UsersService {
 
   // role panel purposes
   async removeRoleFromUser(id: string, roleName: string): Promise<void> {
+    if (!id || !roleName) {
+      throw new BadRequestException('Invalid data 7iu7y6t');
+    }
+
     // Find the user by ID
     const user = await this.userRepository.findOne({
       where: { id },
