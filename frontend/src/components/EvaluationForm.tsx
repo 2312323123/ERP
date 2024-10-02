@@ -1,33 +1,26 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Button, TextField, MenuItem, Typography, Tooltip, IconButton } from '@mui/material'
 import InfoIcon from '@mui/icons-material/Info'
 
-// for use in result view
-interface EvaluationResult {
-  // picture is an url
-  user: { name: string; picture: string }
-  marks: { value: number }[]
-  comment: string
-}
-
-interface CustomFieldNoOrder {
+export interface Criterion {
   name: string
   description: string
   weight: number
 }
-interface EvaluationSubmission {
-  marks: { order: number; value: number }[]
+export interface SurveyEvaluationResult {
+  marks: number[]
   comment: string
 }
 
-interface EvaluationFormProps {
-  evalElements: CustomFieldNoOrder[]
-  gradeNames: string[]
-  onSubmit: (data: EvaluationSubmission) => void
+interface Props {
+  criteria: Criterion[]
+  markTags: string[]
+  onSubmit: (data: SurveyEvaluationResult) => void
+  demoMode?: boolean // fires onSubmit on every change
 }
 
-const EvaluationForm: React.FC<EvaluationFormProps> = ({ evalElements, gradeNames, onSubmit }) => {
-  const [marks, setMarks] = useState<number[]>(Array(evalElements.length).fill(0))
+const EvaluationForm = ({ criteria, markTags, onSubmit, demoMode }: Props) => {
+  const [marks, setMarks] = useState<number[]>(Array(criteria.length).fill(0))
   const [comment, setComment] = useState<string>('')
 
   const handleMarkChange = (index: number, value: number) => {
@@ -36,13 +29,28 @@ const EvaluationForm: React.FC<EvaluationFormProps> = ({ evalElements, gradeName
     setMarks(newMarks)
   }
 
+  // when used in survey stage settings panel
+  useEffect(() => {
+    if (demoMode) {
+      const structuredData = {
+        marks,
+        comment,
+      }
+      onSubmit(structuredData)
+    }
+  }, [marks, comment, demoMode, onSubmit])
+
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault()
+
+    // when used in survey stage settings panel
+    if (demoMode) {
+      setMarks([])
+      setComment('')
+    }
+
     const structuredData = {
-      marks: evalElements.map((_, index) => ({
-        order: index + 1,
-        value: marks[index],
-      })),
+      marks: criteria.map((_, index) => marks[index]),
       comment,
     }
     onSubmit(structuredData)
@@ -51,7 +59,7 @@ const EvaluationForm: React.FC<EvaluationFormProps> = ({ evalElements, gradeName
   return (
     <form onSubmit={handleSubmit}>
       <Box my={2}>
-        {evalElements.map((element, index) => (
+        {criteria.map((element, index) => (
           <Box key={index} my={1}>
             <Box display="flex" alignItems="center">
               <Typography variant="subtitle1">{element.name}</Typography>
@@ -72,7 +80,7 @@ const EvaluationForm: React.FC<EvaluationFormProps> = ({ evalElements, gradeName
             >
               {[1, 2, 3, 4, 5].map((grade, gradeIndex) => (
                 <MenuItem key={gradeIndex} value={gradeIndex + 1}>
-                  {`${grade} - ${gradeNames[gradeIndex]}`}
+                  {`${grade} - ${markTags[gradeIndex]}`}
                 </MenuItem>
               ))}
             </TextField>
@@ -87,6 +95,7 @@ const EvaluationForm: React.FC<EvaluationFormProps> = ({ evalElements, gradeName
           fullWidth
           value={comment}
           onChange={(e) => setComment(e.target.value)}
+          inputProps={{ maxLength: 500 }}
           sx={{ my: 2 }}
         />
 

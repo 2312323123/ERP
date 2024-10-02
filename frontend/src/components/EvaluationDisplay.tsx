@@ -1,39 +1,25 @@
-import React from 'react'
 import { Box, Typography, Avatar, Divider } from '@mui/material'
-
-interface EvaluationResult {
-  user: { name: string; picture: string }
-  marks: number[]
-  comment: string
-}
-
-interface CustomFieldNoOrder {
-  name: string
-  description: string
-  weight: number
-}
-
-interface EvaluationFormProps {
-  evalElements: CustomFieldNoOrder[]
-  gradeNames: string[]
-  onSubmit: (data: any) => void
-}
+import { Criterion, SurveyEvaluationResult } from './EvaluationForm'
 
 interface EvaluationDisplayProps {
-  result: EvaluationResult
-  formProps: EvaluationFormProps
+  userName: string
+  userPicture: string
+  surveyEvaluationResult: SurveyEvaluationResult
+  criteria: Criterion[]
 }
 
-const EvaluationDisplay: React.FC<EvaluationDisplayProps> = ({ result, formProps }) => {
-  const { user, marks, comment } = result
-  const { evalElements, gradeNames } = formProps
-
+const EvaluationDisplay = ({
+  userName,
+  userPicture,
+  surveyEvaluationResult: { marks, comment },
+  criteria,
+}: EvaluationDisplayProps) => {
   return (
     <Box p={2} border={1} borderRadius={2} width="100%">
       {/* User Info */}
       <Box display="flex" alignItems="center" mb={2}>
-        <Avatar src={user.picture} sx={{ width: 50, height: 50, borderRadius: '8px', marginRight: 2 }} />
-        <Typography variant="h6">{user.name}</Typography>
+        <Avatar src={userPicture} sx={{ width: 50, height: 50, borderRadius: '8px', marginRight: 2 }} />
+        <Typography variant="h6">{userName}</Typography>
       </Box>
 
       <Divider sx={{ mb: 2 }} />
@@ -42,7 +28,7 @@ const EvaluationDisplay: React.FC<EvaluationDisplayProps> = ({ result, formProps
       <Box width="100%" display="flex">
         {/* Column for Field Names */}
         <Box pr={2}>
-          {evalElements.map((field, index) => (
+          {criteria.map((field, index) => (
             <Box key={index} mb={1}>
               <Typography variant="body1">{field.name}</Typography>
             </Box>

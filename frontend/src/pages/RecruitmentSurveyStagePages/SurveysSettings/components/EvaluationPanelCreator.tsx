@@ -19,7 +19,7 @@ const EvaluationPanelCreator = () => {
   return (
     <>
       <Typography variant="h6" gutterBottom>
-        Te pola co wystawianie oceny polega na tym że je wypełniasz:
+        Te pola, co wystawianie oceny polega na tym, że je wypełniasz:
       </Typography>
 
       {criteria.map((field, index) => (
