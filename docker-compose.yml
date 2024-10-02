@@ -86,8 +86,8 @@ services:
     build:
       context: ./auth_and_permissions
       dockerfile: Dockerfile
-    ports:
-      - "3000:3000" # Expose the NestJS application port
+    # ports:
+    #   - "3000:3000" # Expose the NestJS application port
     volumes:
       - ./auth_and_permissions:/app
       - /app/node_modules
@@ -112,12 +112,12 @@ services:
     depends_on:
       - db-psql
 
-  surveys_phase:
+  recruitment_survey_phase:
     build:
       context: ./recruitment_survey_phase
       dockerfile: Dockerfile
-    # ports:
-    #   - "3000:3000" # Expose the NestJS application port
+    ports:
+      - "3000:3000" # Expose the NestJS application port
     volumes:
       - ./recruitment_survey_phase:/app
       - /app/node_modules
