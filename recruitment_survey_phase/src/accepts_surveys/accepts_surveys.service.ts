@@ -29,5 +29,7 @@ export class AcceptsSurveysService {
     return `This action removes a #${id} acceptsSurvey`;
   }
 
+  setAcceptsSurveys() {}
+
   getAcceptsSurveys() {}
 }

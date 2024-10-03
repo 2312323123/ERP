@@ -10,6 +10,7 @@ import { EvaluationSchemasModule } from './evaluation_schemas/evaluation_schemas
 import { MarksModule } from './marks/marks.module';
 import { CommentsModule } from './comments/comments.module';
 import { MarkGradeNamesModule } from './mark_grade_names/mark_grade_names.module';
+import { SeederService } from './seeder/seeder.service';
 
 @Module({
   imports: [
@@ -24,6 +25,6 @@ import { MarkGradeNamesModule } from './mark_grade_names/mark_grade_names.module
     MarkGradeNamesModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, SeederService],
 })
 export class AppModule {}
