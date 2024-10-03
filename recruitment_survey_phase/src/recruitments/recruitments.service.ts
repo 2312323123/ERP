@@ -4,13 +4,21 @@ import { UpdateRecruitmentDto } from './dto/update-recruitment.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Recruitment } from './entities/recruitment.entity';
+import { randomBytes } from 'crypto';
 
 @Injectable()
 export class RecruitmentsService {
   constructor(@InjectRepository(Recruitment) private recruitmentRepository: Repository<Recruitment>) {}
 
-  create(createRecruitmentDto: CreateRecruitmentDto) {
-    return 'This action adds a new recruitment';
+  async create(createRecruitmentDto: CreateRecruitmentDto): Promise<Recruitment> {
+    const { name, grading_instruction } = createRecruitmentDto;
+    const recruitment = new Recruitment();
+    recruitment.name = name;
+    recruitment.start_date_time = new Date();
+    recruitment.survey_sending_secret = randomBytes(63).toString('hex'); // Generate 126 characters (63 bytes)
+    recruitment.grading_instruction = grading_instruction;
+
+    return this.recruitmentRepository.save(recruitment);
   }
 
   findAll() {
