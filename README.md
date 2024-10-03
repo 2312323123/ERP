@@ -302,3 +302,10 @@ Remove-Item ./temp_key, ./temp_key.pub, ./temp_public_key.pem
 ```
 
 and you still need to replace newlines in private key with \n, and then store both of them inside double quotes ("") as they contain spaces
+
+### Naming conventions:
+
+- database columns: snake_case
+- ts variables: lowerCamelCase
+- network endpoints urls: kebab-case
+- ...more?
