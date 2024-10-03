@@ -1,9 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCanEvaluateSurveyDto } from './dto/create-can_evaluate_survey.dto';
 import { UpdateCanEvaluateSurveyDto } from './dto/update-can_evaluate_survey.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { CanEvaluateSurvey } from './entities/can_evaluate_survey.entity';
 
 @Injectable()
 export class CanEvaluateSurveysService {
+  constructor(
+    @InjectRepository(CanEvaluateSurvey) private canEvaluateSurveyRepository: Repository<CanEvaluateSurvey>,
+  ) {}
+
   create(createCanEvaluateSurveyDto: CreateCanEvaluateSurveyDto) {
     return 'This action adds a new canEvaluateSurvey';
   }
