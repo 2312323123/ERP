@@ -1,9 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { CreateMarkDto } from './dto/create-mark.dto';
 import { UpdateMarkDto } from './dto/update-mark.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Mark } from './entities/mark.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class MarksService {
+  constructor(@InjectRepository(Mark) markRepository: Repository<Mark>) {}
+
   create(createMarkDto: CreateMarkDto) {
     return 'This action adds a new mark';
   }

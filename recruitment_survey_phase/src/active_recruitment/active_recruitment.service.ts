@@ -1,9 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { CreateActiveRecruitmentDto } from './dto/create-active_recruitment.dto';
 import { UpdateActiveRecruitmentDto } from './dto/update-active_recruitment.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { ActiveRecruitment } from './entities/active_recruitment.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class ActiveRecruitmentService {
+  constructor(
+    @InjectRepository(ActiveRecruitment) private activeRecruitmentRepository: Repository<ActiveRecruitment>,
+  ) {}
+
   create(createActiveRecruitmentDto: CreateActiveRecruitmentDto) {
     return 'This action adds a new activeRecruitment';
   }
