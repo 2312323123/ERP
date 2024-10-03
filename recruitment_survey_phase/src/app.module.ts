@@ -12,6 +12,7 @@ import { CommentsModule } from './comments/comments.module';
 import { MarkGradeNamesModule } from './mark_grade_names/mark_grade_names.module';
 import { SeederService } from './seeder/seeder.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CanEvaluateSurveysModule } from './can_evaluate_surveys/can_evaluate_surveys.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     MarksModule,
     CommentsModule,
     MarkGradeNamesModule,
+    CanEvaluateSurveysModule,
   ],
   controllers: [AppController],
   providers: [AppService, SeederService],
