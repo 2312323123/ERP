@@ -19,4 +19,9 @@ export class AppController {
   async getActiveRecruitmentNameUuid(): Promise<{ name: string; uuid: string } | undefined> {
     return this.appService.getActiveRecruitmentNameUuid();
   }
+
+  @Get('/api/surveys/all-recruitments-uuid-name-start-date')
+  async getAllRecruitmentsUuidNameStartDate(): Promise<{ uuid: string; name: string; startDate: Date }[]> {
+    return this.appService.getAllRecruitmentsUuidNameStartDate();
+  }
 }

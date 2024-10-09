@@ -43,6 +43,15 @@ export class RecruitmentsService {
     return createdRecruitment;
   }
 
+  async getAllRecruitmentsUuidNameStartDate(): Promise<{ uuid: string; name: string; startDate: Date }[]> {
+    const recruitments = await this.recruitmentRepository.find();
+    return recruitments.map((recruitment) => ({
+      uuid: recruitment.uuid,
+      name: recruitment.name,
+      startDate: recruitment.start_date_time,
+    }));
+  }
+
   findAll() {
     return `This action returns all recruitments`;
   }
