@@ -8,5 +8,6 @@ import { ActiveRecruitment } from './entities/active_recruitment.entity';
   imports: [TypeOrmModule.forFeature([ActiveRecruitment])],
   controllers: [ActiveRecruitmentController],
   providers: [ActiveRecruitmentService],
+  exports: [ActiveRecruitmentService],
 })
 export class ActiveRecruitmentModule {}

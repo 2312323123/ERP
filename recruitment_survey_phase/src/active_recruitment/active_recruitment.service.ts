@@ -30,4 +30,17 @@ export class ActiveRecruitmentService {
   remove(id: number) {
     return `This action removes a #${id} activeRecruitment`;
   }
+
+  async getActiveRecruitmentNameUuid(): Promise<{ name: string; uuid: string } | undefined> {
+    const activeRecruitment = await this.activeRecruitmentRepository
+      .find({
+        order: { recruitment_uuid: 'ASC' }, // Replace 'id' with the appropriate column
+        take: 1, // Take only the first record
+      })
+      .then((results) => results[0]);
+    if (activeRecruitment) {
+      return { name: activeRecruitment.recruitment.name, uuid: activeRecruitment.recruitment.uuid };
+    }
+    return undefined;
+  }
 }
