@@ -25,7 +25,7 @@ const initialState = {
   currentRecruitment: {
     name: '',
     uuid: '',
-    googleScriptsToken: '',
+    googleScriptsToken: 'I am a token',
     canEvaluatorsEvaluate: false,
     gradingInstruction: `# Hi, *Pluto*!
 Rekru czy coś`,
@@ -36,13 +36,13 @@ Rekru czy coś`,
         {
           name: 'Przykładowe kryterium',
           description: 'Opis przykładowego kryterium',
-          weight: 1,
+          weight: 2,
         },
       ],
       markTags: {
         mark1Tag: '',
         mark2Tag: '',
-        mark3Tag: '',
+        mark3Tag: 'Jest OK',
         mark4Tag: '',
         mark5Tag: '',
       },
@@ -136,6 +136,12 @@ const surveySettingsPageSlice = createSlice({
     setMark5Tag: (state, action) => {
       state.currentRecruitment.evaluationCriteriaSetup.markTags.mark5Tag = action.payload
     },
+    setDemoEvaluationStateMarks: (state, action) => {
+      state.demoEvaluationState.marks = action.payload
+    },
+    setDemoEvaluationStateComment: (state, action) => {
+      state.demoEvaluationState.comment = action.payload
+    },
   },
 })
 
@@ -158,6 +164,8 @@ export const {
   setMark3Tag,
   setMark4Tag,
   setMark5Tag,
+  setDemoEvaluationStateMarks,
+  setDemoEvaluationStateComment,
 } = surveySettingsPageSlice.actions
 
 // Reducer to be added to the store
@@ -182,3 +190,9 @@ export const getMark4Tag = (state: RootState) =>
   state.surveySettingsPage.currentRecruitment.evaluationCriteriaSetup.markTags.mark4Tag
 export const getMark5Tag = (state: RootState) =>
   state.surveySettingsPage.currentRecruitment.evaluationCriteriaSetup.markTags.mark5Tag
+export const getDemoEvaluationState = (state: RootState) => state.surveySettingsPage.demoEvaluationState
+export const getAnyEvaluationExists = (state: RootState) =>
+  state.surveySettingsPage.currentRecruitment.anyEvaluationExists
+export const getAnySurveyExists = (state: RootState) => state.surveySettingsPage.currentRecruitment.anySurveyExists
+export const getGoogleScriptsToken = (state: RootState) =>
+  state.surveySettingsPage.currentRecruitment.googleScriptsToken

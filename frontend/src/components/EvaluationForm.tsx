@@ -17,11 +17,14 @@ interface Props {
   markTags: string[]
   onSubmit: (data: SurveyEvaluationResult) => void
   demoMode?: boolean // fires onSubmit on every change
+  initialMarks?: number[]
+  initialComment?: string
 }
 
-const EvaluationForm = ({ criteria, markTags, onSubmit, demoMode }: Props) => {
-  const [marks, setMarks] = useState<number[]>(Array(criteria.length).fill(0))
-  const [comment, setComment] = useState<string>('')
+const EvaluationForm = ({ criteria, markTags, onSubmit, demoMode, initialMarks, initialComment }: Props) => {
+  const initialMarksState = initialMarks ?? Array(criteria.length).fill(0)
+  const [marks, setMarks] = useState<number[]>(initialMarksState)
+  const [comment, setComment] = useState<string>(initialComment ?? '')
 
   const handleMarkChange = (index: number, value: number) => {
     const newMarks = [...marks]
@@ -45,8 +48,13 @@ const EvaluationForm = ({ criteria, markTags, onSubmit, demoMode }: Props) => {
 
     // when used in survey stage settings panel
     if (demoMode) {
-      setMarks([])
-      setComment('')
+      const answer = window.confirm(
+        'Normalnie w tym momencie ocena zostałaby zapisana. A w tym demo, jeśli teraz potwierdzisz, to odpowiedź zostanie zresetowana.',
+      )
+      if (answer) {
+        setMarks(initialMarksState)
+        setComment('')
+      }
     }
 
     const structuredData = {
