@@ -11,8 +11,8 @@ export class CanEvaluateSurveysService {
     @InjectRepository(CanEvaluateSurvey) private canEvaluateSurveyRepository: Repository<CanEvaluateSurvey>,
   ) {}
 
-  create(createCanEvaluateSurveyDto: CreateCanEvaluateSurveyDto) {
-    return 'This action adds a new canEvaluateSurvey';
+  setCanEvaluateSurveys(createCanEvaluateSurveyDto: CreateCanEvaluateSurveyDto) {
+    return this.canEvaluateSurveyRepository.save(createCanEvaluateSurveyDto);
   }
 
   findAll() {

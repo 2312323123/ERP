@@ -2,15 +2,15 @@ import { createSlice } from '@reduxjs/toolkit'
 import { RootState } from '../../store'
 
 interface SurveyUniversalState {
-  recruitmentVisible: boolean
-  evaluatorsCanEvaluate: boolean
-  activeRecruitment: { name: string; uuid: string }
+  recruitmentVisible?: boolean
+  evaluatorsCanEvaluate?: boolean
+  activeRecruitment?: { name: string; uuid: string }
 }
 
 const initialState = {
-  recruitmentVisible: false,
-  evaluatorsCanEvaluate: false,
-  activeRecruitment: { name: '', uuid: '' },
+  recruitmentVisible: undefined,
+  evaluatorsCanEvaluate: undefined,
+  activeRecruitment: undefined,
 } as SurveyUniversalState
 
 const surveyUniversalSlice = createSlice({

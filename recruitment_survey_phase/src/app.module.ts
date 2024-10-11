@@ -13,6 +13,7 @@ import { MarkGradeNamesModule } from './mark_grade_names/mark_grade_names.module
 import { SeederService } from './seeder/seeder.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CanEvaluateSurveysModule } from './can_evaluate_surveys/can_evaluate_surveys.module';
+import { CanPeopleSeeRecruitmentModule } from './can_people_see_recruitment/can_people_see_recruitment.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { CanEvaluateSurveysModule } from './can_evaluate_surveys/can_evaluate_su
     CommentsModule,
     MarkGradeNamesModule,
     CanEvaluateSurveysModule,
+    CanPeopleSeeRecruitmentModule,
   ],
   controllers: [AppController],
   providers: [AppService, SeederService],

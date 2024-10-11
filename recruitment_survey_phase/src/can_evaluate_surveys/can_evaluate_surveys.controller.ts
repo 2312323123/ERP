@@ -7,28 +7,28 @@ import { UpdateCanEvaluateSurveyDto } from './dto/update-can_evaluate_survey.dto
 export class CanEvaluateSurveysController {
   constructor(private readonly canEvaluateSurveysService: CanEvaluateSurveysService) {}
 
-  @Post()
-  create(@Body() createCanEvaluateSurveyDto: CreateCanEvaluateSurveyDto) {
-    return this.canEvaluateSurveysService.create(createCanEvaluateSurveyDto);
-  }
+  // @Post()
+  // create(@Body() createCanEvaluateSurveyDto: CreateCanEvaluateSurveyDto) {
+  //   return this.canEvaluateSurveysService.create(createCanEvaluateSurveyDto);
+  // }
 
-  @Get()
-  findAll() {
-    return this.canEvaluateSurveysService.findAll();
-  }
+  // @Get()
+  // findAll() {
+  //   return this.canEvaluateSurveysService.findAll();
+  // }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.canEvaluateSurveysService.findOne(+id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.canEvaluateSurveysService.findOne(+id);
+  // }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCanEvaluateSurveyDto: UpdateCanEvaluateSurveyDto) {
-    return this.canEvaluateSurveysService.update(+id, updateCanEvaluateSurveyDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateCanEvaluateSurveyDto: UpdateCanEvaluateSurveyDto) {
+  //   return this.canEvaluateSurveysService.update(+id, updateCanEvaluateSurveyDto);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.canEvaluateSurveysService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.canEvaluateSurveysService.remove(+id);
+  // }
 }

@@ -115,7 +115,7 @@ const SurveysSettings = () => {
       <Container maxWidth="md">
         {/* Settings Header */}
         <Typography variant="h4" gutterBottom>
-          Rekrutacja {activeRecruitment?.name ?? ''}
+          Rekrutacja {activeRecruitment ? activeRecruitment.name : '- brak rekrutacji w systemie!'}
         </Typography>
       </Container>
 
@@ -133,7 +133,8 @@ const SurveysSettings = () => {
         <Box my={3}>
           {/* Active Recruitment Details */}
           <Typography variant="h5" gutterBottom>
-            Wybrana rekrutacja: {activeRecruitment.name}, początek: {activeRecruitment.date}
+            Wybrana rekrutacja: {activeRecruitment ? activeRecruitment.name : 'brak w systemie'}, początek:{' '}
+            {activeRecruitment?.date}
           </Typography>
 
           {/* Choose Recruitment */}
@@ -245,7 +246,15 @@ const SurveysSettings = () => {
 
           {/* Right Column */}
           <Box flex={1} display="flex" justifyContent="flex-end" flexBasis="25%">
-            <Button variant="contained" color="primary" onClick={handleSave} fullWidth>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleSave}
+              fullWidth
+              sx={{
+                fontSize: '1.25rem',
+              }}
+            >
               Zapisz
             </Button>
           </Box>

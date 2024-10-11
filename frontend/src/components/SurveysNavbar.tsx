@@ -76,7 +76,7 @@ const SurveysNavbar = (props: Props) => {
       if (res.data) {
         dispatch(setActiveRecruitment({ name: res.data.name, uuid: res.data.uuid }))
       } else {
-        dispatch(setActiveRecruitment({ name: '- brak rekrutacji w systemie!', uuid: '' }))
+        dispatch(setActiveRecruitment(undefined))
       }
     } catch (error) {
       logNetworkError(error as NetworkError, 'i87y6t5r4')
@@ -211,7 +211,7 @@ const SurveysNavbar = (props: Props) => {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" noWrap component="div">
-              oceniaczka - rekrutacja {activeRecruitment?.name ?? ''}
+              oceniaczka - rekrutacja {activeRecruitment?.name ?? '- brak rekrutacji w systemie!'}
             </Typography>
           </Toolbar>
         </AppBar>

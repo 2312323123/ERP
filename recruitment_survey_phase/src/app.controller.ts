@@ -24,4 +24,9 @@ export class AppController {
   async getAllRecruitmentsUuidNameStartDate(): Promise<{ uuid: string; name: string; startDate: Date }[]> {
     return this.appService.getAllRecruitmentsUuidNameStartDate();
   }
+
+  @Get('/api/surveys/can-people-see-recruitment')
+  async getCanPeopleSeeRecruitment(): Promise<{ can_people_see_recruitment: boolean }> {
+    return this.appService.getCanPeopleSeeRecruitment();
+  }
 }
