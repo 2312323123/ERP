@@ -10,7 +10,7 @@ import {
   handleDeleteCriteria,
   handleMoveDown,
   handleMoveUp,
-} from '../../../../store/slices/surveySettingsPageSlice'
+} from '../../../../store/slices/surveyStage/surveySettingsPageSlice'
 
 const EvaluationPanelCreator = () => {
   const { criteria } = useSelector(getEvaluationCriteriaSetup)

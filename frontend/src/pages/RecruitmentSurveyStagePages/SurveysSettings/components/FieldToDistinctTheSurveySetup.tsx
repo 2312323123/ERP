@@ -2,7 +2,7 @@ import { Box, Typography, TextField } from '@mui/material'
 import {
   getFieldToDistinctTheSurvey,
   setFieldToDistinctTheSurvey,
-} from '../../../../store/slices/surveySettingsPageSlice'
+} from '../../../../store/slices/surveyStage/surveySettingsPageSlice'
 import { useDispatch, useSelector } from 'react-redux'
 
 const FieldToDistinctTheSurveySetup = () => {

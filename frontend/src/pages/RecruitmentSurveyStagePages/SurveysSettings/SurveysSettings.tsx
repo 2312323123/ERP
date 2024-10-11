@@ -30,21 +30,16 @@ import {
   getMark5Tag,
   setDemoEvaluationStateComment,
   setDemoEvaluationStateMarks,
-} from '../../../store/slices/surveySettingsPageSlice'
+} from '../../../store/slices/surveyStage/surveySettingsPageSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import WeightsSum from './components/WeightsSum'
 import TokenDisplay from './components/TokenDisplay'
+import { getActiveRecruitment } from '../../../store/slices/surveyStage/surveyUniversalSlice'
 
 const SurveysSettings = () => {
   const [newRecruitment, setNewRecruitment] = useState('')
   const [recruitmentSettings, setRecruitmentSettings] = useState<string | 'none'>('none')
   const [selectedRecruitment, setSelectedRecruitment] = useState<string>('')
-  const [activeRecruitment, setActiveRecruitment] = useState<{ name: string; date: string }>({
-    name: 'no name',
-    date: '01-01-2024',
-  })
-  // State for the recruitments to be deleted
-  const [recruitmentsToBeDeleted, setRecruitmentsToBeDeleted] = useState<string[]>([])
   const [recruitments, setRecruitments] = useState<{ [key: string]: { canBeDeleted: boolean } }>({
     // Example recruitments object
     recruitment1rreerre: { canBeDeleted: true },
@@ -103,13 +98,14 @@ const SurveysSettings = () => {
 
     if (confirmDelete) {
       if (recruitment.canBeDeleted) {
-        setRecruitmentsToBeDeleted([...recruitmentsToBeDeleted, recruitmentId])
         alert(`Recruitment ${recruitmentId} added to deletions.`) // Placeholder for feedback
       } else {
         alert('Ta rekrutacja nie może już być usunięta')
       }
     }
   }
+
+  const activeRecruitment = useSelector(getActiveRecruitment)
 
   return (
     <>
@@ -119,7 +115,7 @@ const SurveysSettings = () => {
       <Container maxWidth="md">
         {/* Settings Header */}
         <Typography variant="h4" gutterBottom>
-          Rekrutacja &lt;TODO:nazwa rekru&gt;
+          Rekrutacja {activeRecruitment?.name ?? ''}
         </Typography>
       </Container>
 
@@ -343,7 +339,7 @@ const SurveysSettings = () => {
 
       {/* Info */}
       <Typography variant="h5" gutterBottom align="center">
-        Poniższe ustawienia można zmieniać do momentu wpadnięcia pierwszej ankietki. (czyli{' '}
+        Poniższe można zrobić do momentu wpadnięcia pierwszej ankietki. (czyli{' '}
         {anySurveyExists ? 'już nie można' : 'jeszcze można'}):
       </Typography>
 
@@ -355,25 +351,15 @@ const SurveysSettings = () => {
         {/* Button to delete a recruitment */}
         <Button
           variant="contained"
-          color="secondary"
+          color="primary"
           onClick={() => handleDeleteRecruitment('recruitment1')} // Use the relevant recruitment ID
-          style={{ marginTop: '16px' }}
+          style={{ marginTop: '16px', color: 'white', padding: '1rem 2rem', fontSize: '1rem' }}
         >
           Usuń rekrutację
         </Button>
 
-        {/* Display deleted recruitments */}
-        <Box mt={2}>
-          <Typography variant="h6">Recruitments to be deleted:</Typography>
-          <ul>
-            {recruitmentsToBeDeleted.map((id, index) => (
-              <li key={index}>{id}</li>
-            ))}
-          </ul>
-        </Box>
-
         {/* Divider */}
-        <Divider sx={{ my: 2 }} />
+        <Divider sx={{ my: 3 }} />
       </Container>
     </>
   )

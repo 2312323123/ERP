@@ -11,7 +11,7 @@ import {
   setMark3Tag,
   setMark4Tag,
   setMark5Tag,
-} from '../../../../store/slices/surveySettingsPageSlice'
+} from '../../../../store/slices/surveyStage/surveySettingsPageSlice'
 import { UnknownAction } from '@reduxjs/toolkit'
 
 const MarkTagsSetup = () => {

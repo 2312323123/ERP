@@ -1,5 +1,8 @@
 import { Accordion, AccordionDetails, AccordionSummary, Box, TextField, Typography } from '@mui/material'
-import { getGradingInstruction, setGradingInstruction } from '../../../../store/slices/surveySettingsPageSlice'
+import {
+  getGradingInstruction,
+  setGradingInstruction,
+} from '../../../../store/slices/surveyStage/surveySettingsPageSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { useState } from 'react'

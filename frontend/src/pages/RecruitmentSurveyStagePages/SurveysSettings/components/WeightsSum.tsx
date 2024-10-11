@@ -1,6 +1,9 @@
 import { Typography } from '@mui/material'
 import { useMemo } from 'react'
-import { getDemoEvaluationState, getEvaluationCriteriaSetup } from '../../../../store/slices/surveySettingsPageSlice'
+import {
+  getDemoEvaluationState,
+  getEvaluationCriteriaSetup,
+} from '../../../../store/slices/surveyStage/surveySettingsPageSlice'
 import { useSelector } from 'react-redux'
 
 const WeightsSum = () => {

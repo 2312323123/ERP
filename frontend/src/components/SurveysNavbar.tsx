@@ -13,10 +13,8 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material'
-import React from 'react'
+import React, { useCallback, useContext, useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
-import InboxIcon from '@mui/icons-material/MoveToInbox' // Import InboxIcon
-import MailIcon from '@mui/icons-material/Mail' // Import MailIcon
 import MenuIcon from '@mui/icons-material/Menu' // Import MenuIcon
 import bestLogoWhite from '../assets/best-logo-white.svg'
 import LogoutButton from './auth/Logout'
@@ -28,6 +26,12 @@ import StarsIcon from '@mui/icons-material/Stars'
 import HelpIcon from '@mui/icons-material/Help'
 import FeedbackIcon from '@mui/icons-material/Feedback'
 import SettingsIcon from '@mui/icons-material/Settings'
+import axios from 'axios'
+import { logNetworkSuccess } from '../utils/logNetworkSuccess'
+import { logNetworkError, NetworkError } from '../utils/logNetworkError'
+import { AppContext } from '../App'
+import { getActiveRecruitment, setActiveRecruitment } from '../store/slices/surveyStage/surveyUniversalSlice'
+import { useDispatch, useSelector } from 'react-redux'
 
 const drawerWidth = 240
 
@@ -60,6 +64,30 @@ const SurveysNavbar = (props: Props) => {
       setMobileOpen(!mobileOpen)
     }
   }
+
+  const { apiPathBase } = useContext(AppContext)
+  const dispatch = useDispatch()
+  const handleFetchActiveRecruitment = useCallback(async () => {
+    try {
+      // setButtonsBlocked(true)
+      const res = await axios.get(`${apiPathBase}/api/surveys/active-recruitment-name-uuid`)
+      logNetworkSuccess(res, '34rt546y7')
+
+      if (res.data) {
+        dispatch(setActiveRecruitment({ name: res.data.name, uuid: res.data.uuid }))
+      } else {
+        dispatch(setActiveRecruitment({ name: '- brak rekrutacji w systemie!', uuid: '' }))
+      }
+    } catch (error) {
+      logNetworkError(error as NetworkError, 'i87y6t5r4')
+    }
+  }, [apiPathBase, dispatch])
+
+  const activeRecruitment = useSelector(getActiveRecruitment)
+
+  useEffect(() => {
+    handleFetchActiveRecruitment()
+  }, [handleFetchActiveRecruitment])
 
   const drawer = (
     <div>
@@ -183,7 +211,7 @@ const SurveysNavbar = (props: Props) => {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" noWrap component="div">
-              oceniaczka - rekrutacja &lt;TODO:nazwa rekru&gt;
+              oceniaczka - rekrutacja {activeRecruitment?.name ?? ''}
             </Typography>
           </Toolbar>
         </AppBar>
