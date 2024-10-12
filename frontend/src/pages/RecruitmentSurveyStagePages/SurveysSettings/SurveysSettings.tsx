@@ -174,6 +174,7 @@ const SurveysSettings = () => {
             </Typography>
           </Box>
 
+          {/* Rekrutacja aktywna (widoczna dla ludzi) Switch */}
           <CanPeopleSeeRecruitmentButton />
           <OneFieldBooleanTableDbSwitchButton
             theValue={recruitmentVisible}

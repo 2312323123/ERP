@@ -10,7 +10,6 @@ import { AppContext } from '../../../../App'
 // by default value is undefined, after fetching it takse true/false, change is fetched and shown
 // there have to be GET and POST urls that are the same, but one is for fetching and the other for changing
 const CanPeopleSeeRecruitmentButton = () => {
-  /* Rekrutacja aktywna (widoczna dla ludzi) Switch */
   const recruitmentVisible = useSelector(getRecruitmentVisible)
 
   const [isFetching, setIsFetching] = useState(false)
