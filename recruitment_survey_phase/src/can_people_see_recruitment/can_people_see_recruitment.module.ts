@@ -8,6 +8,6 @@ import { CanPeopleSeeRecruitment } from './entities/can_people_see_recruitment.e
   imports: [TypeOrmModule.forFeature([CanPeopleSeeRecruitment])],
   controllers: [CanPeopleSeeRecruitmentController],
   providers: [CanPeopleSeeRecruitmentService],
-  exports: [TypeOrmModule],
+  exports: [TypeOrmModule, CanPeopleSeeRecruitmentService],
 })
 export class CanPeopleSeeRecruitmentModule {}

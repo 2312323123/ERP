@@ -8,6 +8,6 @@ import { AcceptsSurvey } from './entities/accepts_survey.entity';
   imports: [TypeOrmModule.forFeature([AcceptsSurvey])],
   controllers: [AcceptsSurveysController],
   providers: [AcceptsSurveysService],
-  exports: [TypeOrmModule],
+  exports: [TypeOrmModule, AcceptsSurveysService],
 })
 export class AcceptsSurveysModule {}

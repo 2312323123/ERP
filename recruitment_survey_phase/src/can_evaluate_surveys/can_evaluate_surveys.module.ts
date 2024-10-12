@@ -8,6 +8,6 @@ import { CanEvaluateSurvey } from './entities/can_evaluate_survey.entity';
   imports: [TypeOrmModule.forFeature([CanEvaluateSurvey])],
   controllers: [CanEvaluateSurveysController],
   providers: [CanEvaluateSurveysService],
-  exports: [TypeOrmModule],
+  exports: [TypeOrmModule, CanEvaluateSurveysService],
 })
 export class CanEvaluateSurveysModule {}
