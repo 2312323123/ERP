@@ -179,6 +179,8 @@ const SurveysSettings = () => {
             theValue={recruitmentVisible}
             setterToDispatch={setRectuitmentVisible}
             label="Rekrutacja aktywna (widoczna dla ludzi)?"
+            path="/api/surveys/can-people-see-recruitment"
+            returnFieldName="can_people_see_recruitment"
           />
 
           {/* Można Oceniać Switch */}

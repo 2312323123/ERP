@@ -11,11 +11,13 @@ interface Props {
   theValue: boolean | undefined
   setterToDispatch: (value: boolean | undefined) => UnknownAction
   label: string
+  path: string
+  returnFieldName: string
 }
 
 // by default value is undefined, after fetching it takse true/false, change is fetched and shown
 // there have to be GET and POST urls that are the same, but one is for fetching and the other for changing
-const OneFieldBooleanTableDbSwitchButton = ({ theValue, setterToDispatch, label }: Props) => {
+const OneFieldBooleanTableDbSwitchButton = ({ theValue, setterToDispatch, label, path, returnFieldName }: Props) => {
   /* Rekrutacja aktywna (widoczna dla ludzi) Switch */
   // theValue should come from useSelector
 
@@ -26,26 +28,26 @@ const OneFieldBooleanTableDbSwitchButton = ({ theValue, setterToDispatch, label 
   const handleFetchRecruitmentVisible = useCallback(async () => {
     try {
       // setButtonsBlocked(true)
-      const res = await axios.get(`${apiPathBase}/api/surveys/can-people-see-recruitment`)
+      const res = await axios.get(`${apiPathBase}${path}`)
       logNetworkSuccess(res, 'e24r5rt64')
 
-      if (res.data && res.data.can_people_see_recruitment !== undefined) {
-        dispatch(setterToDispatch(res.data.can_people_see_recruitment))
+      if (res.data && res.data[returnFieldName] !== undefined) {
+        dispatch(setterToDispatch(res.data[returnFieldName]))
       } else {
         dispatch(setterToDispatch(undefined))
       }
     } catch (error) {
       logNetworkError(error as NetworkError, 'o98u7y6')
     }
-  }, [apiPathBase, dispatch, setterToDispatch])
+  }, [apiPathBase, dispatch, setterToDispatch, path, returnFieldName])
 
   const trySwitching = useCallback(async () => {
     const startingValue = theValue // false
     dispatch(setterToDispatch(!startingValue))
     setIsFetching(true)
     try {
-      const res = await axios.post(`${apiPathBase}/api/surveys/can-people-see-recruitment`, {
-        can_people_see_recruitment: !startingValue,
+      const res = await axios.post(`${apiPathBase}${path}`, {
+        [returnFieldName]: !startingValue,
       })
       logNetworkSuccess(res, '324rt5')
       setIsFetching(false)
@@ -55,7 +57,7 @@ const OneFieldBooleanTableDbSwitchButton = ({ theValue, setterToDispatch, label 
       setIsFetching(false)
       logNetworkError(error as NetworkError, 'ee6tu77')
     }
-  }, [apiPathBase, dispatch, theValue, setterToDispatch])
+  }, [apiPathBase, dispatch, theValue, setterToDispatch, path, returnFieldName])
 
   useEffect(() => {
     handleFetchRecruitmentVisible()
