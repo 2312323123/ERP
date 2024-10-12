@@ -24,7 +24,13 @@ export class CanPeopleSeeRecruitmentService {
   }
 
   async getCanPeopleSeeRecruitment() {
-    return await this.canPeopleSeeRecruitmentRepository.findOne({});
+    const res = await this.canPeopleSeeRecruitmentRepository.find({
+      take: 1,
+    });
+    if (res === null) {
+      throw new BadRequestException('No records in can_people_see_recruitment table t54r1');
+    }
+    return res[0];
   }
 
   // findOne(id: number) {

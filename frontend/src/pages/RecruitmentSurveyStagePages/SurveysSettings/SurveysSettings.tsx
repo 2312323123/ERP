@@ -35,6 +35,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import WeightsSum from './components/WeightsSum'
 import TokenDisplay from './components/TokenDisplay'
 import { getActiveRecruitment } from '../../../store/slices/surveyStage/surveyUniversalSlice'
+import CanPeopleSeeRecruitmentButton from './components/CanPeopleSeeRecruitmentButton'
 
 const SurveysSettings = () => {
   const [newRecruitment, setNewRecruitment] = useState('')
@@ -134,7 +135,7 @@ const SurveysSettings = () => {
           {/* Active Recruitment Details */}
           <Typography variant="h5" gutterBottom>
             Wybrana rekrutacja: {activeRecruitment ? activeRecruitment.name : 'brak w systemie'}, początek:{' '}
-            {activeRecruitment?.date}
+            {activeRecruitment ? activeRecruitment?.date : 'brak'}
           </Typography>
 
           {/* Choose Recruitment */}
@@ -155,16 +156,18 @@ const SurveysSettings = () => {
           {/* Token Output */}
           <TokenDisplay />
 
-          {/* Można Oceniać Switch */}
+          {/* Akceptuje ankiety Switch */}
           <Box my={3} display="flex" alignItems="center">
             <Typography variant="body1" mr={2}>
-              Rekrutacja aktywna (widoczna dla ludzi)?
+              Akceptuje ankiety?
             </Typography>
             <Switch checked={canRate} onChange={handleRateChange} color="primary" />
             <Typography variant="body1" ml={2}>
               {canRate ? 'TAK' : 'NIE'}
             </Typography>
           </Box>
+
+          <CanPeopleSeeRecruitmentButton />
 
           {/* Można Oceniać Switch */}
           <Box my={3} display="flex" alignItems="center">

@@ -26,4 +26,8 @@ export class AppService {
   async getCanPeopleSeeRecruitment(): Promise<{ can_people_see_recruitment: boolean }> {
     return await this.canPeopleSeeRecruitmentService.getCanPeopleSeeRecruitment();
   }
+
+  async setCanPeopleSeeRecruitment(createCanPeopleSeeRecruitmentDto: { can_people_see_recruitment: boolean }) {
+    return await this.canPeopleSeeRecruitmentService.create(createCanPeopleSeeRecruitmentDto);
+  }
 }

@@ -1,5 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AppService } from './app.service';
+import { CreateCanPeopleSeeRecruitmentDto } from './can_people_see_recruitment/dto/create-can_people_see_recruitment.dto';
 
 @Controller()
 export class AppController {
@@ -28,5 +29,10 @@ export class AppController {
   @Get('/api/surveys/can-people-see-recruitment')
   async getCanPeopleSeeRecruitment(): Promise<{ can_people_see_recruitment: boolean }> {
     return this.appService.getCanPeopleSeeRecruitment();
+  }
+
+  @Post('/api/surveys/can-people-see-recruitment')
+  async setCanPeopleSeeRecruitment(@Body() createCanPeopleSeeRecruitmentDto: CreateCanPeopleSeeRecruitmentDto) {
+    return this.appService.setCanPeopleSeeRecruitment(createCanPeopleSeeRecruitmentDto);
   }
 }

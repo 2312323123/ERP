@@ -1,5 +1,5 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect } from 'react'
 import { logNetworkSuccess } from '../../../utils/logNetworkSuccess'
 import { logNetworkError, NetworkError } from '../../../utils/logNetworkError'
 import axios from 'axios'
