@@ -1,1 +1,3 @@
-export class CreateAcceptsSurveyDto {}
+export class CreateAcceptsSurveyDto {
+  accepts_surveys: boolean;
+}

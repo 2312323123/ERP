@@ -11,14 +11,16 @@ export class CanPeopleSeeRecruitmentService {
     private canPeopleSeeRecruitmentRepository: Repository<CanPeopleSeeRecruitment>,
   ) {}
 
-  create(createCanPeopleSeeRecruitmentDto: CreateCanPeopleSeeRecruitmentDto) {
-    // update all records to the value that was sent
+  async create(createCanPeopleSeeRecruitmentDto: CreateCanPeopleSeeRecruitmentDto) {
+    // Check if the value is a boolean
     if (typeof createCanPeopleSeeRecruitmentDto.can_people_see_recruitment === 'boolean') {
-      this.canPeopleSeeRecruitmentRepository.update(
+      // Await the repository update
+      await this.canPeopleSeeRecruitmentRepository.update(
         {},
         { can_people_see_recruitment: createCanPeopleSeeRecruitmentDto.can_people_see_recruitment },
       );
     } else {
+      // Throw an exception if the value is not valid
       throw new BadRequestException('Invalid value for can_people_see_recruitment 4t54e');
     }
   }
