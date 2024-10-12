@@ -34,8 +34,13 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 import WeightsSum from './components/WeightsSum'
 import TokenDisplay from './components/TokenDisplay'
-import { getActiveRecruitment } from '../../../store/slices/surveyStage/surveyUniversalSlice'
+import {
+  getActiveRecruitment,
+  getRecruitmentVisible,
+  setRectuitmentVisible,
+} from '../../../store/slices/surveyStage/surveyUniversalSlice'
 import CanPeopleSeeRecruitmentButton from './components/CanPeopleSeeRecruitmentButton'
+import OneFieldBooleanTableDbSwitchButton from '../../../utils/OneFieldBooleanTableDbSwitchButton'
 
 const SurveysSettings = () => {
   const [newRecruitment, setNewRecruitment] = useState('')
@@ -108,6 +113,8 @@ const SurveysSettings = () => {
 
   const activeRecruitment = useSelector(getActiveRecruitment)
 
+  const recruitmentVisible = useSelector(getRecruitmentVisible)
+
   return (
     <>
       <div>SurveysSettings</div>
@@ -168,6 +175,11 @@ const SurveysSettings = () => {
           </Box>
 
           <CanPeopleSeeRecruitmentButton />
+          <OneFieldBooleanTableDbSwitchButton
+            theValue={recruitmentVisible}
+            setterToDispatch={setRectuitmentVisible}
+            label="Rekrutacja aktywna (widoczna dla ludzi)?"
+          />
 
           {/* Można Oceniać Switch */}
           <Box my={3} display="flex" alignItems="center">

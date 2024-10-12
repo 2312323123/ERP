@@ -40,7 +40,7 @@ const CanPeopleSeeRecruitmentButton = () => {
     setIsFetching(true)
     try {
       const res = await axios.post(`${apiPathBase}/api/surveys/can-people-see-recruitment`, {
-        can_people_see_recruitment: !recruitmentVisible,
+        can_people_see_recruitment: !startingValue,
       })
       logNetworkSuccess(res, '0u425')
       setIsFetching(false)
