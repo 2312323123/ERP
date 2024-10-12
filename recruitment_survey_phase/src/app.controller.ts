@@ -50,7 +50,7 @@ export class AppController {
 
   // one switch in survey settings
   @Get('/api/surveys/accepts-surveys')
-  async getAcceptsSurveys(): Promise<{ can_people_see_recruitment: boolean }> {
+  async getAcceptsSurveys(): Promise<{ accepts_surveys: boolean }> {
     return this.appService.getAcceptsSurveys();
   }
   @Post('/api/surveys/accepts-surveys')

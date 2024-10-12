@@ -11,7 +11,7 @@ export class CanPeopleSeeRecruitmentService {
     private canPeopleSeeRecruitmentRepository: Repository<CanPeopleSeeRecruitment>,
   ) {}
 
-  async create(createCanPeopleSeeRecruitmentDto: CreateCanPeopleSeeRecruitmentDto) {
+  async setCanPeopleSeeRecruitment(createCanPeopleSeeRecruitmentDto: CreateCanPeopleSeeRecruitmentDto) {
     // Check if the value is a boolean
     if (typeof createCanPeopleSeeRecruitmentDto.can_people_see_recruitment === 'boolean') {
       // Await the repository update

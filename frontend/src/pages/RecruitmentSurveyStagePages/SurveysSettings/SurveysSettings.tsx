@@ -23,6 +23,7 @@ import {
   getAnyEvaluationExists,
   getDemoEvaluationState,
   getEvaluationCriteriaSetup,
+  getEvaluatorsCanEvaluate,
   getMark1Tag,
   getMark2Tag,
   getMark3Tag,
@@ -30,13 +31,16 @@ import {
   getMark5Tag,
   setDemoEvaluationStateComment,
   setDemoEvaluationStateMarks,
+  setEvaluatorsCanEvaluate,
 } from '../../../store/slices/surveyStage/surveySettingsPageSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import WeightsSum from './components/WeightsSum'
 import TokenDisplay from './components/TokenDisplay'
 import {
+  getAcceptsSurveys,
   getActiveRecruitment,
   getRecruitmentVisible,
+  setAcceptsSurveys,
   setRectuitmentVisible,
 } from '../../../store/slices/surveyStage/surveyUniversalSlice'
 import CanPeopleSeeRecruitmentButton from './components/CanPeopleSeeRecruitmentButton'
@@ -113,7 +117,10 @@ const SurveysSettings = () => {
 
   const activeRecruitment = useSelector(getActiveRecruitment)
 
+  const acceptsSurveys = useSelector(getAcceptsSurveys)
   const recruitmentVisible = useSelector(getRecruitmentVisible)
+  const evaluatorsCanEvaluate = useSelector(getEvaluatorsCanEvaluate)
+  // const activeRecruitment = useSelector(getActiveRecruitment)
 
   return (
     <>
@@ -164,18 +171,15 @@ const SurveysSettings = () => {
           <TokenDisplay />
 
           {/* Akceptuje ankiety Switch */}
-          <Box my={3} display="flex" alignItems="center">
-            <Typography variant="body1" mr={2}>
-              Akceptuje ankiety?
-            </Typography>
-            <Switch checked={canRate} onChange={handleRateChange} color="primary" />
-            <Typography variant="body1" ml={2}>
-              {canRate ? 'TAK' : 'NIE'}
-            </Typography>
-          </Box>
+          <OneFieldBooleanTableDbSwitchButton
+            theValue={acceptsSurveys}
+            setterToDispatch={setAcceptsSurveys}
+            label="Akceptuje ankiety?"
+            path="/api/surveys/accepts-surveys"
+            returnFieldName="accepts_surveys"
+          />
 
           {/* Rekrutacja aktywna (widoczna dla ludzi) Switch */}
-          <CanPeopleSeeRecruitmentButton />
           <OneFieldBooleanTableDbSwitchButton
             theValue={recruitmentVisible}
             setterToDispatch={setRectuitmentVisible}
@@ -185,15 +189,13 @@ const SurveysSettings = () => {
           />
 
           {/* Można Oceniać Switch */}
-          <Box my={3} display="flex" alignItems="center">
-            <Typography variant="body1" mr={2}>
-              Można oceniać?
-            </Typography>
-            <Switch checked={canRate} onChange={handleRateChange} color="primary" />
-            <Typography variant="body1" ml={2}>
-              {canRate ? 'TAK' : 'NIE'}
-            </Typography>
-          </Box>
+          <OneFieldBooleanTableDbSwitchButton
+            theValue={evaluatorsCanEvaluate}
+            setterToDispatch={setEvaluatorsCanEvaluate}
+            label="Można oceniać?"
+            path="/api/surveys/can-evaluate-surveys"
+            returnFieldName="can_evaluate_surveys"
+          />
         </Box>
       </Container>
 

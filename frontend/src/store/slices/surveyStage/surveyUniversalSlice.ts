@@ -2,12 +2,14 @@ import { createSlice } from '@reduxjs/toolkit'
 import { RootState } from '../../store'
 
 interface SurveyUniversalState {
-  recruitmentVisible?: boolean
+  acceptsSurveys?: boolean
   evaluatorsCanEvaluate?: boolean
+  recruitmentVisible?: boolean
   activeRecruitment?: { name: string; uuid: string }
 }
 
 const initialState = {
+  acceptsSurveys: undefined,
   recruitmentVisible: undefined,
   evaluatorsCanEvaluate: undefined,
   activeRecruitment: undefined,
@@ -17,6 +19,9 @@ const surveyUniversalSlice = createSlice({
   name: 'surveyUniversal',
   initialState: initialState,
   reducers: {
+    setAcceptsSurveys: (state, action) => {
+      state.acceptsSurveys = action.payload
+    },
     setRectuitmentVisible: (state, action) => {
       state.recruitmentVisible = action.payload
     },
@@ -30,12 +35,14 @@ const surveyUniversalSlice = createSlice({
 })
 
 // Export actions for dispatching
-export const { setRectuitmentVisible, setEvaluatorsCanEvaluate, setActiveRecruitment } = surveyUniversalSlice.actions
+export const { setAcceptsSurveys, setRectuitmentVisible, setEvaluatorsCanEvaluate, setActiveRecruitment } =
+  surveyUniversalSlice.actions
 
 // Reducer to be added to the store
 export default surveyUniversalSlice.reducer
 
 // Selectors
+export const getAcceptsSurveys = (state: RootState) => state.surveyUniversal.acceptsSurveys
 export const getRecruitmentVisible = (state: RootState) => state.surveyUniversal.recruitmentVisible
 export const getEvaluatorsCanEvaluate = (state: RootState) => state.surveyUniversal.evaluatorsCanEvaluate
 export const getActiveRecruitment = (state: RootState) => state.surveyUniversal.activeRecruitment

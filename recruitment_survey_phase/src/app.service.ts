@@ -35,7 +35,7 @@ export class AppService {
     return await this.canPeopleSeeRecruitmentService.getCanPeopleSeeRecruitment();
   }
   async setCanPeopleSeeRecruitment(createCanPeopleSeeRecruitmentDto: CreateCanPeopleSeeRecruitmentDto) {
-    return await this.canPeopleSeeRecruitmentService.create(createCanPeopleSeeRecruitmentDto);
+    return await this.canPeopleSeeRecruitmentService.setCanPeopleSeeRecruitment(createCanPeopleSeeRecruitmentDto);
   }
 
   // one switch in survey settings - can_evaluate_surveys
