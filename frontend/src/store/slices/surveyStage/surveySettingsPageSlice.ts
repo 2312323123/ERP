@@ -20,7 +20,7 @@ interface EvaluationResult {
 }
 
 const initialState = {
-  otherRecruitments: [] as Array<{ name: string; uuid: string }>,
+  allRecruitmentsUuidNameStartDate: undefined as undefined | Array<{ name: string; uuid: string; startDate: Date }>,
   evaluatorsCanEvaluate: false,
   currentRecruitment: {
     name: '',
