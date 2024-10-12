@@ -246,9 +246,14 @@ COPY . .
 CMD [ "npm", "run", "dev" ]
 ```
 
-#### one more frontend note
+#### some more frontend notes
 
-you may want to set up different Google clientId (here in main.tsx) in your frontend
+- you may want to set up different Google clientId (here in main.tsx) in your frontend
+- example slice to copy approach: surveySettingsPageSlice.tsx
+- example network call to copy approach:
+  - GET: handleFetchActiveRecruitment
+  - POST: erpAskForLogout, or handleClick in RoleButtonOwned.tsx,
+  - POST with blocking buttons while fetching: acceptRequest in UserInfo.tsx
 
 #### some tech used in frontend
 
