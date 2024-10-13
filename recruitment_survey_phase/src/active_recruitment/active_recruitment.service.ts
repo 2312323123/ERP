@@ -32,14 +32,16 @@ export class ActiveRecruitmentService {
   }
 
   async getActiveRecruitmentNameUuid(): Promise<{ name: string; uuid: string } | undefined> {
-    const activeRecruitment = await this.activeRecruitmentRepository
-      .find({
+    const activeRecruitment = (
+      await this.activeRecruitmentRepository.find({
         order: { recruitment_uuid: 'ASC' }, // Replace 'id' with the appropriate column
-        take: 1, // Take only the first record
+        take: 1, // Take only the first record,
+        relations: ['recruitment'], // Load the 'recruitment' relationship
       })
-      .then((results) => results[0]);
-    if (activeRecruitment) {
-      return { name: activeRecruitment.recruitment.name, uuid: activeRecruitment.recruitment.uuid };
+    )[0];
+
+    if (activeRecruitment?.recruitment) {
+      return { name: activeRecruitment.recruitment.name ?? '', uuid: activeRecruitment.recruitment.uuid };
     }
     return undefined;
   }
