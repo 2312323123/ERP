@@ -6,7 +6,7 @@ export class MarkGradeName {
   @PrimaryColumn()
   recruitment_uuid: string;
 
-  @OneToOne(() => Recruitment, (recruitment) => recruitment.uuid)
+  @OneToOne(() => Recruitment, (recruitment) => recruitment.uuid, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'recruitment_uuid' })
   recruitment: Recruitment;
 

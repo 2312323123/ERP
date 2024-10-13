@@ -12,23 +12,23 @@ export class RecruitmentsController {
     return this.recruitmentsService.create(createRecruitmentDto);
   }
 
-  @Get()
-  findAll() {
-    return this.recruitmentsService.findAll();
-  }
+  // @Get()
+  // findAll() {
+  //   return this.recruitmentsService.findAll();
+  // }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.recruitmentsService.findOne(+id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.recruitmentsService.findOne(+id);
+  // }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRecruitmentDto: UpdateRecruitmentDto) {
-    return this.recruitmentsService.update(+id, updateRecruitmentDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateRecruitmentDto: UpdateRecruitmentDto) {
+  //   return this.recruitmentsService.update(+id, updateRecruitmentDto);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.recruitmentsService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.recruitmentsService.remove(+id);
+  // }
 }

@@ -6,7 +6,7 @@ export class EvaluationSchema {
   @PrimaryColumn()
   recruitment_uuid: string;
 
-  @ManyToOne(() => Recruitment, (recruitment) => recruitment.uuid)
+  @ManyToOne(() => Recruitment, (recruitment) => recruitment.uuid, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'recruitment_uuid' })
   recruitment_hehe: Recruitment;
 

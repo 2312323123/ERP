@@ -7,7 +7,7 @@ export class FieldsHiddenForSurveyEvaluator {
   @PrimaryColumn() // Mark as part of the composite primary key
   recruitment_uuid: string;
 
-  @ManyToOne(() => Recruitment, (recruitment) => recruitment.uuid)
+  @ManyToOne(() => Recruitment, (recruitment) => recruitment.uuid, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'recruitment_uuid' }) // Specify the foreign key column name
   recruitment: Recruitment;
 

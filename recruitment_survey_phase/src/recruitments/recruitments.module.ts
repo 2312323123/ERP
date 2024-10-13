@@ -4,9 +4,20 @@ import { RecruitmentsController } from './recruitments.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Recruitment } from './entities/recruitment.entity';
 import { ActiveRecruitment } from 'src/active_recruitment/entities/active_recruitment.entity';
+import { MarkGradeName } from 'src/mark_grade_names/entities/mark_grade_name.entity';
+import { FieldsHiddenForSurveyEvaluator } from 'src/fields_hidden_for_survey_evaluators/entities/fields_hidden_for_survey_evaluator.entity';
+import { EvaluationSchema } from 'src/evaluation_schemas/entities/evaluation_schema.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Recruitment, ActiveRecruitment])],
+  imports: [
+    TypeOrmModule.forFeature([
+      Recruitment,
+      ActiveRecruitment,
+      MarkGradeName,
+      FieldsHiddenForSurveyEvaluator,
+      EvaluationSchema,
+    ]),
+  ],
   controllers: [RecruitmentsController],
   providers: [RecruitmentsService],
   exports: [RecruitmentsService],
