@@ -5,15 +5,40 @@ import SaveSettingsButtonPanel from './SaveSettingsButtonPanel/SaveSettingsButto
 import RecruitmentSettingsPanel from './RecruitmentSettingsPanel/RecruitmentSettingsPanel'
 import DeleteRecruitmentPanel from './DeleteRecruitmentPanel/DeleteRecruitmentPanel'
 import { Divider } from '@mui/material'
-import { getAllRecruitmentsUuidNameStartDate } from '../../../store/slices/surveyStage/surveySettingsPageSlice'
-import { useSelector } from 'react-redux'
 import BigSpinner from './components/BigSpinner'
+import { useGetAllRecruitmentsQuery } from '../../../services/erp'
 
 const SurveysSettings = () => {
-  const allRecruitmentsUuidNameStartDate = useSelector(getAllRecruitmentsUuidNameStartDate)
+  // const allRecruitmentsUuidNameStartDate = useSelector(getAllRecruitmentsUuidNameStartDate)
 
-  if (typeof allRecruitmentsUuidNameStartDate === 'undefined') {
-    return <BigSpinner />
+  // Fetch recruitment data using RTK Query
+  const { data: recruitments, error, isLoading } = useGetAllRecruitmentsQuery()
+
+  // // Using a query hook automatically fetches data and returns query values
+  // const { data, error, isLoading } = useGetPokemonByNameQuery('bulbasaur')
+  // Individual hooks are also accessible under the generated endpoints:
+  // const { data, error, isLoading } = pokemonApi.endpoints.getPokemonByName.useQuery('bulbasaur')
+
+  // if (typeof allRecruitmentsUuidNameStartDate === 'undefined') {
+  //   return <BigSpinner />
+  // }
+
+  if (isLoading) return <BigSpinner />
+
+  if (error) return <div>Oh no, there was an error</div>
+
+  if (recruitments?.length === 0) {
+    return (
+      <>
+        {/* Rekrutacja <nazwa> */}
+        <TitlePanel />
+        <Divider sx={{ my: 4 }} />
+
+        {/* Create New Recruitment section */}
+        <NewRecruitmentPanel isFirstRecruitment />
+        <Divider sx={{ my: 3 }} />
+      </>
+    )
   }
 
   return (

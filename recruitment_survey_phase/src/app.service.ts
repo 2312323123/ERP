@@ -7,6 +7,7 @@ import { AcceptsSurveysService } from './accepts_surveys/accepts_surveys.service
 import { CreateAcceptsSurveyDto } from './accepts_surveys/dto/create-accepts_survey.dto';
 import { CreateCanEvaluateSurveyDto } from './can_evaluate_surveys/dto/create-can_evaluate_survey.dto';
 import { CreateCanPeopleSeeRecruitmentDto } from './can_people_see_recruitment/dto/create-can_people_see_recruitment.dto';
+import { CreateRecruitmentDto } from './recruitments/dto/create-recruitment.dto';
 
 @Injectable()
 export class AppService {
@@ -52,5 +53,9 @@ export class AppService {
   }
   async setAcceptsSurveys(createAcceptsSurveyDto: CreateAcceptsSurveyDto) {
     return await this.acceptsSurveysService.setAcceptsSurveys(createAcceptsSurveyDto);
+  }
+
+  async createRecruitment(createRecruitmentDto: CreateRecruitmentDto) {
+    return this.recruitmentsService.create(createRecruitmentDto);
   }
 }

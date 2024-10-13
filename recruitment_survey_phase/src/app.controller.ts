@@ -3,6 +3,7 @@ import { AppService } from './app.service';
 import { CreateCanPeopleSeeRecruitmentDto } from './can_people_see_recruitment/dto/create-can_people_see_recruitment.dto';
 import { CreateCanEvaluateSurveyDto } from './can_evaluate_surveys/dto/create-can_evaluate_survey.dto';
 import { CreateAcceptsSurveyDto } from './accepts_surveys/dto/create-accepts_survey.dto';
+import { CreateRecruitmentDto } from './recruitments/dto/create-recruitment.dto';
 
 @Controller()
 export class AppController {
@@ -56,5 +57,10 @@ export class AppController {
   @Post('/api/surveys/accepts-surveys')
   async setAcceptsSurveys(@Body() createAcceptsSurveysDto: CreateAcceptsSurveyDto) {
     return this.appService.setAcceptsSurveys(createAcceptsSurveysDto);
+  }
+
+  @Post('/api/surveys/create-recruitment')
+  async createRecruitment(@Body() createRecruitmentDto: CreateRecruitmentDto) {
+    return this.appService.createRecruitment(createRecruitmentDto);
   }
 }
