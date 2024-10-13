@@ -15,14 +15,14 @@ export class RecruitmentsService {
   ) {}
 
   async create(createRecruitmentDto: CreateRecruitmentDto): Promise<Recruitment> {
-    const { name, grading_instruction } = createRecruitmentDto;
+    const { name, copy_from_uuid } = createRecruitmentDto;
     const recruitment = new Recruitment();
     if (name) {
       recruitment.name = name;
     }
     recruitment.start_date_time = new Date();
     recruitment.survey_sending_secret = randomBytes(63).toString('hex'); // Generate 126 characters (63 bytes)
-    recruitment.grading_instruction = grading_instruction ?? '';
+    // recruitment.grading_instruction = grading_instruction ?? '';
     const createdRecruitment = await this.recruitmentRepository.save(recruitment);
 
     // set active_recruitment as the created recruitment
