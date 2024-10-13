@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import {
   getDemoEvaluationState,
   getEvaluationCriteriaSetup,
-} from '../../../../store/slices/surveyStage/surveySettingsPageSlice'
+} from '../../../../../store/slices/surveyStage/surveySettingsPageSlice'
 import { useSelector } from 'react-redux'
 
 const WeightsSum = () => {

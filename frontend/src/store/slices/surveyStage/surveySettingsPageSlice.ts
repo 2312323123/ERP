@@ -142,6 +142,9 @@ const surveySettingsPageSlice = createSlice({
     setDemoEvaluationStateComment: (state, action) => {
       state.demoEvaluationState.comment = action.payload
     },
+    setAllRecruitmentsUuidNameStartDate: (state, action) => {
+      state.allRecruitmentsUuidNameStartDate = action.payload
+    },
   },
 })
 
@@ -166,6 +169,7 @@ export const {
   setMark5Tag,
   setDemoEvaluationStateMarks,
   setDemoEvaluationStateComment,
+  setAllRecruitmentsUuidNameStartDate,
 } = surveySettingsPageSlice.actions
 
 // Reducer to be added to the store
@@ -196,3 +200,5 @@ export const getAnyEvaluationExists = (state: RootState) =>
 export const getAnySurveyExists = (state: RootState) => state.surveySettingsPage.currentRecruitment.anySurveyExists
 export const getGoogleScriptsToken = (state: RootState) =>
   state.surveySettingsPage.currentRecruitment.googleScriptsToken
+export const getAllRecruitmentsUuidNameStartDate = (state: RootState) =>
+  state.surveySettingsPage.allRecruitmentsUuidNameStartDate

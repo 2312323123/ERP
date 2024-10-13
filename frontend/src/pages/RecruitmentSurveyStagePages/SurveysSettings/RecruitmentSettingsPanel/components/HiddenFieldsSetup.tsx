@@ -5,7 +5,7 @@ import {
   handleAddFieldsNotToShow,
   handleDeleteFieldsNotToShow,
   handleFieldsNotToShowChange,
-} from '../../../../store/slices/surveyStage/surveySettingsPageSlice'
+} from '../../../../../store/slices/surveyStage/surveySettingsPageSlice'
 import DeleteIcon from '@mui/icons-material/Delete'
 
 const HiddenFieldsSetup = () => {
