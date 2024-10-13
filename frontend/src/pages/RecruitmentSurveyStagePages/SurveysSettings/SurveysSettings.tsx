@@ -5,8 +5,17 @@ import SaveSettingsButtonPanel from './SaveSettingsButtonPanel/SaveSettingsButto
 import RecruitmentSettingsPanel from './RecruitmentSettingsPanel/RecruitmentSettingsPanel'
 import DeleteRecruitmentPanel from './DeleteRecruitmentPanel/DeleteRecruitmentPanel'
 import { Divider } from '@mui/material'
+import { getAllRecruitmentsUuidNameStartDate } from '../../../store/slices/surveyStage/surveySettingsPageSlice'
+import { useSelector } from 'react-redux'
+import BigSpinner from './components/BigSpinner'
 
 const SurveysSettings = () => {
+  const allRecruitmentsUuidNameStartDate = useSelector(getAllRecruitmentsUuidNameStartDate)
+
+  if (typeof allRecruitmentsUuidNameStartDate === 'undefined') {
+    return <BigSpinner />
+  }
+
   return (
     <>
       {/* Rekrutacja <nazwa> */}
