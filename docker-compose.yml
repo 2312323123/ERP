@@ -19,25 +19,38 @@ services:
       - source: db-psql-init.sql
         target: /docker-entrypoint-initdb.d/init.sql
 
+  # # docker-compose exec -it curl_service sh
+  # curl_service:
+  #   image: curlimages/curl:latest
+  #   depends_on:
+  #     - auth_and_permissions # Wait for this service to be available
+  #   entrypoint: ["sleep", "infinity"] # Keep the container running
+  #   networks:
+  #     - outside
+  #     - backend
+  #     - frontend
+  #     - db_admin_sql
+  #     - db_admin_mongo
+
   # psql-client:
   #   image: postgres:13
   #   entrypoint: ["tail", "-f", "/dev/null"]
   #   networks:
   #     - backend
 
-  mongo:
-    image: mongo
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-      MONGO_INITDB_DATABASE: surveys_db # Set the default database name
-    # UNCOMMENT THIS TO PERSIST DATA
-    # volumes:
-    #   - mongo_data:/data/db # Persist data
-    networks:
-      - backend
-      - db_admin_mongo
+  # mongo:
+  #   image: mongo
+  #   restart: always
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+  #     MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+  #     MONGO_INITDB_DATABASE: surveys_db # Set the default database name
+  #   # UNCOMMENT THIS TO PERSIST DATA
+  #   # volumes:
+  #   #   - mongo_data:/data/db # Persist data
+  #   networks:
+  #     - backend
+  #     - db_admin_mongo
 
   pgadmin:
     build:
@@ -68,19 +81,19 @@ services:
     depends_on:
       - db-psql
 
-  mongo-express:
-    image: mongo-express
-    restart: always
-    ports:
-      - 8081:8081
-    environment:
-      ME_CONFIG_BASICAUTH_USERNAME: ${ME_CONFIG_BASICAUTH_USERNAME}
-      ME_CONFIG_BASICAUTH_PASSWORD: ${ME_CONFIG_BASICAUTH_PASSWORD}
-      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/
-    networks:
-      - db_admin_mongo
-    depends_on:
-      - mongo
+  # mongo-express:
+  #   image: mongo-express
+  #   restart: always
+  #   ports:
+  #     - 8081:8081
+  #   environment:
+  #     ME_CONFIG_BASICAUTH_USERNAME: ${ME_CONFIG_BASICAUTH_USERNAME}
+  #     ME_CONFIG_BASICAUTH_PASSWORD: ${ME_CONFIG_BASICAUTH_PASSWORD}
+  #     ME_CONFIG_MONGODB_URL: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/
+  #   networks:
+  #     - db_admin_mongo
+  #   depends_on:
+  #     - mongo
 
   auth_and_permissions:
     build:
