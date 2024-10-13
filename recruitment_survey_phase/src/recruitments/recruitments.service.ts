@@ -102,7 +102,7 @@ export class RecruitmentsService {
       const initialEntity = this.activeRecruitmentRepository.create(activeRecruitment);
       await this.activeRecruitmentRepository.save(initialEntity);
     } else {
-      const activeRecruitment = await this.activeRecruitmentRepository.findOne({});
+      const activeRecruitment = (await this.activeRecruitmentRepository.find())[0];
       if (activeRecruitment) {
         activeRecruitment.recruitment_uuid = createdRecruitment.uuid;
         await this.activeRecruitmentRepository.save(activeRecruitment);
