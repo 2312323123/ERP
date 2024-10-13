@@ -1,3 +1,10 @@
+### Some common errors during development caused by how Nest.js works:
+
+- using repository of another Table in different .service.ts
+  - error: `Nest can't resolve dependencies of the RecruitmentsService (RecruitmentRepository, ActiveRecruitmentRepository, ?). Please make sure that the argument "MarkGradeNameRepository" at index [2] is available in the RecruitmentsModule context.`
+  - if you do this:
+    `@InjectRepository(MarkGradeName) private markGradeNameRepository: Repository<MarkGradeName>,` in `recruitments.service.ts`, you have to go to `recruitments.module.ts` and add `MarkGradeName` to the array here: `imports: [TypeOrmModule.forFeature([Recruitment, ActiveRecruitment])],` (MarkGradeName is an the Entity)
+
 ### First thing to know
 
 Everything is created automatically on startup except:
