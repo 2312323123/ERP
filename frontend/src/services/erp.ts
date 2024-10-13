@@ -7,6 +7,11 @@ export interface SurveyRecruitment {
   startDate: string // or Date if you convert the string to a Date object
 }
 
+export interface ActiveRecruitment {
+  uuid: string
+  name: string
+}
+
 // Define a service using a base URL and expected endpoints
 export const erpApi = createApi({
   reducerPath: 'erpApi',
@@ -15,6 +20,11 @@ export const erpApi = createApi({
     getAllRecruitments: builder.query<SurveyRecruitment[], void>({
       query: () => 'api/surveys/all-recruitments-uuid-name-start-date',
       providesTags: [{ type: 'SurveyRecruitment', id: 'LIST' }], // Add this
+    }),
+
+    getActiveRecruitment: builder.query<ActiveRecruitment, void>({
+      query: () => 'api/surveys/active-recruitment-name-uuid',
+      providesTags: [{ type: 'SurveyRecruitment', id: 'ACTIVE' }], // Add this
     }),
 
     // Define the POST mutation
@@ -42,4 +52,4 @@ export const erpApi = createApi({
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetAllRecruitmentsQuery, useCreateRecruitmentMutation } = erpApi
+export const { useGetAllRecruitmentsQuery, useGetActiveRecruitmentQuery, useCreateRecruitmentMutation } = erpApi

@@ -9,28 +9,12 @@ import { ActiveRecruitment } from 'src/active_recruitment/entities/active_recrui
 import { MarkGradeName } from 'src/mark_grade_names/entities/mark_grade_name.entity';
 import { FieldsHiddenForSurveyEvaluator } from 'src/fields_hidden_for_survey_evaluators/entities/fields_hidden_for_survey_evaluator.entity';
 import { EvaluationSchema } from 'src/evaluation_schemas/entities/evaluation_schema.entity';
+import {
+  CreateRecruitmentRelatedDataForFrontendDto,
+  RecruitmentRelatedData,
+} from './dto/create-recruitment-related-data-for-frontend.dto copy';
 
-export interface RecruitmentRelatedData {
-  grading_instruction: string;
-  fieldsNotToShow: Array<string>;
-  fieldToDistinctTheSurvey: string;
-  evaluationCriteriaSetup: {
-    criteria: Array<{
-      name: string;
-      description: string;
-      weight: number;
-    }>;
-    markTags: {
-      mark1Tag: string;
-      mark2Tag: string;
-      mark3Tag: string;
-      mark4Tag: string;
-      mark5Tag: string;
-    };
-  };
-}
-
-const recruitmentCreateDefaults = {
+const recruitmentCreateDefaults: RecruitmentRelatedData = {
   grading_instruction: `# Hi, *Pluto*!
   Rekru czy coś`,
   fieldsNotToShow: [''] as Array<string>,

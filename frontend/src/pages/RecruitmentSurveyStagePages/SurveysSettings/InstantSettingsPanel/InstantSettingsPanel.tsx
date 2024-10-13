@@ -14,11 +14,15 @@ import OneFieldBooleanTableDbSwitchButton from '../../../../utils/OneFieldBoolea
 import TokenDisplay from './components/TokenDisplay'
 import { useSelector } from 'react-redux'
 import { useState } from 'react'
-import { useGetAllRecruitmentsQuery } from '../../../../services/erp'
+import { useGetActiveRecruitmentQuery, useGetAllRecruitmentsQuery } from '../../../../services/erp'
 
 const InstantSettingsPanel = () => {
-  const activeRecruitment = useSelector(getActiveRecruitment)
-
+  // const activeRecruitment = useSelector(getActiveRecruitment)
+  const {
+    data: activeRecruitment,
+    error: activeRecruitmentError,
+    isLoading: activeRecruitmentIsLoading,
+  } = useGetActiveRecruitmentQuery()
   const { data: recruitments, error, isLoading } = useGetAllRecruitmentsQuery()
 
   const [selectedRecruitment, setSelectedRecruitment] = useState<string>('')
@@ -54,7 +58,9 @@ const InstantSettingsPanel = () => {
       <Typography variant="h4" gutterBottom>
         Ustawienia zmieniane natychmiastowo
       </Typography>
-
+      <h4>activeRecruitment</h4>
+      {JSON.stringify(activeRecruitment)}
+      <h4>recruitments</h4>
       {JSON.stringify(recruitments)}
 
       {/* Create New Recruitment */}
