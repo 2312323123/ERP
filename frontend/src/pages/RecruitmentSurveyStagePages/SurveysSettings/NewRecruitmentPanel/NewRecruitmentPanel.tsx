@@ -1,4 +1,16 @@
-import { Container, Box, Typography, TextField, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/material'
+import {
+  Container,
+  Box,
+  Typography,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Button,
+  Alert,
+  Snackbar,
+} from '@mui/material'
 import { useState } from 'react'
 import { useCreateRecruitmentMutation } from '../../../../services/erp'
 
@@ -71,6 +83,18 @@ const NewRecruitmentPanel = ({ isFirstRecruitment }: Props) => {
         >
           Stwórz
         </Button>
+
+        <Snackbar open={isError} autoHideDuration={6000} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+          <Alert severity="error" sx={{ width: '100%' }}>
+            Wystąpił błąd przy tworzeniu rekrutacji!
+          </Alert>
+        </Snackbar>
+
+        {/* <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+            An error occurred!
+          </Alert>
+        </Snackbar> */}
       </Box>
     </Container>
   )
