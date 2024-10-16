@@ -88,8 +88,7 @@ export class RecruitmentsService {
     } else {
       const activeRecruitment = (await this.activeRecruitmentRepository.find())[0];
       if (activeRecruitment) {
-        activeRecruitment.recruitment_uuid = createdRecruitment.uuid;
-        await this.activeRecruitmentRepository.save(activeRecruitment);
+        await this.activeRecruitmentRepository.update({}, { recruitment_uuid: createdRecruitment.uuid });
       } else {
         console.log('some really weird error 4y6hy5tr489');
       }
