@@ -4,6 +4,10 @@
   - error: `Nest can't resolve dependencies of the RecruitmentsService (RecruitmentRepository, ActiveRecruitmentRepository, ?). Please make sure that the argument "MarkGradeNameRepository" at index [2] is available in the RecruitmentsModule context.`
   - if you do this:
     `@InjectRepository(MarkGradeName) private markGradeNameRepository: Repository<MarkGradeName>,` in `recruitments.service.ts`, you have to go to `recruitments.module.ts` and add `MarkGradeName` to the array here: `imports: [TypeOrmModule.forFeature([Recruitment, ActiveRecruitment])],` (MarkGradeName is an the Entity)
+- fetching related tables by some i.e. OneToOne relation:
+  - error: Cannot read properties of undefined (reading '<\some_field_name>\')
+  - you need to add this in find to load related tables fields, example in getActiveRecruitmentNameUuid:
+    relations: ['recruitment'], // Load the 'recruitment' relationship
 
 ### First thing to know
 
