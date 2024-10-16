@@ -5,7 +5,7 @@ interface SurveyUniversalState {
   acceptsSurveys?: boolean
   evaluatorsCanEvaluate?: boolean
   recruitmentVisible?: boolean
-  activeRecruitment?: { name: string; uuid: string }
+  // activeRecruitment?: { name: string; uuid: string }
 }
 
 const initialState = {
@@ -28,15 +28,18 @@ const surveyUniversalSlice = createSlice({
     setEvaluatorsCanEvaluate: (state, action) => {
       state.evaluatorsCanEvaluate = action.payload
     },
-    setActiveRecruitment: (state, action) => {
-      state.activeRecruitment = action.payload
-    },
+    // setActiveRecruitment: (state, action) => {
+    //   state.activeRecruitment = action.payload
+    // },
   },
 })
 
 // Export actions for dispatching
-export const { setAcceptsSurveys, setRectuitmentVisible, setEvaluatorsCanEvaluate, setActiveRecruitment } =
-  surveyUniversalSlice.actions
+export const {
+  setAcceptsSurveys,
+  setRectuitmentVisible,
+  setEvaluatorsCanEvaluate,
+} = surveyUniversalSlice.actions //, setActiveRecruitment } =
 
 // Reducer to be added to the store
 export default surveyUniversalSlice.reducer
@@ -45,4 +48,4 @@ export default surveyUniversalSlice.reducer
 export const getAcceptsSurveys = (state: RootState) => state.surveyUniversal.acceptsSurveys
 export const getRecruitmentVisible = (state: RootState) => state.surveyUniversal.recruitmentVisible
 export const getEvaluatorsCanEvaluate = (state: RootState) => state.surveyUniversal.evaluatorsCanEvaluate
-export const getActiveRecruitment = (state: RootState) => state.surveyUniversal.activeRecruitment
+// export const getActiveRecruitment = (state: RootState) => state.surveyUniversal.activeRecruitment

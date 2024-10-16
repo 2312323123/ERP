@@ -20,8 +20,28 @@ import {
   setDemoEvaluationStateComment,
   setDemoEvaluationStateMarks,
 } from '../../../../store/slices/surveyStage/surveySettingsPageSlice'
+import { useGetActiveRecruitmentQuery, useGetActiveRecruitmentSettingsQuery } from '../../../../services/erp'
+import { useEffect } from 'react'
 
 const RecruitmentSettingsPanel = () => {
+  const {
+    data: activeRecruitment,
+    error: activeRecruitmentError,
+    isLoading: activeRecruitmentIsLoading,
+  } = useGetActiveRecruitmentQuery()
+
+  const {
+    data: activeRecruitmentSettings,
+    error: activeRecruitmentSettingsError,
+    isLoading: activeRecruitmentSettingsIsLoading,
+  } = useGetActiveRecruitmentSettingsQuery(activeRecruitment?.uuid ?? '')
+
+  useEffect(() => {
+    if (activeRecruitmentSettings) {
+      console.log('Active recruitment settings changed:', activeRecruitmentSettings)
+    }
+  }, [activeRecruitmentSettings])
+
   const anyEvaluationExists = useSelector(getAnyEvaluationExists)
   const evaluationCriteriaSetup = useSelector(getEvaluationCriteriaSetup)
   const mark1Tag = useSelector(getMark1Tag)
@@ -43,6 +63,8 @@ const RecruitmentSettingsPanel = () => {
       {/* Always available ones */}
       <Container maxWidth="md">
         <Divider sx={{ my: 2 }} />
+
+        <pre>{JSON.stringify(activeRecruitmentSettings, null, 2)}</pre>
 
         {/* Accordion */}
         <MarkdownEditor />

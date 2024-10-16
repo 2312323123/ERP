@@ -1,13 +1,11 @@
 import { Container, Typography, Box, FormControl, InputLabel, Select, MenuItem } from '@mui/material'
 import {
-  getEvaluatorsCanEvaluate,
-  setEvaluatorsCanEvaluate,
-} from '../../../../store/slices/surveyStage/surveySettingsPageSlice'
-import {
   getAcceptsSurveys,
-  getActiveRecruitment,
+  // getActiveRecruitment,
+  getEvaluatorsCanEvaluate,
   getRecruitmentVisible,
   setAcceptsSurveys,
+  setEvaluatorsCanEvaluate,
   setRectuitmentVisible,
 } from '../../../../store/slices/surveyStage/surveyUniversalSlice'
 import OneFieldBooleanTableDbSwitchButton from '../../../../utils/OneFieldBooleanTableDbSwitchButton'
@@ -36,7 +34,7 @@ const InstantSettingsPanel = () => {
     const confirmSave = handleSaveChanges()
 
     if (!confirmSave) {
-      const confirmExit = window.confirm('Czy na pewno chcesz wyjść z tej rekru?')
+      const confirmExit = window.confirm('Czy na pewno chcesz zmienić aktywną rekru?')
       if (confirmExit) {
         setSelectedRecruitment(value)
       }
@@ -44,7 +42,9 @@ const InstantSettingsPanel = () => {
   }
 
   const handleSaveChanges = () => {
-    const confirmSave = window.confirm('Czy chcesz zapisać zmiany w tej rekru, z której wychodzisz?')
+    const confirmSave = window.confirm(
+      `Czy chcesz zapisać zmiany w tej rekru, z której wychodzisz? (${activeRecruitment?.name})`,
+    )
     if (confirmSave) {
       // Implement save logic here
       alert('Changes saved!') // Placeholder for actual save logic
@@ -67,8 +67,12 @@ const InstantSettingsPanel = () => {
       <Box my={3}>
         {/* Active Recruitment Details */}
         <Typography variant="h5" gutterBottom>
-          Wybrana rekrutacja: {activeRecruitment ? activeRecruitment.name : 'brak w systemie'}, początek:{' '}
-          {activeRecruitment ? activeRecruitment?.date : 'brak'}
+          Wybrana rekrutacja: {activeRecruitment?.name ?? 'brak w systemie'}, początek:{' '}
+          {activeRecruitment && recruitments
+            ? new Date(
+                recruitments.find((recruitment) => recruitment.uuid === activeRecruitment.uuid)?.startDate ?? '',
+              ).toLocaleDateString()
+            : 'brak'}
         </Typography>
 
         {/* Choose Recruitment */}
@@ -76,12 +80,15 @@ const InstantSettingsPanel = () => {
           <FormControl fullWidth variant="outlined" margin="normal">
             <InputLabel>Wybierz rekrutację</InputLabel>
             <Select
-              value={selectedRecruitment}
+              value={activeRecruitment?.uuid}
               onChange={(e) => trySettingSelectedRecruitment(e.target.value)}
               label="Wybierz rekrutację"
             >
-              <MenuItem value="recruitment1">Recruitment 1</MenuItem>
-              <MenuItem value="recruitment2">Recruitment 2</MenuItem>
+              {recruitments?.map((recruitment) => (
+                <MenuItem key={recruitment.uuid} value={recruitment.uuid}>
+                  {recruitment.name} - utworzono: {new Date(recruitment.startDate).toLocaleDateString()}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Box>

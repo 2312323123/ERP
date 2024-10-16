@@ -1,9 +1,12 @@
 import { Container, Typography } from '@mui/material'
-import { getActiveRecruitment } from '../../../../store/slices/surveyStage/surveyUniversalSlice'
-import { useSelector } from 'react-redux'
+import { useGetActiveRecruitmentQuery } from '../../../../services/erp'
 
 const TitlePanel = () => {
-  const activeRecruitment = useSelector(getActiveRecruitment)
+  const {
+    data: activeRecruitment,
+    error: activeRecruitmentError,
+    isLoading: activeRecruitmentIsLoading,
+  } = useGetActiveRecruitmentQuery()
 
   return (
     <Container maxWidth="md">

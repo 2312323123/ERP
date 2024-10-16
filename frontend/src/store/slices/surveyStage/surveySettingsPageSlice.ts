@@ -21,7 +21,7 @@ interface EvaluationResult {
 
 const initialState = {
   allRecruitmentsUuidNameStartDate: undefined as undefined | Array<{ name: string; uuid: string; startDate: Date }>,
-  evaluatorsCanEvaluate: false,
+  // evaluatorsCanEvaluate: false,
   currentRecruitment: {
     name: '',
     uuid: '',
@@ -66,9 +66,9 @@ const surveySettingsPageSlice = createSlice({
   name: 'surveySettingsPage',
   initialState: initialState,
   reducers: {
-    setEvaluatorsCanEvaluate: (state, action) => {
-      state.evaluatorsCanEvaluate = action.payload
-    },
+    // setEvaluatorsCanEvaluate: (state, action) => {
+    //   state.evaluatorsCanEvaluate = action.payload
+    // },
     setGradingInstruction: (state, action) => {
       state.currentRecruitment.gradingInstruction = action.payload
     },
@@ -150,7 +150,7 @@ const surveySettingsPageSlice = createSlice({
 
 // Export actions for dispatching
 export const {
-  setEvaluatorsCanEvaluate,
+  // setEvaluatorsCanEvaluate,
   setGradingInstruction,
   setFieldsNotToShow,
   handleFieldsNotToShowChange,
@@ -176,7 +176,7 @@ export const {
 export default surveySettingsPageSlice.reducer
 
 // Selectors
-export const getEvaluatorsCanEvaluate = (state: RootState) => state.surveySettingsPage.evaluatorsCanEvaluate
+// export const getEvaluatorsCanEvaluate = (state: RootState) => state.surveySettingsPage.evaluatorsCanEvaluate
 export const getGradingInstruction = (state: RootState) =>
   state.surveySettingsPage.currentRecruitment.gradingInstruction
 export const getFieldsNotToShow = (state: RootState) => state.surveySettingsPage.currentRecruitment.fieldsNotToShow

@@ -58,4 +58,8 @@ export class AppService {
   async createRecruitment(createRecruitmentDto: CreateRecruitmentDto) {
     return this.recruitmentsService.create(createRecruitmentDto);
   }
+
+  async getActiveRecruitmentDataForFrontend() {
+    return this.recruitmentsService.getActiveRecruitmentDataForFrontend();
+  }
 }

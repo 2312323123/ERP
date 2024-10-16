@@ -12,6 +12,30 @@ export interface ActiveRecruitment {
   name: string
 }
 
+export interface SurveySettingsExported {
+  gradingInstruction: string
+  fieldsNotToShow: Array<string>
+  fieldToDistinctTheSurvey: string
+  evaluationCriteria: Array<{
+    name: string
+    description: string
+    weight: number
+  }>
+  markTags: {
+    mark1Tag: string
+    mark2Tag: string
+    mark3Tag: string
+    mark4Tag: string
+    mark5Tag: string
+  }
+}
+
+export interface SurveySettingsImported extends SurveySettingsExported {
+  token: string
+  anySurveyExists: boolean
+  anyEvaluationExists: boolean
+}
+
 // Define a service using a base URL and expected endpoints
 export const erpApi = createApi({
   reducerPath: 'erpApi',
@@ -46,10 +70,20 @@ export const erpApi = createApi({
         }
       },
     }),
+
+    getActiveRecruitmentSettings: builder.query<SurveySettingsImported, string>({
+      query: () => 'api/surveys/active-recruitment-settings',
+      providesTags: [{ type: 'SurveyRecruitment', id: 'ACTIVE' }], // applies here too
+    }),
   }),
   tagTypes: ['SurveyRecruitment'], // Keep the tag type for survey recruitments
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetAllRecruitmentsQuery, useGetActiveRecruitmentQuery, useCreateRecruitmentMutation } = erpApi
+export const {
+  useGetAllRecruitmentsQuery,
+  useGetActiveRecruitmentQuery,
+  useCreateRecruitmentMutation,
+  useGetActiveRecruitmentSettingsQuery,
+} = erpApi

@@ -63,4 +63,9 @@ export class AppController {
   async createRecruitment(@Body() createRecruitmentDto: CreateRecruitmentDto) {
     return this.appService.createRecruitment(createRecruitmentDto);
   }
+
+  @Get('/api/surveys/active-recruitment-settings')
+  async getActiveRecruitmentSettings() {
+    return this.appService.getActiveRecruitmentDataForFrontend();
+  }
 }

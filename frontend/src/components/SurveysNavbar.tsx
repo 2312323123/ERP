@@ -13,7 +13,7 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material'
-import React, { useCallback, useContext, useEffect } from 'react'
+import { useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import MenuIcon from '@mui/icons-material/Menu' // Import MenuIcon
 import bestLogoWhite from '../assets/best-logo-white.svg'
@@ -26,12 +26,13 @@ import StarsIcon from '@mui/icons-material/Stars'
 import HelpIcon from '@mui/icons-material/Help'
 import FeedbackIcon from '@mui/icons-material/Feedback'
 import SettingsIcon from '@mui/icons-material/Settings'
-import axios from 'axios'
-import { logNetworkSuccess } from '../utils/logNetworkSuccess'
-import { logNetworkError, NetworkError } from '../utils/logNetworkError'
-import { AppContext } from '../App'
-import { getActiveRecruitment, setActiveRecruitment } from '../store/slices/surveyStage/surveyUniversalSlice'
-import { useDispatch, useSelector } from 'react-redux'
+// import axios from 'axios'
+// import { logNetworkSuccess } from '../utils/logNetworkSuccess'
+// import { logNetworkError, NetworkError } from '../utils/logNetworkError'
+// import { AppContext } from '../App'
+// import { getActiveRecruitment, setActiveRecruitment } from '../store/slices/surveyStage/surveyUniversalSlice'
+// import { useDispatch, useSelector } from 'react-redux'
+import { useGetActiveRecruitmentQuery } from '../services/erp'
 
 const drawerWidth = 240
 
@@ -47,8 +48,8 @@ const SurveysNavbar = (props: Props) => {
   // Mui Responsive drawer & React Router Outlet
 
   const { window } = props
-  const [mobileOpen, setMobileOpen] = React.useState(false)
-  const [isClosing, setIsClosing] = React.useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const [isClosing, setIsClosing] = useState(false)
 
   const handleDrawerClose = () => {
     setIsClosing(true)
@@ -65,29 +66,35 @@ const SurveysNavbar = (props: Props) => {
     }
   }
 
-  const { apiPathBase } = useContext(AppContext)
-  const dispatch = useDispatch()
-  const handleFetchActiveRecruitment = useCallback(async () => {
-    try {
-      // setButtonsBlocked(true)
-      const res = await axios.get(`${apiPathBase}/api/surveys/active-recruitment-name-uuid`)
-      logNetworkSuccess(res, '34rt546y7')
+  const {
+    data: activeRecruitment,
+    error: activeRecruitmentError,
+    isLoading: activeRecruitmentIsLoading,
+  } = useGetActiveRecruitmentQuery()
 
-      if (res.data) {
-        dispatch(setActiveRecruitment({ name: res.data.name, uuid: res.data.uuid }))
-      } else {
-        dispatch(setActiveRecruitment(undefined))
-      }
-    } catch (error) {
-      logNetworkError(error as NetworkError, 'i87y6t5r4')
-    }
-  }, [apiPathBase, dispatch])
+  // const { apiPathBase } = useContext(AppContext)
+  // const dispatch = useDispatch()
+  // const handleFetchActiveRecruitment = useCallback(async () => {
+  //   try {
+  //     // setButtonsBlocked(true)
+  //     const res = await axios.get(`${apiPathBase}/api/surveys/active-recruitment-name-uuid`)
+  //     logNetworkSuccess(res, '34rt546y7')
 
-  const activeRecruitment = useSelector(getActiveRecruitment)
+  //     if (res.data) {
+  //       dispatch(setActiveRecruitment({ name: res.data.name, uuid: res.data.uuid }))
+  //     } else {
+  //       dispatch(setActiveRecruitment(undefined))
+  //     }
+  //   } catch (error) {
+  //     logNetworkError(error as NetworkError, 'i87y6t5r4')
+  //   }
+  // }, [apiPathBase, dispatch])
 
-  useEffect(() => {
-    handleFetchActiveRecruitment()
-  }, [handleFetchActiveRecruitment])
+  // const activeRecruitment = useSelector(getActiveRecruitment)
+
+  // useEffect(() => {
+  //   handleFetchActiveRecruitment()
+  // }, [handleFetchActiveRecruitment])
 
   const drawer = (
     <div>

@@ -7,5 +7,5 @@ export class SurveyMetadata {
   uuid: string;
 
   @ManyToOne(() => Recruitment, (recruitment) => recruitment.uuid)
-  recruitment_uuid: Recruitment;
+  recruitment: Recruitment;
 }
