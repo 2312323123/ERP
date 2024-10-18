@@ -16,4 +16,7 @@ export class Recruitment {
 
   @Column({ type: 'text' })
   grading_instruction: string;
+
+  @Column()
+  field_to_distinct_the_survey: string;
 }

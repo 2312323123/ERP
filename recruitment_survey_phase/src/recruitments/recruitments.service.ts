@@ -20,7 +20,7 @@ const recruitmentCreateDefaults: RecruitmentRelatedData = {
   gradingInstruction: `# Hi, *Pluto*!
   Rekru czy coś`,
   fieldsNotToShow: [''] as Array<string>,
-  fieldToDistinctTheSurvey: '',
+  fieldToDistinctTheSurvey: 'imię',
   evaluationCriteria: [
     {
       name: 'Przykładowe kryterium',
@@ -59,6 +59,7 @@ export class RecruitmentsService {
     recruitment.start_date_time = new Date();
     recruitment.survey_sending_secret = randomBytes(63).toString('hex'); // Generate 126 characters (63 bytes)
     recruitment.grading_instruction = recruitmentCreateDefaults.gradingInstruction;
+    recruitment.field_to_distinct_the_survey = recruitmentCreateDefaults.fieldToDistinctTheSurvey;
 
     // save the recruitment
     const createdRecruitment = await this.recruitmentRepository.save(recruitment);
@@ -71,7 +72,10 @@ export class RecruitmentsService {
       if (recruitmentToCopyFrom) {
         await this.updateRecruitment(
           createdRecruitment.uuid,
-          new UpdateRecruitmentDto({ grading_instruction: recruitmentToCopyFrom.grading_instruction }),
+          new UpdateRecruitmentDto({
+            grading_instruction: recruitmentToCopyFrom.grading_instruction,
+            field_to_distinct_the_survey: recruitmentToCopyFrom.field_to_distinct_the_survey,
+          }),
         );
       }
       this.createRecruitmentRelatedEntitiesFromExistingRecruitment(createdRecruitment, copy_from_uuid);
@@ -107,7 +111,10 @@ export class RecruitmentsService {
 
     await this.updateRecruitment(
       createdRecruitment.uuid,
-      new UpdateRecruitmentDto({ grading_instruction: recruitmentRelatedData.gradingInstruction }),
+      new UpdateRecruitmentDto({
+        grading_instruction: recruitmentRelatedData.gradingInstruction,
+        field_to_distinct_the_survey: recruitmentRelatedData.fieldToDistinctTheSurvey,
+      }),
     );
 
     for (const field of recruitmentRelatedData.fieldsNotToShow) {
@@ -175,6 +182,10 @@ export class RecruitmentsService {
         recruitmentToUpdate.grading_instruction = updateRecruitmentDto.grading_instruction;
       }
 
+      if (updateRecruitmentDto.field_to_distinct_the_survey) {
+        recruitmentToUpdate.field_to_distinct_the_survey = updateRecruitmentDto.field_to_distinct_the_survey;
+      }
+
       // Save the updated entity
       const updatedRecruitment = await this.recruitmentRepository.save(recruitmentToUpdate);
 
@@ -217,6 +228,7 @@ export class RecruitmentsService {
     const recruitmentRelatedData = new CreateRecruitmentRelatedDataForFrontendDto();
     recruitmentRelatedData.gradingInstruction = recruitment.grading_instruction;
     recruitmentRelatedData.token = recruitment.survey_sending_secret;
+    recruitmentRelatedData.fieldToDistinctTheSurvey = recruitment.field_to_distinct_the_survey;
 
     recruitmentRelatedData.fieldsNotToShow = fieldsHiddenForSurveyEvaluator.map((field) => field.field);
 
