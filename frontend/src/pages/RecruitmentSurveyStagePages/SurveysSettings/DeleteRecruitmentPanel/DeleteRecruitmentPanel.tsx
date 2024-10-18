@@ -48,6 +48,7 @@ const DeleteRecruitmentPanel = () => {
         ) : (
           <CircularProgress size={20} />
         )}
+        ):
       </Typography>
 
       {/* Settings until the first survey section */}
