@@ -7,28 +7,28 @@ import { UpdateActiveRecruitmentDto } from './dto/update-active_recruitment.dto'
 export class ActiveRecruitmentController {
   constructor(private readonly activeRecruitmentService: ActiveRecruitmentService) {}
 
-  @Post()
-  create(@Body() createActiveRecruitmentDto: CreateActiveRecruitmentDto) {
-    return this.activeRecruitmentService.create(createActiveRecruitmentDto);
-  }
+  // @Post()
+  // create(@Body() createActiveRecruitmentDto: CreateActiveRecruitmentDto) {
+  //   return this.activeRecruitmentService.create(createActiveRecruitmentDto);
+  // }
 
-  @Get()
-  findAll() {
-    return this.activeRecruitmentService.findAll();
-  }
+  // @Get()
+  // findAll() {
+  //   return this.activeRecruitmentService.findAll();
+  // }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.activeRecruitmentService.findOne(+id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.activeRecruitmentService.findOne(+id);
+  // }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateActiveRecruitmentDto: UpdateActiveRecruitmentDto) {
-    return this.activeRecruitmentService.update(+id, updateActiveRecruitmentDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateActiveRecruitmentDto: UpdateActiveRecruitmentDto) {
+  //   return this.activeRecruitmentService.update(+id, updateActiveRecruitmentDto);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.activeRecruitmentService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.activeRecruitmentService.remove(+id);
+  // }
 }

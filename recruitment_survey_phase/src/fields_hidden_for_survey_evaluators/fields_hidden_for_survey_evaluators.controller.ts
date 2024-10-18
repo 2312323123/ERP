@@ -7,28 +7,28 @@ import { UpdateFieldsHiddenForSurveyEvaluatorDto } from './dto/update-fields_hid
 export class FieldsHiddenForSurveyEvaluatorsController {
   constructor(private readonly fieldsHiddenForSurveyEvaluatorsService: FieldsHiddenForSurveyEvaluatorsService) {}
 
-  @Post()
-  create(@Body() createFieldsHiddenForSurveyEvaluatorDto: CreateFieldsHiddenForSurveyEvaluatorDto) {
-    return this.fieldsHiddenForSurveyEvaluatorsService.create(createFieldsHiddenForSurveyEvaluatorDto);
-  }
+  // @Post()
+  // create(@Body() createFieldsHiddenForSurveyEvaluatorDto: CreateFieldsHiddenForSurveyEvaluatorDto) {
+  //   return this.fieldsHiddenForSurveyEvaluatorsService.create(createFieldsHiddenForSurveyEvaluatorDto);
+  // }
 
-  @Get()
-  findAll() {
-    return this.fieldsHiddenForSurveyEvaluatorsService.findAll();
-  }
+  // @Get()
+  // findAll() {
+  //   return this.fieldsHiddenForSurveyEvaluatorsService.findAll();
+  // }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.fieldsHiddenForSurveyEvaluatorsService.findOne(+id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.fieldsHiddenForSurveyEvaluatorsService.findOne(+id);
+  // }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFieldsHiddenForSurveyEvaluatorDto: UpdateFieldsHiddenForSurveyEvaluatorDto) {
-    return this.fieldsHiddenForSurveyEvaluatorsService.update(+id, updateFieldsHiddenForSurveyEvaluatorDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateFieldsHiddenForSurveyEvaluatorDto: UpdateFieldsHiddenForSurveyEvaluatorDto) {
+  //   return this.fieldsHiddenForSurveyEvaluatorsService.update(+id, updateFieldsHiddenForSurveyEvaluatorDto);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.fieldsHiddenForSurveyEvaluatorsService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.fieldsHiddenForSurveyEvaluatorsService.remove(+id);
+  // }
 }

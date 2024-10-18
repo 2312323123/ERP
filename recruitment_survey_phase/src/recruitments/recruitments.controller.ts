@@ -7,10 +7,10 @@ import { UpdateRecruitmentDto } from './dto/update-recruitment.dto';
 export class RecruitmentsController {
   constructor(private readonly recruitmentsService: RecruitmentsService) {}
 
-  @Post()
-  create(@Body() createRecruitmentDto: CreateRecruitmentDto) {
-    return this.recruitmentsService.create(createRecruitmentDto);
-  }
+  // @Post()
+  // create(@Body() createRecruitmentDto: CreateRecruitmentDto) {
+  //   return this.recruitmentsService.create(createRecruitmentDto);
+  // }
 
   // @Get()
   // findAll() {

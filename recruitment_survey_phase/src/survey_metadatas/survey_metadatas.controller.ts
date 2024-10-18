@@ -7,28 +7,28 @@ import { UpdateSurveyMetadataDto } from './dto/update-survey_metadata.dto';
 export class SurveyMetadatasController {
   constructor(private readonly surveyMetadatasService: SurveyMetadatasService) {}
 
-  @Post()
-  create(@Body() createSurveyMetadataDto: CreateSurveyMetadataDto) {
-    return this.surveyMetadatasService.create(createSurveyMetadataDto);
-  }
+  // @Post()
+  // create(@Body() createSurveyMetadataDto: CreateSurveyMetadataDto) {
+  //   return this.surveyMetadatasService.create(createSurveyMetadataDto);
+  // }
 
-  @Get()
-  findAll() {
-    return this.surveyMetadatasService.findAll();
-  }
+  // @Get()
+  // findAll() {
+  //   return this.surveyMetadatasService.findAll();
+  // }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.surveyMetadatasService.findOne(+id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.surveyMetadatasService.findOne(+id);
+  // }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSurveyMetadataDto: UpdateSurveyMetadataDto) {
-    return this.surveyMetadatasService.update(+id, updateSurveyMetadataDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateSurveyMetadataDto: UpdateSurveyMetadataDto) {
+  //   return this.surveyMetadatasService.update(+id, updateSurveyMetadataDto);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.surveyMetadatasService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.surveyMetadatasService.remove(+id);
+  // }
 }

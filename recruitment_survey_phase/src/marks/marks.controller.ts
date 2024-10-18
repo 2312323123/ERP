@@ -7,28 +7,28 @@ import { UpdateMarkDto } from './dto/update-mark.dto';
 export class MarksController {
   constructor(private readonly marksService: MarksService) {}
 
-  @Post()
-  create(@Body() createMarkDto: CreateMarkDto) {
-    return this.marksService.create(createMarkDto);
-  }
+  // @Post()
+  // create(@Body() createMarkDto: CreateMarkDto) {
+  //   return this.marksService.create(createMarkDto);
+  // }
 
-  @Get()
-  findAll() {
-    return this.marksService.findAll();
-  }
+  // @Get()
+  // findAll() {
+  //   return this.marksService.findAll();
+  // }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.marksService.findOne(+id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.marksService.findOne(+id);
+  // }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMarkDto: UpdateMarkDto) {
-    return this.marksService.update(+id, updateMarkDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateMarkDto: UpdateMarkDto) {
+  //   return this.marksService.update(+id, updateMarkDto);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.marksService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.marksService.remove(+id);
+  // }
 }
