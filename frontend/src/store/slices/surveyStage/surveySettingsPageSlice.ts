@@ -1,16 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { RootState } from '../../store'
-
-interface EvaluationCriteriaSetup {
-  criteria: Array<{ name: string; description: string; weight: number }>
-  markTags: {
-    mark1Tag: string
-    mark2Tag: string
-    mark3Tag: string
-    mark4Tag: string
-    mark5Tag: string
-  }
-}
+import { SurveySettingsExported } from '../../../services/erp'
 
 interface EvaluationResult {
   // picture is an url
@@ -21,36 +11,7 @@ interface EvaluationResult {
 
 const initialState = {
   allRecruitmentsUuidNameStartDate: undefined as undefined | Array<{ name: string; uuid: string; startDate: Date }>,
-  // evaluatorsCanEvaluate: false,
-  currentRecruitment: {
-    name: '',
-    uuid: '',
-    googleScriptsToken: 'I am a token',
-    canEvaluatorsEvaluate: false,
-    gradingInstruction: `# Hi, *Pluto*!
-Rekru czy coś`,
-    fieldsNotToShow: [''] as Array<string>,
-    fieldToDistinctTheSurvey: '',
-    evaluationCriteriaSetup: {
-      criteria: [
-        {
-          name: 'Przykładowe kryterium',
-          description: 'Opis przykładowego kryterium',
-          weight: 2,
-        },
-      ],
-      markTags: {
-        mark1Tag: '',
-        mark2Tag: '',
-        mark3Tag: 'Jest OK',
-        mark4Tag: '',
-        mark5Tag: '',
-      },
-    } as EvaluationCriteriaSetup,
-    anyEvaluationExists: false,
-    anySurveyExists: false,
-    shouldBeDeleted: false,
-  },
+
   demoEvaluationState: {
     user: {
       name: 'John Doe',
@@ -60,81 +21,91 @@ Rekru czy coś`,
     marks: [3],
     comment: 'Jestem komentarzem',
   } as EvaluationResult,
+
+  surveySettingsEditable: {
+    gradingInstruction: '',
+    fieldsNotToShow: [] as Array<string>,
+    fieldToDistinctTheSurvey: '',
+    evaluationCriteria: [],
+    markTags: {
+      mark1Tag: '',
+      mark2Tag: '',
+      mark3Tag: '',
+      mark4Tag: '',
+      mark5Tag: '',
+    },
+  } as SurveySettingsExported,
 }
 
 const surveySettingsPageSlice = createSlice({
   name: 'surveySettingsPage',
   initialState: initialState,
   reducers: {
-    // setEvaluatorsCanEvaluate: (state, action) => {
-    //   state.evaluatorsCanEvaluate = action.payload
-    // },
     setGradingInstruction: (state, action) => {
-      state.currentRecruitment.gradingInstruction = action.payload
+      state.surveySettingsEditable.gradingInstruction = action.payload
     },
     setFieldsNotToShow: (state, action) => {
-      state.currentRecruitment.fieldsNotToShow = action.payload
+      state.surveySettingsEditable.fieldsNotToShow = action.payload
     },
     handleFieldsNotToShowChange: (state, { payload: { index, value } }) => {
-      state.currentRecruitment.fieldsNotToShow[index] = value
+      state.surveySettingsEditable.fieldsNotToShow[index] = value
     },
     handleAddFieldsNotToShow: (state) => {
-      state.currentRecruitment.fieldsNotToShow.push('')
+      state.surveySettingsEditable.fieldsNotToShow.push('')
     },
     handleDeleteFieldsNotToShow: (state, { payload: { index } }) => {
-      state.currentRecruitment.fieldsNotToShow.splice(index, 1)
+      state.surveySettingsEditable.fieldsNotToShow.splice(index, 1)
     },
     setFieldToDistinctTheSurvey: (state, action) => {
-      state.currentRecruitment.fieldToDistinctTheSurvey = action.payload
+      state.surveySettingsEditable.fieldToDistinctTheSurvey = action.payload
     },
     // EvaluationPanelCreator.tsx
     handleAddCriteria(state) {
       const newField = {
-        order: state.currentRecruitment.evaluationCriteriaSetup.criteria.length + 1,
         name: '',
         description: '',
         weight: 0,
       }
-      state.currentRecruitment.evaluationCriteriaSetup.criteria.push(newField)
+      state.surveySettingsEditable.evaluationCriteria.push(newField)
     },
     handleCriteriaChange(state, { payload: { index, key, value } }) {
       // @ts-expect-error: Type 'string' cannot be used to index type '{ name: string; description: string; weight: number; }'
-      state.currentRecruitment.evaluationCriteriaSetup.criteria[index][key] = value
+      state.surveySettingsEditable.evaluationCriteria[index][key] = value
     },
     handleDeleteCriteria(state, { payload: { index } }) {
-      state.currentRecruitment.evaluationCriteriaSetup.criteria.splice(index, 1)
+      state.surveySettingsEditable.evaluationCriteria.splice(index, 1)
     },
     handleMoveUp(state, { payload: { index } }) {
       if (index > 0) {
-        const newFields = [...state.currentRecruitment.evaluationCriteriaSetup.criteria]
+        const newFields = [...state.surveySettingsEditable.evaluationCriteria]
         const [movedField] = newFields.splice(index, 1)
         newFields.splice(index - 1, 0, movedField)
-        state.currentRecruitment.evaluationCriteriaSetup.criteria = newFields
+        state.surveySettingsEditable.evaluationCriteria = newFields
       }
     },
     handleMoveDown(state, { payload: { index } }) {
-      if (index < state.currentRecruitment.evaluationCriteriaSetup.criteria.length - 1) {
-        const newFields = [...state.currentRecruitment.evaluationCriteriaSetup.criteria]
+      if (index < state.surveySettingsEditable.evaluationCriteria.length - 1) {
+        const newFields = [...state.surveySettingsEditable.evaluationCriteria]
         const [movedField] = newFields.splice(index, 1)
         newFields.splice(index + 1, 0, movedField)
-        state.currentRecruitment.evaluationCriteriaSetup.criteria = newFields
+        state.surveySettingsEditable.evaluationCriteria = newFields
       }
     },
     // end of EvaluationPanelCreator.tsx
     setMark1Tag: (state, action) => {
-      state.currentRecruitment.evaluationCriteriaSetup.markTags.mark1Tag = action.payload
+      state.surveySettingsEditable.markTags.mark1Tag = action.payload
     },
     setMark2Tag: (state, action) => {
-      state.currentRecruitment.evaluationCriteriaSetup.markTags.mark2Tag = action.payload
+      state.surveySettingsEditable.markTags.mark2Tag = action.payload
     },
     setMark3Tag: (state, action) => {
-      state.currentRecruitment.evaluationCriteriaSetup.markTags.mark3Tag = action.payload
+      state.surveySettingsEditable.markTags.mark3Tag = action.payload
     },
     setMark4Tag: (state, action) => {
-      state.currentRecruitment.evaluationCriteriaSetup.markTags.mark4Tag = action.payload
+      state.surveySettingsEditable.markTags.mark4Tag = action.payload
     },
     setMark5Tag: (state, action) => {
-      state.currentRecruitment.evaluationCriteriaSetup.markTags.mark5Tag = action.payload
+      state.surveySettingsEditable.markTags.mark5Tag = action.payload
     },
     setDemoEvaluationStateMarks: (state, action) => {
       state.demoEvaluationState.marks = action.payload
@@ -144,6 +115,9 @@ const surveySettingsPageSlice = createSlice({
     },
     setAllRecruitmentsUuidNameStartDate: (state, action) => {
       state.allRecruitmentsUuidNameStartDate = action.payload
+    },
+    setSurveySettingsEditable: (state, action) => {
+      state.surveySettingsEditable = action.payload
     },
   },
 })
@@ -170,6 +144,7 @@ export const {
   setDemoEvaluationStateMarks,
   setDemoEvaluationStateComment,
   setAllRecruitmentsUuidNameStartDate,
+  setSurveySettingsEditable,
 } = surveySettingsPageSlice.actions
 
 // Reducer to be added to the store
@@ -177,28 +152,22 @@ export default surveySettingsPageSlice.reducer
 
 // Selectors
 // export const getEvaluatorsCanEvaluate = (state: RootState) => state.surveySettingsPage.evaluatorsCanEvaluate
+// export const getGradingInstruction = (state: RootState) =>
+//   state.surveySettingsPage.surveySettingsEditable.gradingInstruction
+
 export const getGradingInstruction = (state: RootState) =>
-  state.surveySettingsPage.currentRecruitment.gradingInstruction
-export const getFieldsNotToShow = (state: RootState) => state.surveySettingsPage.currentRecruitment.fieldsNotToShow
+  state.surveySettingsPage.surveySettingsEditable.gradingInstruction
+export const getFieldsNotToShow = (state: RootState) => state.surveySettingsPage.surveySettingsEditable.fieldsNotToShow
 export const getFieldToDistinctTheSurvey = (state: RootState) =>
-  state.surveySettingsPage.currentRecruitment.fieldToDistinctTheSurvey
-export const getEvaluationCriteriaSetup = (state: RootState) =>
-  state.surveySettingsPage.currentRecruitment.evaluationCriteriaSetup
-export const getMark1Tag = (state: RootState) =>
-  state.surveySettingsPage.currentRecruitment.evaluationCriteriaSetup.markTags.mark1Tag
-export const getMark2Tag = (state: RootState) =>
-  state.surveySettingsPage.currentRecruitment.evaluationCriteriaSetup.markTags.mark2Tag
-export const getMark3Tag = (state: RootState) =>
-  state.surveySettingsPage.currentRecruitment.evaluationCriteriaSetup.markTags.mark3Tag
-export const getMark4Tag = (state: RootState) =>
-  state.surveySettingsPage.currentRecruitment.evaluationCriteriaSetup.markTags.mark4Tag
-export const getMark5Tag = (state: RootState) =>
-  state.surveySettingsPage.currentRecruitment.evaluationCriteriaSetup.markTags.mark5Tag
+  state.surveySettingsPage.surveySettingsEditable.fieldToDistinctTheSurvey
+export const getEvaluationCriteria = (state: RootState) =>
+  state.surveySettingsPage.surveySettingsEditable.evaluationCriteria
+export const getMark1Tag = (state: RootState) => state.surveySettingsPage.surveySettingsEditable.markTags.mark1Tag
+export const getMark2Tag = (state: RootState) => state.surveySettingsPage.surveySettingsEditable.markTags.mark2Tag
+export const getMark3Tag = (state: RootState) => state.surveySettingsPage.surveySettingsEditable.markTags.mark3Tag
+export const getMark4Tag = (state: RootState) => state.surveySettingsPage.surveySettingsEditable.markTags.mark4Tag
+export const getMark5Tag = (state: RootState) => state.surveySettingsPage.surveySettingsEditable.markTags.mark5Tag
 export const getDemoEvaluationState = (state: RootState) => state.surveySettingsPage.demoEvaluationState
-export const getAnyEvaluationExists = (state: RootState) =>
-  state.surveySettingsPage.currentRecruitment.anyEvaluationExists
-export const getAnySurveyExists = (state: RootState) => state.surveySettingsPage.currentRecruitment.anySurveyExists
-export const getGoogleScriptsToken = (state: RootState) =>
-  state.surveySettingsPage.currentRecruitment.googleScriptsToken
 export const getAllRecruitmentsUuidNameStartDate = (state: RootState) =>
   state.surveySettingsPage.allRecruitmentsUuidNameStartDate
+export const getSurveySettingsEditable = (state: RootState) => state.surveySettingsPage.surveySettingsEditable

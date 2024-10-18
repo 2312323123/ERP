@@ -1,17 +1,25 @@
 import { VisibilityOff, Visibility, ContentCopy } from '@mui/icons-material'
 import { Box, Typography, TextField, InputAdornment, IconButton } from '@mui/material'
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
-import { getGoogleScriptsToken } from '../../../../../store/slices/surveyStage/surveySettingsPageSlice'
+import { useGetActiveRecruitmentQuery, useGetActiveRecruitmentSettingsQuery } from '../../../../../services/erp'
 
 const TokenDisplay = () => {
   const [showData, setShowData] = useState(false)
-  const sensitiveData = useSelector(getGoogleScriptsToken)
+  const {
+    data: activeRecruitment,
+    error: activeRecruitmentError,
+    isLoading: activeRecruitmentIsLoading,
+  } = useGetActiveRecruitmentQuery()
+  const {
+    data: activeRecruitmentSettings,
+    error: activeRecruitmentSettingsError,
+    isLoading: activeRecruitmentSettingsIsLoading,
+  } = useGetActiveRecruitmentSettingsQuery(activeRecruitment?.uuid ?? '')
 
   const handleToggleShowData = () => setShowData(!showData)
 
   const handleCopyToClipboard = () => {
-    navigator.clipboard.writeText(sensitiveData)
+    navigator.clipboard.writeText(activeRecruitmentSettings?.token ?? '')
     alert('Copied to clipboard!')
   }
 
@@ -21,7 +29,7 @@ const TokenDisplay = () => {
 
       <TextField
         type={showData ? 'text' : 'password'}
-        value={sensitiveData}
+        value={activeRecruitmentSettings?.token ?? ''}
         label="Token"
         fullWidth
         slotProps={{

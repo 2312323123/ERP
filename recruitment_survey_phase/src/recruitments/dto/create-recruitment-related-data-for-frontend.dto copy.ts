@@ -1,5 +1,5 @@
 export class RecruitmentRelatedData {
-  grading_instruction: string;
+  gradingInstruction: string;
   fieldsNotToShow: Array<string>;
   fieldToDistinctTheSurvey: string;
   evaluationCriteria: Array<{

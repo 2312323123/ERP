@@ -1,4 +1,4 @@
-import { Box, Container, Divider, Typography } from '@mui/material'
+import { Box, CircularProgress, Container, Divider, Typography } from '@mui/material'
 import FieldToDistinctTheSurveySetup from './components/FieldToDistinctTheSurveySetup'
 import HiddenFieldsSetup from './components/HiddenFieldsSetup'
 import MarkdownEditor from './components/MarkdownEditor'
@@ -9,16 +9,17 @@ import MarkTagsSetup from './components/MarkTagsSetup'
 import WeightsSum from './components/WeightsSum'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  getAnyEvaluationExists,
   getDemoEvaluationState,
-  getEvaluationCriteriaSetup,
+  getEvaluationCriteria,
   getMark1Tag,
   getMark2Tag,
   getMark3Tag,
   getMark4Tag,
   getMark5Tag,
+  getSurveySettingsEditable,
   setDemoEvaluationStateComment,
   setDemoEvaluationStateMarks,
+  setSurveySettingsEditable,
 } from '../../../../store/slices/surveyStage/surveySettingsPageSlice'
 import { useGetActiveRecruitmentQuery, useGetActiveRecruitmentSettingsQuery } from '../../../../services/erp'
 import { useEffect } from 'react'
@@ -29,34 +30,49 @@ const RecruitmentSettingsPanel = () => {
     error: activeRecruitmentError,
     isLoading: activeRecruitmentIsLoading,
   } = useGetActiveRecruitmentQuery()
-
   const {
     data: activeRecruitmentSettings,
     error: activeRecruitmentSettingsError,
     isLoading: activeRecruitmentSettingsIsLoading,
   } = useGetActiveRecruitmentSettingsQuery(activeRecruitment?.uuid ?? '')
 
+  const dispatch = useDispatch()
+
   useEffect(() => {
     if (activeRecruitmentSettings) {
       console.log('Active recruitment settings changed:', activeRecruitmentSettings)
+      dispatch(
+        setSurveySettingsEditable({
+          gradingInstruction: activeRecruitmentSettings.gradingInstruction,
+          fieldsNotToShow: activeRecruitmentSettings.fieldsNotToShow,
+          fieldToDistinctTheSurvey: activeRecruitmentSettings.fieldToDistinctTheSurvey,
+          evaluationCriteria: activeRecruitmentSettings.evaluationCriteria,
+          markTags: {
+            mark1Tag: activeRecruitmentSettings.markTags.mark1Tag,
+            mark2Tag: activeRecruitmentSettings.markTags.mark2Tag,
+            mark3Tag: activeRecruitmentSettings.markTags.mark3Tag,
+            mark4Tag: activeRecruitmentSettings.markTags.mark4Tag,
+            mark5Tag: activeRecruitmentSettings.markTags.mark5Tag,
+          },
+        }),
+      )
     }
-  }, [activeRecruitmentSettings])
+  }, [activeRecruitmentSettings, dispatch])
 
-  const anyEvaluationExists = useSelector(getAnyEvaluationExists)
-  const evaluationCriteriaSetup = useSelector(getEvaluationCriteriaSetup)
+  const evaluationCriteria = useSelector(getEvaluationCriteria)
   const mark1Tag = useSelector(getMark1Tag)
   const mark2Tag = useSelector(getMark2Tag)
   const mark3Tag = useSelector(getMark3Tag)
   const mark4Tag = useSelector(getMark4Tag)
   const mark5Tag = useSelector(getMark5Tag)
 
-  const dispatch = useDispatch()
-
   const demoEvaluationState = useSelector(getDemoEvaluationState)
   const setSurveyEvaluationResult = (result: SurveyEvaluationResult) => {
     dispatch(setDemoEvaluationStateMarks(result.marks))
     dispatch(setDemoEvaluationStateComment(result.comment))
   }
+
+  const surveySettingsEditable = useSelector(getSurveySettingsEditable)
 
   return (
     <>
@@ -65,6 +81,10 @@ const RecruitmentSettingsPanel = () => {
         <Divider sx={{ my: 2 }} />
 
         <pre>{JSON.stringify(activeRecruitmentSettings, null, 2)}</pre>
+
+        <h3> dpupa </h3>
+
+        <pre>{JSON.stringify(surveySettingsEditable, null, 2)}</pre>
 
         {/* Accordion */}
         <MarkdownEditor />
@@ -85,7 +105,16 @@ const RecruitmentSettingsPanel = () => {
       {/* Info */}
       <Typography variant="h5" gutterBottom align="center">
         Poniższe ustawienia można zmieniać do momentu wpadnięcia pierwszej oceny od dowolnego oceniającego. (czyli{' '}
-        {anyEvaluationExists ? 'już nie można' : 'jeszcze można'}):
+        {activeRecruitmentSettings ? (
+          activeRecruitmentSettings.isThereAnyMark ? (
+            'już nie można'
+          ) : (
+            'jeszcze można'
+          )
+        ) : (
+          <CircularProgress size={20} />
+        )}
+        ):
       </Typography>
 
       {/* Settings until the first evaluation section */}
@@ -117,7 +146,7 @@ const RecruitmentSettingsPanel = () => {
             </Typography>
             <Divider sx={{ my: 1 }} />
             <EvaluationForm
-              criteria={evaluationCriteriaSetup.criteria}
+              criteria={evaluationCriteria}
               markTags={[mark1Tag, mark2Tag, mark3Tag, mark4Tag, mark5Tag]}
               onSubmit={setSurveyEvaluationResult}
               demoMode
@@ -136,7 +165,7 @@ const RecruitmentSettingsPanel = () => {
                 marks: demoEvaluationState.marks,
                 comment: demoEvaluationState.comment,
               }}
-              criteria={evaluationCriteriaSetup.criteria}
+              criteria={evaluationCriteria}
             />
             <Divider sx={{ my: 2 }} />
             <WeightsSum />

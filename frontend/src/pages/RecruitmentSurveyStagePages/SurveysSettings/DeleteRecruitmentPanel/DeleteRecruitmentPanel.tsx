@@ -1,10 +1,18 @@
-import { Typography, Container, Divider, Button } from '@mui/material'
-import { useSelector } from 'react-redux'
-import { getAnyEvaluationExists } from '../../../../store/slices/surveyStage/surveySettingsPageSlice'
+import { Typography, Container, Divider, Button, CircularProgress } from '@mui/material'
 import { useState } from 'react'
+import { useGetActiveRecruitmentQuery, useGetActiveRecruitmentSettingsQuery } from '../../../../services/erp'
 
 const DeleteRecruitmentPanel = () => {
-  const anySurveyExists = useSelector(getAnyEvaluationExists)
+  const {
+    data: activeRecruitment,
+    error: activeRecruitmentError,
+    isLoading: activeRecruitmentIsLoading,
+  } = useGetActiveRecruitmentQuery()
+  const {
+    data: activeRecruitmentSettings,
+    error: activeRecruitmentSettingsError,
+    isLoading: activeRecruitmentSettingsIsLoading,
+  } = useGetActiveRecruitmentSettingsQuery(activeRecruitment?.uuid ?? '')
 
   const handleDeleteRecruitment = (recruitmentId: string) => {
     const [recruitments, setRecruitments] = useState<{ [key: string]: { canBeDeleted: boolean } }>({
@@ -31,7 +39,15 @@ const DeleteRecruitmentPanel = () => {
       {/* Info */}
       <Typography variant="h5" gutterBottom align="center">
         Poniższe można zrobić do momentu wpadnięcia pierwszej ankietki. (czyli{' '}
-        {anySurveyExists ? 'już nie można' : 'jeszcze można'}):
+        {activeRecruitmentSettings ? (
+          activeRecruitmentSettings.isThereAnySurvey ? (
+            'już nie można'
+          ) : (
+            'jeszcze można'
+          )
+        ) : (
+          <CircularProgress size={20} />
+        )}
       </Typography>
 
       {/* Settings until the first survey section */}

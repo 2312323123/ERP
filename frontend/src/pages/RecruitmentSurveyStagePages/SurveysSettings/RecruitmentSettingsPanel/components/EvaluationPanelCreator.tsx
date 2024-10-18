@@ -4,7 +4,7 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  getEvaluationCriteriaSetup,
+  getEvaluationCriteria,
   handleAddCriteria,
   handleCriteriaChange,
   handleDeleteCriteria,
@@ -13,7 +13,7 @@ import {
 } from '../../../../../store/slices/surveyStage/surveySettingsPageSlice'
 
 const EvaluationPanelCreator = () => {
-  const { criteria } = useSelector(getEvaluationCriteriaSetup)
+  const criteria = useSelector(getEvaluationCriteria)
   const dispatch = useDispatch()
 
   return (
@@ -59,7 +59,7 @@ const EvaluationPanelCreator = () => {
           />
 
           {/* Delete button */}
-          <IconButton onClick={() => dispatch(handleDeleteCriteria(index))} color="secondary">
+          <IconButton onClick={() => dispatch(handleDeleteCriteria({ index }))} color="secondary">
             <DeleteIcon />
           </IconButton>
         </Box>

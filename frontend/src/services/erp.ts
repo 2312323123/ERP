@@ -32,8 +32,8 @@ export interface SurveySettingsExported {
 
 export interface SurveySettingsImported extends SurveySettingsExported {
   token: string
-  anySurveyExists: boolean
-  anyEvaluationExists: boolean
+  isThereAnySurvey: boolean
+  isThereAnyMark: boolean
 }
 
 // Define a service using a base URL and expected endpoints

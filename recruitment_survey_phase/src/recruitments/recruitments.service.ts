@@ -17,7 +17,7 @@ import { Mark } from 'src/marks/entities/mark.entity';
 import { SurveyMetadata } from 'src/survey_metadatas/entities/survey_metadata.entity';
 
 const recruitmentCreateDefaults: RecruitmentRelatedData = {
-  grading_instruction: `# Hi, *Pluto*!
+  gradingInstruction: `# Hi, *Pluto*!
   Rekru czy coś`,
   fieldsNotToShow: [''] as Array<string>,
   fieldToDistinctTheSurvey: '',
@@ -58,7 +58,7 @@ export class RecruitmentsService {
     }
     recruitment.start_date_time = new Date();
     recruitment.survey_sending_secret = randomBytes(63).toString('hex'); // Generate 126 characters (63 bytes)
-    recruitment.grading_instruction = recruitmentCreateDefaults.grading_instruction;
+    recruitment.grading_instruction = recruitmentCreateDefaults.gradingInstruction;
 
     // save the recruitment
     const createdRecruitment = await this.recruitmentRepository.save(recruitment);
@@ -107,7 +107,7 @@ export class RecruitmentsService {
 
     await this.updateRecruitment(
       createdRecruitment.uuid,
-      new UpdateRecruitmentDto({ grading_instruction: recruitmentRelatedData.grading_instruction }),
+      new UpdateRecruitmentDto({ grading_instruction: recruitmentRelatedData.gradingInstruction }),
     );
 
     for (const field of recruitmentRelatedData.fieldsNotToShow) {
@@ -215,7 +215,7 @@ export class RecruitmentsService {
     });
 
     const recruitmentRelatedData = new CreateRecruitmentRelatedDataForFrontendDto();
-    recruitmentRelatedData.grading_instruction = recruitment.grading_instruction;
+    recruitmentRelatedData.gradingInstruction = recruitment.grading_instruction;
     recruitmentRelatedData.token = recruitment.survey_sending_secret;
 
     recruitmentRelatedData.fieldsNotToShow = fieldsHiddenForSurveyEvaluator.map((field) => field.field);
