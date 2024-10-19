@@ -35,6 +35,9 @@ const initialState = {
       mark5Tag: '',
     },
   } as SurveySettingsExported,
+
+  copyingSettingsFromOtherRecruitment: false,
+  recruitmentToCopyFrom: '',
 }
 
 const surveySettingsPageSlice = createSlice({
@@ -119,6 +122,12 @@ const surveySettingsPageSlice = createSlice({
     setSurveySettingsEditable: (state, action) => {
       state.surveySettingsEditable = action.payload
     },
+    setCopyingSettingsFromOtherRecruitment: (state, action) => {
+      state.copyingSettingsFromOtherRecruitment = action.payload
+    },
+    setRecruitmentToCopyFrom: (state, action) => {
+      state.recruitmentToCopyFrom = action.payload
+    },
   },
 })
 
@@ -145,6 +154,8 @@ export const {
   setDemoEvaluationStateComment,
   setAllRecruitmentsUuidNameStartDate,
   setSurveySettingsEditable,
+  setCopyingSettingsFromOtherRecruitment,
+  setRecruitmentToCopyFrom,
 } = surveySettingsPageSlice.actions
 
 // Reducer to be added to the store
@@ -171,3 +182,6 @@ export const getDemoEvaluationState = (state: RootState) => state.surveySettings
 export const getAllRecruitmentsUuidNameStartDate = (state: RootState) =>
   state.surveySettingsPage.allRecruitmentsUuidNameStartDate
 export const getSurveySettingsEditable = (state: RootState) => state.surveySettingsPage.surveySettingsEditable
+export const getCopyingSettingsFromOtherRecruitment = (state: RootState) =>
+  state.surveySettingsPage.copyingSettingsFromOtherRecruitment
+export const getRecruitmentToCopyFrom = (state: RootState) => state.surveySettingsPage.recruitmentToCopyFrom

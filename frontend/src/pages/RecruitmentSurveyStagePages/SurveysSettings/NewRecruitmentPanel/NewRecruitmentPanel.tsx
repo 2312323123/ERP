@@ -1,32 +1,26 @@
-import {
-  Container,
-  Box,
-  Typography,
-  TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Button,
-  Alert,
-  Snackbar,
-} from '@mui/material'
-import { useState } from 'react'
+import { Container, Box, Typography, TextField, Button, Alert, Snackbar } from '@mui/material'
+import { useEffect, useState } from 'react'
 import { useCreateRecruitmentMutation } from '../../../../services/erp'
+import CopyFrom from './components/CopyFrom'
+import {
+  getRecruitmentToCopyFrom,
+  setRecruitmentToCopyFrom,
+} from '../../../../store/slices/surveyStage/surveySettingsPageSlice'
+import { useDispatch, useSelector } from 'react-redux'
 
 interface Props {
   isFirstRecruitment?: boolean
 }
 
 const NewRecruitmentPanel = ({ isFirstRecruitment }: Props) => {
-  const [recruitmentName, setRecruitmentName] = useState<string>('')
-  const [recruitmentSettings, setRecruitmentSettings] = useState<string | 'none'>('none')
+  const [recruitmentName, setRecruitmentName] = useState('')
 
   // Destructure the mutation hook
   const [createRecruitment, { isLoading, isSuccess, isError }] = useCreateRecruitmentMutation()
 
   const [touched, setTouched] = useState(false) // Track if the button was clicked
 
+  const recruitmentToCopyFrom = useSelector(getRecruitmentToCopyFrom)
   const handleCreateRecruitment = () => {
     setTouched(true) // Mark the field as touched when the button is clicked
 
@@ -36,10 +30,20 @@ const NewRecruitmentPanel = ({ isFirstRecruitment }: Props) => {
 
     const newRecruitment = {
       name: recruitmentName,
+      ...(recruitmentToCopyFrom && { copy_from_uuid: recruitmentToCopyFrom }),
     }
 
     createRecruitment(newRecruitment)
   }
+
+  const dispatch = useDispatch()
+  useEffect(() => {
+    if (isSuccess) {
+      setRecruitmentName('') // Clear the input field after successful creation
+      setTouched(false) // Reset the touched state
+      dispatch(setRecruitmentToCopyFrom(''))
+    }
+  }, [isSuccess, dispatch])
 
   return (
     <Container maxWidth="md">
@@ -60,29 +64,18 @@ const NewRecruitmentPanel = ({ isFirstRecruitment }: Props) => {
           helperText={touched && !recruitmentName ? 'Nazwa jest wymagana' : ''}
         />
 
-        {!isFirstRecruitment && (
-          <FormControl fullWidth variant="outlined" margin="normal">
-            <InputLabel>Skopiuj ustawienia z</InputLabel>
-            <Select
-              value={recruitmentSettings}
-              onChange={(e) => setRecruitmentSettings(e.target.value)}
-              label="Skopiuj ustawienia z"
-            >
-              <MenuItem value="none">None</MenuItem>
-              <MenuItem value="option1">Option 1</MenuItem>
-              <MenuItem value="option2">Option 2</MenuItem>
-            </Select>
-          </FormControl>
-        )}
+        <CopyFrom isFirstRecruitment={isFirstRecruitment} />
 
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleCreateRecruitment}
-          disabled={isLoading} // Disable if required field is empty
-        >
-          Stwórz
-        </Button>
+        <div>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleCreateRecruitment}
+            disabled={isLoading} // Disable if required field is empty
+          >
+            Stwórz
+          </Button>
+        </div>
 
         <Snackbar open={isError} autoHideDuration={6000} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
           <Alert severity="error" sx={{ width: '100%' }}>
