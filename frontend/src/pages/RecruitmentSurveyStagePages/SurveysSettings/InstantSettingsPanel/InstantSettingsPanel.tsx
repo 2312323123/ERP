@@ -11,8 +11,8 @@ import {
 import OneFieldBooleanTableDbSwitchButton from '../../../../utils/OneFieldBooleanTableDbSwitchButton'
 import TokenDisplay from './components/TokenDisplay'
 import { useSelector } from 'react-redux'
-import { useState } from 'react'
 import { useGetActiveRecruitmentQuery, useGetAllRecruitmentsQuery } from '../../../../services/erp'
+import SetActiveRecruitment from './components/SetActiveRecruitment'
 
 const InstantSettingsPanel = () => {
   // const activeRecruitment = useSelector(getActiveRecruitment)
@@ -23,34 +23,9 @@ const InstantSettingsPanel = () => {
   } = useGetActiveRecruitmentQuery()
   const { data: recruitments, error, isLoading } = useGetAllRecruitmentsQuery()
 
-  const [selectedRecruitment, setSelectedRecruitment] = useState<string>('')
-
   const acceptsSurveys = useSelector(getAcceptsSurveys)
   const recruitmentVisible = useSelector(getRecruitmentVisible)
   const evaluatorsCanEvaluate = useSelector(getEvaluatorsCanEvaluate)
-  // const activeRecruitment = useSelector(getActiveRecruitment)
-
-  const trySettingSelectedRecruitment = (value: string) => {
-    const confirmSave = handleSaveChanges()
-
-    if (!confirmSave) {
-      const confirmExit = window.confirm('Czy na pewno chcesz zmienić aktywną rekru?')
-      if (confirmExit) {
-        setSelectedRecruitment(value)
-      }
-    }
-  }
-
-  const handleSaveChanges = () => {
-    const confirmSave = window.confirm(
-      `Czy chcesz zapisać zmiany w tej rekru, z której wychodzisz? (${activeRecruitment?.name})`,
-    )
-    if (confirmSave) {
-      // Implement save logic here
-      alert('Changes saved!') // Placeholder for actual save logic
-    }
-    return confirmSave
-  }
 
   return (
     <Container maxWidth="md">
@@ -76,22 +51,7 @@ const InstantSettingsPanel = () => {
         </Typography>
 
         {/* Choose Recruitment */}
-        <Box my={3}>
-          <FormControl fullWidth variant="outlined" margin="normal">
-            <InputLabel>Wybierz rekrutację</InputLabel>
-            <Select
-              value={activeRecruitment?.uuid}
-              onChange={(e) => trySettingSelectedRecruitment(e.target.value)}
-              label="Wybierz rekrutację"
-            >
-              {recruitments?.map((recruitment) => (
-                <MenuItem key={recruitment.uuid} value={recruitment.uuid}>
-                  {recruitment.name} - utworzono: {new Date(recruitment.startDate).toLocaleDateString()}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box>
+        <SetActiveRecruitment />
 
         {/* Token Output */}
         <TokenDisplay />
@@ -105,11 +65,11 @@ const InstantSettingsPanel = () => {
           returnFieldName="accepts_surveys"
         />
 
-        {/* Rekrutacja aktywna (widoczna dla ludzi) Switch */}
+        {/* Użytkownicy systemu widzą rekrutację? Switch */}
         <OneFieldBooleanTableDbSwitchButton
           theValue={recruitmentVisible}
           setterToDispatch={setRectuitmentVisible}
-          label="Rekrutacja aktywna (widoczna dla ludzi)?"
+          label="Użytkownicy systemu widzą rekrutację?"
           path="/api/surveys/can-people-see-recruitment"
           returnFieldName="can_people_see_recruitment"
         />

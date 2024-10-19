@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateRecruitmentDto } from './dto/create-recruitment.dto';
 import { UpdateRecruitmentDto } from './dto/update-recruitment.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -57,7 +57,7 @@ export class RecruitmentsService {
       recruitment.name = name;
     }
     recruitment.start_date_time = new Date();
-    recruitment.survey_sending_secret = randomBytes(63).toString('hex'); // Generate 126 characters (63 bytes)
+    recruitment.survey_sending_secret = randomBytes(31).toString('hex'); // Generate 126 characters (63 bytes)
     recruitment.grading_instruction = recruitmentCreateDefaults.gradingInstruction;
     recruitment.field_to_distinct_the_survey = recruitmentCreateDefaults.fieldToDistinctTheSurvey;
 
@@ -69,14 +69,8 @@ export class RecruitmentsService {
       const recruitmentToCopyFrom = await this.recruitmentRepository.findOne({
         where: { uuid: copy_from_uuid },
       });
-      if (recruitmentToCopyFrom) {
-        await this.updateRecruitment(
-          createdRecruitment.uuid,
-          new UpdateRecruitmentDto({
-            grading_instruction: recruitmentToCopyFrom.grading_instruction,
-            field_to_distinct_the_survey: recruitmentToCopyFrom.field_to_distinct_the_survey,
-          }),
-        );
+      if (!recruitmentToCopyFrom) {
+        throw new BadRequestException('Recruitment to copy from does not exist 43t34t');
       }
       this.createRecruitmentRelatedEntitiesFromExistingRecruitment(createdRecruitment, copy_from_uuid);
     } else {
@@ -109,13 +103,11 @@ export class RecruitmentsService {
   ): Promise<void> {
     const { uuid } = createdRecruitment;
 
-    await this.updateRecruitment(
-      createdRecruitment.uuid,
-      new UpdateRecruitmentDto({
-        grading_instruction: recruitmentRelatedData.gradingInstruction,
-        field_to_distinct_the_survey: recruitmentRelatedData.fieldToDistinctTheSurvey,
-      }),
-    );
+    const updateRecruitmentDto = new UpdateRecruitmentDto();
+    updateRecruitmentDto.grading_instruction = recruitmentRelatedData.gradingInstruction;
+    updateRecruitmentDto.field_to_distinct_the_survey = recruitmentRelatedData.fieldToDistinctTheSurvey;
+
+    await this.updateRecruitment(createdRecruitment.uuid, updateRecruitmentDto);
 
     for (const field of recruitmentRelatedData.fieldsNotToShow) {
       const fieldsHiddenForSurveyEvaluator = new FieldsHiddenForSurveyEvaluator();
@@ -149,7 +141,59 @@ export class RecruitmentsService {
     createdRecruitment: Recruitment,
     copyFromUuid: string,
   ): Promise<void> {
-    return;
+    const uuid = copyFromUuid;
+
+    if (!uuid) {
+      throw new BadRequestException('No recruitment to copy from');
+    }
+
+    // check if the recruitment exists
+    const recruitmentToCopyFrom = await this.recruitmentRepository.findOne({
+      where: { uuid },
+    });
+
+    if (!recruitmentToCopyFrom) {
+      throw new NotFoundException('Recruitment not found');
+    }
+
+    const copyObject = {} as RecruitmentRelatedData;
+
+    // grading_instruction
+    copyObject.gradingInstruction = recruitmentToCopyFrom.grading_instruction;
+
+    // fieldsNotToShow
+    const fieldsHiddenForSurveyEvaluator = await this.fieldsHiddenForSurveyEvaluatorRepository.find({
+      where: { recruitment_uuid: uuid },
+    });
+    copyObject.fieldsNotToShow = fieldsHiddenForSurveyEvaluator.map((field) => field.field);
+
+    // fieldToDistinctTheSurvey
+    copyObject.fieldToDistinctTheSurvey = recruitmentToCopyFrom.field_to_distinct_the_survey;
+
+    // evaluationCriteria
+    const evaluationSchemas = await this.evaluationSchemaRepository.find({
+      where: { recruitment_uuid: uuid },
+      order: { order: 'ASC' },
+    });
+    copyObject.evaluationCriteria = evaluationSchemas.map((schema) => ({
+      name: schema.name,
+      description: schema.description,
+      weight: schema.weight,
+    }));
+
+    // markTags
+    const markGradeNames = await this.markGradeNameRepository.findOne({
+      where: { recruitment_uuid: uuid },
+    });
+    copyObject.markTags = {
+      mark1Tag: markGradeNames?.grade_1_of_5 ?? '',
+      mark2Tag: markGradeNames?.grade_2_of_5 ?? '',
+      mark3Tag: markGradeNames?.grade_3_of_5 ?? '',
+      mark4Tag: markGradeNames?.grade_4_of_5 ?? '',
+      mark5Tag: markGradeNames?.grade_5_of_5 ?? '',
+    };
+
+    await this.createRecruitmentRelatedEntitiesFromObject(createdRecruitment, copyObject);
   }
 
   async getAllRecruitmentsUuidNameStartDate(): Promise<{ uuid: string; name: string; startDate: Date }[]> {

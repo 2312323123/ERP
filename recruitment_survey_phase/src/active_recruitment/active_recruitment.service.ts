@@ -1,14 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateActiveRecruitmentDto } from './dto/create-active_recruitment.dto';
 import { UpdateActiveRecruitmentDto } from './dto/update-active_recruitment.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ActiveRecruitment } from './entities/active_recruitment.entity';
 import { Repository } from 'typeorm';
+import { Recruitment } from 'src/recruitments/entities/recruitment.entity';
 
 @Injectable()
 export class ActiveRecruitmentService {
   constructor(
     @InjectRepository(ActiveRecruitment) private activeRecruitmentRepository: Repository<ActiveRecruitment>,
+    @InjectRepository(Recruitment) private recruitmentRepository: Repository<Recruitment>,
   ) {}
 
   create(createActiveRecruitmentDto: CreateActiveRecruitmentDto) {
@@ -44,5 +46,36 @@ export class ActiveRecruitmentService {
       return { name: activeRecruitment.recruitment.name ?? '', uuid: activeRecruitment.recruitment.uuid };
     }
     return undefined;
+  }
+
+  async setActiveRecruitment(recruitmentUuid: string) {
+    if (!recruitmentUuid) {
+      throw new BadRequestException('Invalid recruitment UUID');
+    }
+
+    // initialize can_people_see_recruitment to false
+    const activeRecruitmentCount = await this.activeRecruitmentRepository.count();
+    if (activeRecruitmentCount === 0) {
+      // if 0, create a new active recruitment
+
+      const newActiveRecruitment = this.activeRecruitmentRepository.create({
+        recruitment_uuid: recruitmentUuid,
+      });
+      await this.activeRecruitmentRepository.save(newActiveRecruitment);
+    } else {
+      // if not 0, update the existing active recruitment
+
+      // check if the recruitment exists
+      const recruitment = await this.recruitmentRepository.findOne({
+        where: { uuid: recruitmentUuid },
+      });
+
+      if (!recruitment) {
+        throw new BadRequestException('Recruitment does not exist');
+      }
+
+      // update the recruitment_uuid
+      await this.activeRecruitmentRepository.update({}, { recruitment_uuid: recruitmentUuid });
+    }
   }
 }

@@ -51,6 +51,25 @@ export const erpApi = createApi({
       providesTags: [{ type: 'SurveyRecruitment', id: 'ACTIVE' }], // Add this
     }),
 
+    setActiveRecruitment: builder.mutation<void, string>({
+      query: (recruitmentUuid) => ({
+        url: 'api/surveys/active-recruitment',
+        method: 'POST',
+        body: { recruitment_uuid: recruitmentUuid },
+      }),
+      onQueryStarted: async (recruitmentUuid, { dispatch, queryFulfilled }) => {
+        try {
+          // Wait for the mutation to finish
+          await queryFulfilled
+
+          // Invalidate the cached data for the list to trigger a refetch
+          dispatch(erpApi.util.invalidateTags([{ type: 'SurveyRecruitment', id: 'ACTIVE' }]))
+        } catch (error) {
+          console.error('Error setting active recruitment t5984rt54', error)
+        }
+      },
+    }),
+
     // Define the POST mutation
     createRecruitment: builder.mutation<SurveyRecruitment, Partial<SurveyRecruitment>>({
       query: (newRecruitment) => ({
@@ -64,7 +83,12 @@ export const erpApi = createApi({
           await queryFulfilled
 
           // Invalidate the cached data for the list to trigger a refetch
-          dispatch(erpApi.util.invalidateTags([{ type: 'SurveyRecruitment', id: 'LIST' }]))
+          dispatch(
+            erpApi.util.invalidateTags([
+              { type: 'SurveyRecruitment', id: 'LIST' },
+              { type: 'SurveyRecruitment', id: 'ACTIVE' },
+            ]),
+          )
         } catch (error) {
           console.error('Error creating recruitment', error)
         }
@@ -86,4 +110,5 @@ export const {
   useGetActiveRecruitmentQuery,
   useCreateRecruitmentMutation,
   useGetActiveRecruitmentSettingsQuery,
+  useSetActiveRecruitmentMutation,
 } = erpApi

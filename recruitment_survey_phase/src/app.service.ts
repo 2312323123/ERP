@@ -62,4 +62,8 @@ export class AppService {
   async getActiveRecruitmentDataForFrontend() {
     return this.recruitmentsService.getActiveRecruitmentDataForFrontend();
   }
+
+  async setActiveRecruitment(uuid: string) {
+    return this.activeRecruitmentService.setActiveRecruitment(uuid);
+  }
 }
