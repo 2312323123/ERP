@@ -22,8 +22,7 @@ interface Props {
 }
 
 const EvaluationForm = ({ criteria, markTags, onSubmit, demoMode, initialMarks, initialComment }: Props) => {
-  const initialMarksState = initialMarks ?? Array(criteria.length).fill(0)
-  const [marks, setMarks] = useState<number[]>(initialMarksState)
+  const [marks, setMarks] = useState<number[]>(initialMarks ?? Array(criteria.length).fill(0))
   const [comment, setComment] = useState<string>(initialComment ?? '')
 
   const handleMarkChange = (index: number, value: number) => {
@@ -52,7 +51,7 @@ const EvaluationForm = ({ criteria, markTags, onSubmit, demoMode, initialMarks, 
         'Normalnie w tym momencie ocena zostałaby zapisana. A w tym demo, jeśli teraz potwierdzisz, to odpowiedź zostanie zresetowana.',
       )
       if (answer) {
-        setMarks(initialMarksState)
+        setMarks([])
         setComment('')
       }
     }
