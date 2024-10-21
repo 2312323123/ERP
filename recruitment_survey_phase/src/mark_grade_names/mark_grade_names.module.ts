@@ -8,5 +8,6 @@ import { MarkGradeName } from './entities/mark_grade_name.entity';
   imports: [TypeOrmModule.forFeature([MarkGradeName])],
   controllers: [MarkGradeNamesController],
   providers: [MarkGradeNamesService],
+  exports: [TypeOrmModule, MarkGradeNamesService],
 })
 export class MarkGradeNamesModule {}

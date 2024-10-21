@@ -12,9 +12,12 @@ import { EvaluationSchema } from 'src/evaluation_schemas/entities/evaluation_sch
 import {
   CreateRecruitmentRelatedDataForFrontendDto,
   RecruitmentRelatedData,
-} from './dto/create-recruitment-related-data-for-frontend.dto copy';
+} from './dto/create-recruitment-related-data-for-frontend.dto';
 import { Mark } from 'src/marks/entities/mark.entity';
 import { SurveyMetadata } from 'src/survey_metadatas/entities/survey_metadata.entity';
+import { CreateEvaluationSchemaDto } from 'src/evaluation_schemas/dto/create-evaluation_schema.dto';
+import { EvaluationSchemasService } from 'src/evaluation_schemas/evaluation_schemas.service';
+import { MarkGradeNamesService } from 'src/mark_grade_names/mark_grade_names.service';
 
 const recruitmentCreateDefaults: RecruitmentRelatedData = {
   gradingInstruction: `# Hi, *Pluto*!
@@ -26,7 +29,7 @@ const recruitmentCreateDefaults: RecruitmentRelatedData = {
       name: 'Przykładowe kryterium',
       description: 'Opis przykładowego kryterium',
       weight: 2,
-    },
+    } as CreateEvaluationSchemaDto,
   ],
   markTags: {
     mark1Tag: '',
@@ -48,6 +51,8 @@ export class RecruitmentsService {
     @InjectRepository(EvaluationSchema) private evaluationSchemaRepository: Repository<EvaluationSchema>,
     @InjectRepository(Mark) private markRepository: Repository<Mark>,
     @InjectRepository(SurveyMetadata) private surveyMetadataRepository: Repository<SurveyMetadata>,
+    private readonly evaluationSchemasService: EvaluationSchemasService,
+    private readonly markGradeNamesService: MarkGradeNamesService,
   ) {}
 
   async create(createRecruitmentDto: CreateRecruitmentDto): Promise<Recruitment> {
@@ -116,25 +121,16 @@ export class RecruitmentsService {
       await this.fieldsHiddenForSurveyEvaluatorRepository.save(fieldsHiddenForSurveyEvaluator);
     }
 
-    const markGradeName = new MarkGradeName();
-    markGradeName.recruitment_uuid = uuid;
-    markGradeName.grade_1_of_5 = recruitmentRelatedData.markTags.mark1Tag;
-    markGradeName.grade_2_of_5 = recruitmentRelatedData.markTags.mark2Tag;
-    markGradeName.grade_3_of_5 = recruitmentRelatedData.markTags.mark3Tag;
-    markGradeName.grade_4_of_5 = recruitmentRelatedData.markTags.mark4Tag;
-    markGradeName.grade_5_of_5 = recruitmentRelatedData.markTags.mark5Tag;
-    await this.markGradeNameRepository.save(markGradeName);
+    await this.markGradeNamesService.create({
+      recruitmentUuid: uuid,
+      ...recruitmentRelatedData.markTags,
+    });
 
     // order will be 0-indexed
-    for (const [index, criterion] of recruitmentRelatedData.evaluationCriteria.entries()) {
-      const evaluationSchema = new EvaluationSchema();
-      evaluationSchema.recruitment_uuid = uuid;
-      evaluationSchema.order = index;
-      evaluationSchema.name = criterion.name;
-      evaluationSchema.description = criterion.description;
-      evaluationSchema.weight = criterion.weight;
-      await this.evaluationSchemaRepository.save(evaluationSchema);
-    }
+    await this.evaluationSchemasService.createRecruitmentEvaluationSchemas(
+      uuid,
+      recruitmentRelatedData.evaluationCriteria,
+    );
   }
 
   async createRecruitmentRelatedEntitiesFromExistingRecruitment(

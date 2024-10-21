@@ -8,5 +8,6 @@ import { EvaluationSchema } from './entities/evaluation_schema.entity';
   imports: [TypeOrmModule.forFeature([EvaluationSchema])],
   controllers: [EvaluationSchemasController],
   providers: [EvaluationSchemasService],
+  exports: [TypeOrmModule, EvaluationSchemasService],
 })
 export class EvaluationSchemasModule {}

@@ -8,5 +8,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   imports: [TypeOrmModule.forFeature([FieldsHiddenForSurveyEvaluator])],
   controllers: [FieldsHiddenForSurveyEvaluatorsController],
   providers: [FieldsHiddenForSurveyEvaluatorsService],
+  exports: [TypeOrmModule, FieldsHiddenForSurveyEvaluatorsService],
 })
 export class FieldsHiddenForSurveyEvaluatorsModule {}

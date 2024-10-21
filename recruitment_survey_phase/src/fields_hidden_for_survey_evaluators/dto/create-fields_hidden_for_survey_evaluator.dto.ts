@@ -1,1 +1,4 @@
-export class CreateFieldsHiddenForSurveyEvaluatorDto {}
+export class CreateFieldsHiddenForSurveyEvaluatorDto {
+  recruitmentUuid: string;
+  fields: string[];
+}

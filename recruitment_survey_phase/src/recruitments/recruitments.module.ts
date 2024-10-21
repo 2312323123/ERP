@@ -9,6 +9,8 @@ import { FieldsHiddenForSurveyEvaluator } from 'src/fields_hidden_for_survey_eva
 import { EvaluationSchema } from 'src/evaluation_schemas/entities/evaluation_schema.entity';
 import { SurveyMetadata } from 'src/survey_metadatas/entities/survey_metadata.entity';
 import { Mark } from 'src/marks/entities/mark.entity';
+import { EvaluationSchemasService } from 'src/evaluation_schemas/evaluation_schemas.service';
+import { MarkGradeNamesService } from 'src/mark_grade_names/mark_grade_names.service';
 
 @Module({
   imports: [
@@ -23,7 +25,7 @@ import { Mark } from 'src/marks/entities/mark.entity';
     ]),
   ],
   controllers: [RecruitmentsController],
-  providers: [RecruitmentsService],
+  providers: [RecruitmentsService, EvaluationSchemasService, MarkGradeNamesService],
   exports: [RecruitmentsService],
 })
 export class RecruitmentsModule {}

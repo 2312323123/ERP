@@ -1,10 +1,11 @@
-import { BadRequestException, Body, Controller, Get, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 import { CreateCanPeopleSeeRecruitmentDto } from './can_people_see_recruitment/dto/create-can_people_see_recruitment.dto';
 import { CreateCanEvaluateSurveyDto } from './can_evaluate_surveys/dto/create-can_evaluate_survey.dto';
 import { CreateAcceptsSurveyDto } from './accepts_surveys/dto/create-accepts_survey.dto';
 import { CreateRecruitmentDto } from './recruitments/dto/create-recruitment.dto';
 import { CreateActiveRecruitmentDto } from './active_recruitment/dto/create-active_recruitment.dto';
+import { RecruitmentRelatedData } from './recruitments/dto/create-recruitment-related-data-for-frontend.dto';
 
 @Controller()
 export class AppController {
@@ -76,5 +77,11 @@ export class AppController {
       throw new BadRequestException('Invalid recruitment UUID');
     }
     return this.appService.setActiveRecruitment(createActiveRecruitmentDto.recruitment_uuid);
+  }
+
+  @Post('/api/surveys/save-survey-settings')
+  @HttpCode(201)
+  async saveSurveySettings(@Body() surveySettings: Partial<RecruitmentRelatedData>) {
+    await this.appService.saveSurveySettings(surveySettings);
   }
 }
