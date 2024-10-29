@@ -262,10 +262,16 @@ CMD [ "npm", "run", "dev" ]
 
 - you may want to set up different Google clientId (here in main.tsx) in your frontend
 - example slice to copy approach: surveySettingsPageSlice.tsx
-- example network call to copy approach:
+- example network call to copy approach: // TODO: check if not outdated
   - GET: handleFetchActiveRecruitment
   - POST: erpAskForLogout, or handleClick in RoleButtonOwned.tsx,
   - POST with blocking buttons while fetching: acceptRequest in UserInfo.tsx
+- how to show some message to user:
+  - `const showSnackbar = useSnackbar()`, and then i.e.
+    `showSnackbar('Zapisano zmiany!', 'success')` for success,
+    `showSnackbar('An error occurred.', 'error')showSnackbar('An error occurred.', 'error')` for error
+    there's also 'info' and 'warning'
+  - the whole mutation action with snackbar may be isolated like in the case of useSaveRecruitmentSettings.ts, then all you do is call saveRecruitmentSettings()
 
 #### some tech used in frontend
 
