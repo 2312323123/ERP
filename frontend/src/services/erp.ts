@@ -95,9 +95,31 @@ export const erpApi = createApi({
       },
     }),
 
+    saveRecruitmentSettings: builder.mutation<void, SurveySettingsExported>({
+      query: (surveySettings) => ({
+        url: 'api/surveys/save-survey-settings',
+        method: 'POST',
+        body: surveySettings,
+      }),
+      onQueryStarted: async (surveySettings, { dispatch, queryFulfilled }) => {
+        try {
+          // Wait for the mutation to finish
+          await queryFulfilled
+
+          // Invalidate the cached data for the list to trigger a refetch
+          dispatch(erpApi.util.invalidateTags([{ type: 'SurveyRecruitment', id: 'SETTINGS' }]))
+        } catch (error) {
+          console.error('Error saving recruitment settings', error)
+        }
+      },
+    }),
+
     getActiveRecruitmentSettings: builder.query<SurveySettingsImported, string>({
       query: () => 'api/surveys/active-recruitment-settings',
-      providesTags: [{ type: 'SurveyRecruitment', id: 'ACTIVE' }], // applies here too
+      providesTags: [
+        { type: 'SurveyRecruitment', id: 'ACTIVE' },
+        { type: 'SurveyRecruitment', id: 'SETTINGS' },
+      ], // applies here too
     }),
   }),
   tagTypes: ['SurveyRecruitment'], // Keep the tag type for survey recruitments
@@ -111,4 +133,5 @@ export const {
   useCreateRecruitmentMutation,
   useGetActiveRecruitmentSettingsQuery,
   useSetActiveRecruitmentMutation,
+  useSaveRecruitmentSettingsMutation,
 } = erpApi

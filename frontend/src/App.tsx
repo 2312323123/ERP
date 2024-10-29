@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useState } from 'react'
 // import './App.css'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import { RouterProvider } from 'react-router-dom'
@@ -8,6 +8,7 @@ import { createTheme, ThemeProvider } from '@mui/material'
 import { router } from './router'
 import { takeMeToSurveyPhase } from './utils/takeMeToSurveyPhase'
 import PathChangeListener from './utils/PathChangeListener'
+import { SnackbarProvider } from './context/SnackbarProvider'
 
 export const AppContext = createContext(initialAppContextValue)
 
@@ -63,11 +64,13 @@ function App() {
 
   return (
     <AppContext.Provider value={value}>
-      <GoogleOAuthProvider clientId={'630669205687-ukc7rkopmrfomse2g04uei1gkhdvo2o0.apps.googleusercontent.com'}>
-        <ThemeProvider theme={theme}>
-          <RouterProvider router={router} />
-        </ThemeProvider>
-      </GoogleOAuthProvider>
+      <SnackbarProvider>
+        <GoogleOAuthProvider clientId={'630669205687-ukc7rkopmrfomse2g04uei1gkhdvo2o0.apps.googleusercontent.com'}>
+          <ThemeProvider theme={theme}>
+            <RouterProvider router={router} />
+          </ThemeProvider>
+        </GoogleOAuthProvider>
+      </SnackbarProvider>
     </AppContext.Provider>
   )
 }

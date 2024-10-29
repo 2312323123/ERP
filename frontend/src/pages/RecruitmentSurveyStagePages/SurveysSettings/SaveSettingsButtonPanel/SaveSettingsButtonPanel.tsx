@@ -1,8 +1,11 @@
-import { Container, Box, Typography, Button, Divider } from '@mui/material'
+import { Container, Box, Typography, Button } from '@mui/material'
+import useSaveRecruitmentSettings from '../../../../hooks/surveys/useSaveRecruitmentSettings'
 
 const SaveSettingsButtonPanel = () => {
+  const saveRecruitmentSettings = useSaveRecruitmentSettings()
+
   const handleSave = () => {
-    alert('Duupa!')
+    saveRecruitmentSettings()
   }
 
   return (

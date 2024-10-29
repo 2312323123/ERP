@@ -4,7 +4,6 @@ import {
   useGetAllRecruitmentsQuery,
   useSetActiveRecruitmentMutation,
 } from '../../../../../services/erp'
-import { useState } from 'react'
 
 const SetActiveRecruitment = () => {
   const {
@@ -13,8 +12,6 @@ const SetActiveRecruitment = () => {
     isLoading: activeRecruitmentIsLoading,
   } = useGetActiveRecruitmentQuery()
   const { data: recruitments, error, isLoading } = useGetAllRecruitmentsQuery()
-
-  const [selectedRecruitment, setSelectedRecruitment] = useState('')
 
   // Destructure the mutation hook
   const [
@@ -37,15 +34,14 @@ const SetActiveRecruitment = () => {
     return confirmSave
   }
   const trySettingSelectedRecruitment = (value: string) => {
-    setActiveRecruitment(value)
-    // const confirmSave = handleSaveChanges()
+    const confirmSave = handleSaveChanges()
 
-    // if (!confirmSave) {
-    //   const confirmExit = window.confirm('Czy na pewno chcesz zmienić aktywną rekru?')
-    //   if (confirmExit) {
-    //     setSelectedRecruitment(value)
-    //   }
-    // }
+    if (!confirmSave) {
+      const confirmExit = window.confirm('Czy na pewno chcesz zmienić aktywną rekru?')
+      if (confirmExit) {
+        setActiveRecruitment(value)
+      }
+    }
   }
 
   return (

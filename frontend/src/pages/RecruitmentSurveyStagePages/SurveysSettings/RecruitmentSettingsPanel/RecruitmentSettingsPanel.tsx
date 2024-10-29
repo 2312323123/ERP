@@ -82,7 +82,7 @@ const RecruitmentSettingsPanel = () => {
 
         <pre>{JSON.stringify(activeRecruitmentSettings, null, 2)}</pre>
 
-        <h3> dpupa </h3>
+        <h3> tgtge </h3>
 
         <pre>{JSON.stringify(surveySettingsEditable, null, 2)}</pre>
 
