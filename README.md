@@ -81,7 +81,7 @@ Best to keep it uncommented only when using it. Library: `npm i @nestjs/swagger`
 - env variables should just work inside app if specified in docker-compose
 - it's kind of important to check input parameters are always defined or you might get compromised, in auth service this is done using UndefinedCheckPipe for each applicable controller input parameter, so this:
 
-```
+```TS
   @Post('/api/auth/setup-roles')
   async setupRoles(@Body() { role, description = '' }: { role: string; description: string }) {
     const createRoleDto = new CreateRoleDto(role, description);
@@ -92,7 +92,7 @@ Best to keep it uncommented only when using it. Library: `npm i @nestjs/swagger`
 
 got replaced by this:
 
-```
+```TS
   @Post('/api/auth/setup-roles')
   async setupRoles(
     @Body('role', UndefinedCheckPipe) role: string,
@@ -104,7 +104,7 @@ got replaced by this:
   }
 ```
 
-in some other cases checking this has been moves deeper to service.
+in some other cases checking this has been moved deeper to service.
 
 ---
 
