@@ -33,10 +33,10 @@ const InstantSettingsPanel = () => {
       <Typography variant="h4" gutterBottom>
         Ustawienia zmieniane natychmiastowo
       </Typography>
-      <h4>activeRecruitment</h4>
+      {/* <h4>activeRecruitment</h4>
       {JSON.stringify(activeRecruitment)}
       <h4>recruitments</h4>
-      {JSON.stringify(recruitments)}
+      {JSON.stringify(recruitments)} */}
 
       {/* Create New Recruitment */}
       <Box my={3}>
@@ -63,6 +63,7 @@ const InstantSettingsPanel = () => {
           label="Akceptuje ankiety?"
           path="/api/surveys/accepts-surveys"
           returnFieldName="accepts_surveys"
+          disabled={!activeRecruitment}
         />
 
         {/* Użytkownicy systemu widzą rekrutację? Switch */}
@@ -72,6 +73,7 @@ const InstantSettingsPanel = () => {
           label="Użytkownicy systemu widzą rekrutację?"
           path="/api/surveys/can-people-see-recruitment"
           returnFieldName="can_people_see_recruitment"
+          disabled={!activeRecruitment}
         />
 
         {/* Można Oceniać Switch */}
@@ -81,6 +83,7 @@ const InstantSettingsPanel = () => {
           label="Można oceniać?"
           path="/api/surveys/can-evaluate-surveys"
           returnFieldName="can_evaluate_surveys"
+          disabled={!activeRecruitment}
         />
       </Box>
     </Container>

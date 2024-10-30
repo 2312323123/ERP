@@ -1,6 +1,6 @@
 import { Typography, Container, Divider, Button, CircularProgress } from '@mui/material'
-import { useState } from 'react'
 import { useGetActiveRecruitmentQuery, useGetActiveRecruitmentSettingsQuery } from '../../../../services/erp'
+import useDeleteRecruitment from '../../../../hooks/surveys/useDeleteRecruitment'
 
 const DeleteRecruitmentPanel = () => {
   const {
@@ -14,23 +14,13 @@ const DeleteRecruitmentPanel = () => {
     isLoading: activeRecruitmentSettingsIsLoading,
   } = useGetActiveRecruitmentSettingsQuery(activeRecruitment?.uuid ?? '')
 
-  const handleDeleteRecruitment = (recruitmentId: string) => {
-    const [recruitments, setRecruitments] = useState<{ [key: string]: { canBeDeleted: boolean } }>({
-      // Example recruitments object
-      recruitment1rreerre: { canBeDeleted: true },
-      recruitment2rtrttr: { canBeDeleted: false },
-      // Add more recruitments as needed
-    })
+  const deleteActiveRecruitment = useDeleteRecruitment()
 
-    const recruitment = recruitments[recruitmentId]
-    const confirmDelete = window.confirm('Are you sure you want to delete this recruitment?')
+  const handleDeleteRecruitment = () => {
+    const confirmDelete = window.confirm('Czy na pewno chcesz usunąć aktywną rekrutację?')
 
     if (confirmDelete) {
-      if (recruitment.canBeDeleted) {
-        alert(`Recruitment ${recruitmentId} added to deletions.`) // Placeholder for feedback
-      } else {
-        alert('Ta rekrutacja nie może już być usunięta')
-      }
+      deleteActiveRecruitment()
     }
   }
 
@@ -60,8 +50,9 @@ const DeleteRecruitmentPanel = () => {
         <Button
           variant="contained"
           color="primary"
-          onClick={() => handleDeleteRecruitment('recruitment1')} // Use the relevant recruitment ID
+          onClick={handleDeleteRecruitment}
           style={{ marginTop: '16px', color: 'white', padding: '1rem 2rem', fontSize: '1rem' }}
+          disabled={activeRecruitmentSettings?.isThereAnySurvey ?? true}
         >
           Usuń rekrutację (działa natychmiastowo)
         </Button>

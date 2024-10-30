@@ -121,6 +121,36 @@ export const erpApi = createApi({
         { type: 'SurveyRecruitment', id: 'SETTINGS' },
       ], // applies here too
     }),
+
+    deleteRecruitment: builder.mutation<void, string>({
+      query: (recruitmentUuid) => {
+        console.log('recruitmentUuid:')
+        console.log(recruitmentUuid)
+
+        return {
+          url: 'api/surveys/delete-recruitment',
+          method: 'POST',
+          body: { uuid: recruitmentUuid },
+        }
+      },
+      onQueryStarted: async (recruitmentUuid, { dispatch, queryFulfilled }) => {
+        try {
+          // Wait for the mutation to finish
+          await queryFulfilled
+
+          // Invalidate the cached data for the list to trigger a refetch
+          dispatch(
+            erpApi.util.invalidateTags([
+              { type: 'SurveyRecruitment', id: 'SETTINGS' },
+              { type: 'SurveyRecruitment', id: 'LIST' },
+              { type: 'SurveyRecruitment', id: 'ACTIVE' },
+            ]),
+          )
+        } catch (error) {
+          console.error('Error deleting recruitment', error)
+        }
+      },
+    }),
   }),
   tagTypes: ['SurveyRecruitment'], // Keep the tag type for survey recruitments
 })
@@ -134,4 +164,5 @@ export const {
   useGetActiveRecruitmentSettingsQuery,
   useSetActiveRecruitmentMutation,
   useSaveRecruitmentSettingsMutation,
+  useDeleteRecruitmentMutation,
 } = erpApi

@@ -13,8 +13,12 @@ import {
   setMark5Tag,
 } from '../../../../../store/slices/surveyStage/surveySettingsPageSlice'
 import { UnknownAction } from '@reduxjs/toolkit'
+import { useGetActiveRecruitmentQuery, useGetActiveRecruitmentSettingsQuery } from '../../../../../services/erp'
 
 const MarkTagsSetup = () => {
+  const { data: activeRecruitment } = useGetActiveRecruitmentQuery()
+  const { data: activeRecruitmentSettings } = useGetActiveRecruitmentSettingsQuery(activeRecruitment?.uuid ?? '')
+
   const mark1Tag = useSelector(getMark1Tag)
   const mark2Tag = useSelector(getMark2Tag)
   const mark3Tag = useSelector(getMark3Tag)
@@ -32,6 +36,7 @@ const MarkTagsSetup = () => {
         variant="outlined"
         size="small"
         sx={{ marginLeft: 1, width: '175px' }} // Adjust width as needed
+        disabled={activeRecruitmentSettings?.isThereAnyMark ?? true}
       />
     </Box>
   )

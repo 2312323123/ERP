@@ -29,15 +29,18 @@ const TokenDisplay = () => {
 
       <TextField
         type={showData ? 'text' : 'password'}
-        value={activeRecruitmentSettings?.token ?? ''}
+        value={activeRecruitmentSettingsError ? '' : (activeRecruitmentSettings?.token ?? '')}
         label="Token"
         fullWidth
+        disabled={!activeRecruitment}
         slotProps={{
           input: {
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton onClick={handleToggleShowData}>{showData ? <VisibilityOff /> : <Visibility />}</IconButton>
-                <IconButton onClick={handleCopyToClipboard}>
+                <IconButton onClick={handleToggleShowData} disabled={!activeRecruitment}>
+                  {showData ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+                <IconButton onClick={handleCopyToClipboard} disabled={!activeRecruitment}>
                   <ContentCopy />
                 </IconButton>
               </InputAdornment>

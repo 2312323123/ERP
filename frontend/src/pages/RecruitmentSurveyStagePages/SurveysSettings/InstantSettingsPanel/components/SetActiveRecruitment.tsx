@@ -34,6 +34,11 @@ const SetActiveRecruitment = () => {
     return confirmSave
   }
   const trySettingSelectedRecruitment = (value: string) => {
+    if (!activeRecruitment) {
+      setActiveRecruitment(value)
+      return
+    }
+
     const confirmSave = handleSaveChanges()
 
     if (!confirmSave) {

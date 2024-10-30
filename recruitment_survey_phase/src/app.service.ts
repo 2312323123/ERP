@@ -101,6 +101,9 @@ export class AppService {
       ...surveySettings.markTags,
     } as CreateMarkGradeNameDto;
 
+    // to secure settings that can't be changed if there are already marks
+    const anyMarkExists = await this.recruitmentsService.checkIfMarkExistsForRecruitment(uuid);
+
     await Promise.all([
       Object.keys(updateRecruitmentDto).length
         ? this.recruitmentsService.updateRecruitment(uuid, updateRecruitmentDto)
@@ -108,10 +111,14 @@ export class AppService {
       updateFieldsHiddenForSurveyEvaluatorDto?.fields
         ? this.fieldsHiddenForSurveyEvaluatorsService.update(updateFieldsHiddenForSurveyEvaluatorDto)
         : null,
-      evaluationCriteria?.length
+      evaluationCriteria?.length && !anyMarkExists
         ? this.evaluationSchemasService.updateRecruitmentEvaluationSchemas(uuid, evaluationCriteria)
         : null,
-      this.markGradeNamesService.update(markGradeNames),
+      !anyMarkExists ? this.markGradeNamesService.update(markGradeNames) : null,
     ]);
+  }
+
+  async deleteRecruitment(uuid: string) {
+    await this.recruitmentsService.delete(uuid);
   }
 }

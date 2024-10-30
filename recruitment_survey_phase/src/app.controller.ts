@@ -6,6 +6,7 @@ import { CreateAcceptsSurveyDto } from './accepts_surveys/dto/create-accepts_sur
 import { CreateRecruitmentDto } from './recruitments/dto/create-recruitment.dto';
 import { CreateActiveRecruitmentDto } from './active_recruitment/dto/create-active_recruitment.dto';
 import { RecruitmentRelatedData } from './recruitments/dto/create-recruitment-related-data-for-frontend.dto';
+import { DeleteRecruitmentDto } from './recruitments/dto/delete-recruitment.dto';
 
 @Controller()
 export class AppController {
@@ -83,5 +84,13 @@ export class AppController {
   @HttpCode(201)
   async saveSurveySettings(@Body() surveySettings: Partial<RecruitmentRelatedData>) {
     await this.appService.saveSurveySettings(surveySettings);
+  }
+
+  @Post('/api/surveys/delete-recruitment')
+  async deleteRecruitment(@Body() deleteRecruitmentDto: DeleteRecruitmentDto) {
+    if (!deleteRecruitmentDto.uuid) {
+      throw new BadRequestException('Invalid recruitment UUID');
+    }
+    await this.appService.deleteRecruitment(deleteRecruitmentDto.uuid);
   }
 }

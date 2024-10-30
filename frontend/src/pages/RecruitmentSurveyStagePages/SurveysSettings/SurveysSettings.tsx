@@ -6,7 +6,7 @@ import RecruitmentSettingsPanel from './RecruitmentSettingsPanel/RecruitmentSett
 import DeleteRecruitmentPanel from './DeleteRecruitmentPanel/DeleteRecruitmentPanel'
 import { Divider } from '@mui/material'
 import BigSpinner from './components/BigSpinner'
-import { useGetAllRecruitmentsQuery } from '../../../services/erp'
+import { useGetActiveRecruitmentQuery, useGetAllRecruitmentsQuery } from '../../../services/erp'
 
 const SurveysSettings = () => {
   // const allRecruitmentsUuidNameStartDate = useSelector(getAllRecruitmentsUuidNameStartDate)
@@ -22,6 +22,8 @@ const SurveysSettings = () => {
   // if (typeof allRecruitmentsUuidNameStartDate === 'undefined') {
   //   return <BigSpinner />
   // }
+
+  const { data: activeRecruitment } = useGetActiveRecruitmentQuery()
 
   if (isLoading) return <BigSpinner />
 
@@ -55,14 +57,18 @@ const SurveysSettings = () => {
       <NewRecruitmentPanel />
       <Divider sx={{ my: 3 }} />
 
-      {/* Save Settings Button Panel */}
-      <SaveSettingsButtonPanel />
+      {activeRecruitment && (
+        <>
+          {/* Save Settings Button Panel */}
+          <SaveSettingsButtonPanel />
 
-      {/* Per-recruitment settings section */}
-      <RecruitmentSettingsPanel />
+          {/* Per-recruitment settings section */}
+          <RecruitmentSettingsPanel />
 
-      {/* Delete recruitment (possible until the first survey) */}
-      <DeleteRecruitmentPanel />
+          {/* Delete recruitment (possible until the first survey) */}
+          <DeleteRecruitmentPanel />
+        </>
+      )}
     </>
   )
 }

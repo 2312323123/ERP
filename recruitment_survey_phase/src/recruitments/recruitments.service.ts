@@ -203,13 +203,13 @@ export class RecruitmentsService {
     }));
   }
 
-  findAll() {
-    return `This action returns all recruitments`;
-  }
+  // findAll() {
+  //   return `This action returns all recruitments`;
+  // }
 
-  findOne(id: number) {
-    return `This action returns a #${id} recruitment`;
-  }
+  // findOne(id: number) {
+  //   return `This action returns a #${id} recruitment`;
+  // }
 
   async updateRecruitment(uuid: string, updateRecruitmentDto: UpdateRecruitmentDto) {
     const recruitmentToUpdate = await this.recruitmentRepository.findOne({
@@ -233,9 +233,9 @@ export class RecruitmentsService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} recruitment`;
-  }
+  // remove(id: number) {
+  //   return `This action removes a #${id} recruitment`;
+  // }
 
   async getActiveRecruitmentDataForFrontend(): Promise<CreateRecruitmentRelatedDataForFrontendDto | null> {
     const { recruitment_uuid: uuid } = (await this.activeRecruitmentRepository.find())[0];
@@ -295,6 +295,24 @@ export class RecruitmentsService {
     recruitmentRelatedData.isThereAnySurvey = await this.checkIfAnySurveyExistsForRecruitment(uuid);
 
     return recruitmentRelatedData;
+  }
+
+  async delete(uuid: string): Promise<void> {
+    if (await this.checkIfAnySurveyExistsForRecruitment(uuid)) {
+      throw new BadRequestException('Cannot delete recruitment with existing surveys');
+    }
+
+    // check if the recruitment exists
+    const recruitmentToDelete = await this.recruitmentRepository.findOne({
+      where: { uuid },
+    });
+
+    if (!recruitmentToDelete) {
+      throw new NotFoundException('Recruitment not found');
+    }
+
+    // delete the recruitment
+    await this.recruitmentRepository.remove(recruitmentToDelete);
   }
 
   // Check if any Mark exists for a given Recruitment UUID

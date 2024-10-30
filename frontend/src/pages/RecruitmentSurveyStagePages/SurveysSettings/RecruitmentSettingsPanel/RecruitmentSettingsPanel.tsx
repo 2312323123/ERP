@@ -80,11 +80,11 @@ const RecruitmentSettingsPanel = () => {
       <Container maxWidth="md">
         <Divider sx={{ my: 2 }} />
 
-        <pre>{JSON.stringify(activeRecruitmentSettings, null, 2)}</pre>
+        {/* <pre>{JSON.stringify(activeRecruitmentSettings, null, 2)}</pre>
 
         <h3> tgtge </h3>
 
-        <pre>{JSON.stringify(surveySettingsEditable, null, 2)}</pre>
+        <pre>{JSON.stringify(surveySettingsEditable, null, 2)}</pre> */}
 
         {/* Accordion */}
         <MarkdownEditor />

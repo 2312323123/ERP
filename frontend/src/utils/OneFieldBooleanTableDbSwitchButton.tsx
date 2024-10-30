@@ -13,11 +13,19 @@ interface Props {
   label: string
   path: string
   returnFieldName: string
+  disabled?: boolean
 }
 
 // by default value is undefined, after fetching it takse true/false, change is fetched and shown
 // there have to be GET and POST urls that are the same, but one is for fetching and the other for changing
-const OneFieldBooleanTableDbSwitchButton = ({ theValue, setterToDispatch, label, path, returnFieldName }: Props) => {
+const OneFieldBooleanTableDbSwitchButton = ({
+  theValue,
+  setterToDispatch,
+  label,
+  path,
+  returnFieldName,
+  disabled,
+}: Props) => {
   /* Rekrutacja aktywna (widoczna dla ludzi) Switch */
   // theValue should come from useSelector
 
@@ -81,7 +89,7 @@ const OneFieldBooleanTableDbSwitchButton = ({ theValue, setterToDispatch, label,
         {label}
       </Typography>
 
-      <Switch checked={theValue} onChange={trySwitching} color="primary" disabled={isFetching} />
+      <Switch checked={theValue} onChange={trySwitching} color="primary" disabled={isFetching || disabled} />
       <Typography variant="body1" ml={2}>
         {theValue ? 'TAK' : 'NIE'}
       </Typography>
