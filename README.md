@@ -147,7 +147,7 @@ In nginx.conf, each backend microservice has some /api/something/, that is redir
 
 #### Usage
 
-entry point -> look at what port 80 of nginx is exposed to in the main docker-compose.yml
+entry point -> look at what port 80 of nginx is exposed to in the main docker-compose.yml \
 ~~db admin panel -> /pgadmin~~ \
 until it's fixed, pgadmin will be at http://149.156.119.173:5050/
 
@@ -285,7 +285,7 @@ CMD [ "npm", "run", "dev" ]
 - you need .env in the main ERP folder, like:
   TODO: add stuff here
 - be aware that when you deploy on different url, it has to be specified in one of the variables
-- backend was done with npm, frontend with yarn, which sits on top of that
+- backend was done with npm, frontend with yarn, which sits on top of that // TODO: check - you sure you hadn't moved to npm to keep this uniform?
 
 #### random helpful things:
 
@@ -332,3 +332,18 @@ and you still need to replace newlines in private key with \n, and then store bo
 - ts variables: lowerCamelCase
 - network endpoints urls: kebab-case
 - ...more?
+
+### Nest cheat sheet:
+
+- check if some data entry exists:
+
+```TS
+    // check if the recruitment exists
+    const recruitmentToCopyFrom = await this.recruitmentRepository.findOne({
+      where: { uuid },
+    });
+
+    if (!recruitmentToCopyFrom) {
+      throw new NotFoundException('Recruitment not found');
+    }
+```
