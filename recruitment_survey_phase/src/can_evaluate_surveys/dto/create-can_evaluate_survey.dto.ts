@@ -1,3 +1,3 @@
 export class CreateCanEvaluateSurveyDto {
-  can_evaluate_surveys: boolean;
+  constructor(public can_evaluate_surveys: boolean) {}
 }

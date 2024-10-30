@@ -1,6 +1,8 @@
 export class CreateRecruitmentDto {
-  name: string;
-  copy_from_uuid?: string;
-  grading_instruction?: string;
-  field_to_distinct_the_survey?: string;
+  constructor(
+    public name: string,
+    public copy_from_uuid?: string,
+    public grading_instruction?: string,
+    public field_to_distinct_the_survey?: string,
+  ) {}
 }

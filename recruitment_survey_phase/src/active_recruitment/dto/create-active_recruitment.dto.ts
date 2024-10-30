@@ -1,3 +1,4 @@
 export class CreateActiveRecruitmentDto {
-  recruitment_uuid: string;
+  // might not be used actually
+  constructor(public recruitment_uuid: string) {}
 }

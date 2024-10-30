@@ -1,3 +1,3 @@
 export class CreateAcceptsSurveyDto {
-  accepts_surveys: boolean;
+  constructor(public accepts_surveys: boolean) {}
 }
