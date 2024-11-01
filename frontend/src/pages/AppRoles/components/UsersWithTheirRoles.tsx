@@ -1,9 +1,9 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
-import { useCallback, useContext, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { logNetworkSuccess } from '../../../utils/logNetworkSuccess'
 import { logNetworkError, NetworkError } from '../../../utils/logNetworkError'
 import axios from 'axios'
-import { AppContext } from '../../../App'
+import { apiPathBase } from '../../../config/constants'
 import UserInfoNoButtons from './UserInfoNoButtons'
 import RoleButtonOwned from './RoleButtonOwned'
 import RoleButtonNotOwned from './RoleButtonNotOwned'
@@ -21,7 +21,6 @@ export interface UserWithTheirRoles {
 }
 
 const UsersWithTheirRoles = ({ allRolesRoles }: { allRolesRoles: string[] }) => {
-  const { apiPathBase } = useContext(AppContext)
   const [buttonsBlocked, setButtonsBlocked] = useState(false)
 
   // [{role, description}, ...]
@@ -41,7 +40,7 @@ const UsersWithTheirRoles = ({ allRolesRoles }: { allRolesRoles: string[] }) => 
     }
 
     getAllRoles()
-  }, [apiPathBase])
+  }, [])
 
   useEffect(() => {
     refresh()

@@ -2,19 +2,19 @@ import axios from 'axios'
 import { jwtDecode } from 'jwt-decode'
 import { logNetworkSuccess } from '../../utils/logNetworkSuccess'
 import { logNetworkError, NetworkError } from '../../utils/logNetworkError'
-import { AccessTokensInterface } from '../../constants/initialStates'
+import { useDispatch, useSelector } from 'react-redux'
+import { getAccessToken, getRefreshToken, saveTokens } from '../../store/slices/authSlice'
+import { apiPathBase } from '../../config/constants'
 
-export const useRefreshAccessToken = (
-  refreshUrl: string,
-  accessTokens: AccessTokensInterface,
-  setAccessTokens: (arg: AccessTokensInterface) => void,
-) => {
-  const refreshToken = accessTokens.refreshToken
+export const useRefreshAccessToken = () => {
+  const refreshToken = useSelector(getRefreshToken)
+  const accessToken = useSelector(getAccessToken)
+  const dispatch = useDispatch()
 
   return async (): Promise<void> => {
     try {
-      const response = await axios.post(refreshUrl, {
-        id: (jwtDecode(accessTokens.accessToken) as { id: string }).id,
+      const response = await axios.post(`${apiPathBase}/api/auth/refresh`, {
+        id: (jwtDecode(accessToken) as { id: string }).id,
         refresh_token: refreshToken,
       })
       logNetworkSuccess(response, '20949ri1')
@@ -23,11 +23,13 @@ export const useRefreshAccessToken = (
         if (!exp) {
           throw new Error('Access token does not have exp field 34r23e32')
         }
-        setAccessTokens({
-          accessToken: response.data.access_token,
-          refreshToken,
-          accessTokenExp: exp,
-        })
+        dispatch(
+          saveTokens({
+            accessToken: response.data.access_token,
+            refreshToken,
+            accessTokenExp: exp,
+          }),
+        )
       }
     } catch (error) {
       logNetworkError(error as NetworkError, 'ei4282o')

@@ -3,21 +3,22 @@ import { GoogleOAuthProvider } from '@react-oauth/google'
 // import viteLogo from '/vite.svg'
 import { useState } from 'react'
 import axios from 'axios'
-import { AppContext } from '../../App'
-import { useContext } from 'react'
+import { useDispatch } from 'react-redux'
+import { saveTokens } from '../../store/slices/authSlice'
+import { apiPathBase } from '../../config/constants'
 import { logNetworkError, NetworkError } from '../../utils/logNetworkError'
 import { logNetworkSuccess } from '../../utils/logNetworkSuccess'
 import { useGoogleAuth } from '../../hooks/auth/useGoogleAuth'
 import { jwtDecode } from 'jwt-decode'
 import { router } from '../../router'
-import { Box, Typography, TextField, Button } from '@mui/material'
+import { Box, Typography, Button } from '@mui/material'
 
 const Login = () => {
   const [receivedIdToken, setReceivedIdToken] = useState('')
-  const { apiPathBase, setLoggedIn, setAccessTokens } = useContext(AppContext)
   const [askedForAccount, setAskedForAccount] = useState(false)
   const [successfullyAskedForAccount, setSuccessfullyAskedForAccount] = useState(false)
   const [accountRequestAlreadyExists, setAccountRequestAlreadyExists] = useState(false)
+  const dispatch = useDispatch()
 
   const erpGoogleCodeLogin = async (code: string) => {
     return await axios.get(`${apiPathBase}/api/auth/login`, {
@@ -42,12 +43,13 @@ const Login = () => {
         if (!exp) {
           throw new Error('Access token does not have exp field 54t3r4r')
         }
-        setAccessTokens({
-          accessToken: res.data.accessToken,
-          refreshToken: res.data.refreshToken,
-          accessTokenExp: exp,
-        })
-        setLoggedIn(true)
+        dispatch(
+          saveTokens({
+            accessToken: res.data.accessToken,
+            refreshToken: res.data.refreshToken,
+            accessTokenExp: exp,
+          }),
+        )
       } else {
         setReceivedIdToken(res.data.id_token)
       }

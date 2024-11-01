@@ -1,11 +1,11 @@
 import { Box, Typography, CircularProgress, Switch } from '@mui/material'
 import axios from 'axios'
-import { useState, useContext, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { AppContext } from '../App'
 import { logNetworkError, NetworkError } from './logNetworkError'
 import { logNetworkSuccess } from './logNetworkSuccess'
 import { UnknownAction } from '@reduxjs/toolkit'
+import { apiPathBase } from '../config/constants'
 
 interface Props {
   theValue: boolean | undefined
@@ -29,7 +29,6 @@ const OneFieldBooleanTableDbSwitchButton = ({
   /* Rekrutacja aktywna (widoczna dla ludzi) Switch */
   // theValue should come from useSelector
 
-  const { apiPathBase } = useContext(AppContext)
   const dispatch = useDispatch()
   const [isFetching, setIsFetching] = useState(false)
 
@@ -47,7 +46,7 @@ const OneFieldBooleanTableDbSwitchButton = ({
     } catch (error) {
       logNetworkError(error as NetworkError, 'o98u7y6')
     }
-  }, [apiPathBase, dispatch, setterToDispatch, path, returnFieldName])
+  }, [dispatch, setterToDispatch, path, returnFieldName])
 
   const trySwitching = useCallback(async () => {
     const startingValue = theValue // false
@@ -65,7 +64,7 @@ const OneFieldBooleanTableDbSwitchButton = ({
       setIsFetching(false)
       logNetworkError(error as NetworkError, 'ee6tu77')
     }
-  }, [apiPathBase, dispatch, theValue, setterToDispatch, path, returnFieldName])
+  }, [dispatch, theValue, setterToDispatch, path, returnFieldName])
 
   useEffect(() => {
     handleFetchRecruitmentVisible()

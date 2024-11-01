@@ -3,6 +3,7 @@ import counterReducer from './slices/counterSlice'
 import surveySettingsPageReducer from './slices/surveyStage/surveySettingsPageSlice'
 import surveyUniversalReducer from './slices/surveyStage/surveyUniversalSlice'
 import { erpApi } from '../services/erp' // Import the survey API
+import authReducer from './slices/authSlice'
 
 // Create the Redux store
 export const store = configureStore({
@@ -11,6 +12,7 @@ export const store = configureStore({
     surveySettingsPage: surveySettingsPageReducer,
     surveyUniversal: surveyUniversalReducer,
     [erpApi.reducerPath]: erpApi.reducer, // Add erpApi reducer
+    auth: authReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(erpApi.middleware), // Add erpApi middleware
 })

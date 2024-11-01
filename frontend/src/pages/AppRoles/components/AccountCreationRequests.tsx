@@ -1,10 +1,10 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
-import { useCallback, useContext, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { logNetworkSuccess } from '../../../utils/logNetworkSuccess'
 import { logNetworkError, NetworkError } from '../../../utils/logNetworkError'
 import axios from 'axios'
-import { AppContext } from '../../../App'
 import UserInfo from './UserInfo'
+import { apiPathBase } from '../../../config/constants'
 
 export interface AccountCreationRequest {
   email: string
@@ -17,8 +17,6 @@ export interface AccountCreationRequest {
 }
 
 const AccountCreationRequests = () => {
-  const { apiPathBase } = useContext(AppContext)
-
   // [{role, description}, ...]
   const [allAccountCreationRequests, setAccountCreationRequests] = useState<AccountCreationRequest[]>()
 
@@ -35,7 +33,7 @@ const AccountCreationRequests = () => {
     }
 
     getAllRoles()
-  }, [apiPathBase])
+  }, [])
 
   useEffect(() => {
     refresh()

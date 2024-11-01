@@ -1,16 +1,19 @@
-import { useContext } from 'react'
-import { AppContext } from '../App'
 import { Button, ListItem, Stack } from '@mui/material'
-import { Link } from 'react-router-dom'
 import { router } from '../router'
 import { takeMeToSurveyPhase } from '../utils/takeMeToSurveyPhase'
 import { logNetworkError, NetworkError } from '../utils/logNetworkError'
 import { logNetworkSuccess } from '../utils/logNetworkSuccess'
 import axios from 'axios'
 import MinimumReduxUseExample from '../components/MinimumReduxUseExample'
+import { jwtDecode } from 'jwt-decode'
+import { apiPathBase } from '../config/constants'
+import { useSelector } from 'react-redux'
+import { getAccessToken, getRefreshToken } from '../store/slices/authSlice'
+import { useRefreshAccessToken } from '../hooks/auth/useRefreshAccessToken'
 
 const Home = () => {
-  const { refreshAccessToken, accessTokens, apiPathBase } = useContext(AppContext)
+  const refreshToken = useSelector(getRefreshToken)
+  const accessToken = useSelector(getAccessToken)
 
   const giveDwaciekSuperadmin = async () => {
     try {
@@ -30,13 +33,27 @@ const Home = () => {
     }
   }
 
+  const logAccessTokens = () => {
+    console.log('accessToken:')
+    console.log(accessToken)
+    console.log('refreshToken:')
+    console.log(refreshToken)
+    // log decoded access token (using JWT library)
+    console.log('jwtDecode(accessToken):')
+    console.log(jwtDecode(accessToken))
+    console.log('jwtDecode(refreshToken):')
+    console.log(jwtDecode(refreshToken))
+  }
+
+  const refreshAccessToken = useRefreshAccessToken()
+
   return (
     <>
       <h1>Home Page</h1>
       <Button variant="contained" color="primary" onClick={refreshAccessToken}>
         refresh access token
       </Button>
-      <Button variant="contained" color="primary" onClick={() => console.log(accessTokens)}>
+      <Button variant="contained" color="primary" onClick={logAccessTokens}>
         log access tokens
       </Button>
       <Stack spacing={2}>

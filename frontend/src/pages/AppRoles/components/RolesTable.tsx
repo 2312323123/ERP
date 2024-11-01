@@ -1,9 +1,9 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
-import { useContext, useEffect } from 'react'
+import { useEffect } from 'react'
 import { logNetworkSuccess } from '../../../utils/logNetworkSuccess'
 import { logNetworkError, NetworkError } from '../../../utils/logNetworkError'
 import axios from 'axios'
-import { AppContext } from '../../../App'
+import { apiPathBase } from '../../../config/constants'
 
 interface Props {
   allRoles: { role: string; description: string }[]
@@ -11,8 +11,6 @@ interface Props {
 }
 
 const RolesTable = ({ allRoles, setAllRoles }: Props) => {
-  const { apiPathBase } = useContext(AppContext)
-
   useEffect(() => {
     // get all roles
     const getAllRoles = async () => {
@@ -26,7 +24,7 @@ const RolesTable = ({ allRoles, setAllRoles }: Props) => {
     }
 
     getAllRoles()
-  }, [apiPathBase, setAllRoles])
+  }, [setAllRoles])
 
   return (
     <>

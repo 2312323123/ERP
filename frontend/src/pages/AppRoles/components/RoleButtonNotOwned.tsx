@@ -1,10 +1,9 @@
 import { Button } from '@mui/material'
-import { AppContext } from '../../../App'
-import { useContext } from 'react'
 import axios from 'axios'
 import { logNetworkSuccess } from '../../../utils/logNetworkSuccess'
 import { logNetworkError, NetworkError } from '../../../utils/logNetworkError'
 import { UserWithTheirRoles } from './UsersWithTheirRoles'
+import { apiPathBase } from '../../../config/constants'
 
 interface Props {
   user: UserWithTheirRoles
@@ -15,7 +14,6 @@ interface Props {
 }
 
 const RoleButtonNotOwned = ({ user, role, buttonsBlocked, setButtonsBlocked, refresh }: Props) => {
-  const { apiPathBase } = useContext(AppContext)
   const { id } = user
 
   const handleClick = async () => {
@@ -33,13 +31,6 @@ const RoleButtonNotOwned = ({ user, role, buttonsBlocked, setButtonsBlocked, ref
       setButtonsBlocked(false)
     }
   }
-
-  // const handleClick = async () => {
-  //   console.log('id:')
-  //   console.log(id)
-  //   console.log('role:')
-  //   console.log(role)
-  // }
 
   return (
     <Button

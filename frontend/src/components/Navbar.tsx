@@ -1,10 +1,10 @@
-import React, { useContext } from 'react'
 import { Link, Outlet } from 'react-router-dom'
-import { AppContext } from '../App'
 import Logout from './auth/Logout'
+import { useSelector } from 'react-redux'
+import { getLoggedIn } from '../store/slices/authSlice'
 
 const Navbar: React.FC = () => {
-  const { loggedIn } = useContext(AppContext)
+  const loggedIn = useSelector(getLoggedIn)
 
   const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     if (!loggedIn) {

@@ -1,19 +1,20 @@
-import { useContext } from 'react'
-import { AppContext } from '../../App'
 import { jwtDecode } from 'jwt-decode'
 import axios from 'axios'
 import { logNetworkSuccess } from '../../utils/logNetworkSuccess'
 import { logNetworkError, NetworkError } from '../../utils/logNetworkError'
-import { initialAppAccessTokensValue } from '../../constants/initialStates'
+import { useDispatch, useSelector } from 'react-redux'
+import { getAccessToken, getRefreshToken, logout } from '../../store/slices/authSlice'
+import { apiPathBase } from '../../config/constants'
 
-const Logout = ({ children }) => {
+interface Props {
+  children?: React.ReactNode
+}
+
+const Logout = ({ children }: Props) => {
   // component's goal is to ask api for logout, and if there's error, alert, if not, set logged in to false
-  const {
-    apiPathBase,
-    accessTokens: { accessToken, refreshToken },
-    setAccessTokens,
-    setLoggedIn,
-  } = useContext(AppContext)
+  const accessToken = useSelector(getAccessToken)
+  const refreshToken = useSelector(getRefreshToken)
+  const dispatch = useDispatch()
 
   // It makes sense not to need current access token here as it's
   // more secure and simple and you don't need a fresh token after logging out.
@@ -28,8 +29,7 @@ const Logout = ({ children }) => {
     try {
       const res = await erpAskForLogout()
       logNetworkSuccess(res, '4t3h349')
-      setLoggedIn(false)
-      setAccessTokens(initialAppAccessTokensValue)
+      dispatch(logout())
     } catch (error) {
       logNetworkError(error as NetworkError, '493ru498')
       alert('Error during logout. Contact support.')

@@ -3,11 +3,10 @@ import { AccountCreationRequest } from './AccountCreationRequests'
 import { logNetworkSuccess } from '../../../utils/logNetworkSuccess'
 import { logNetworkError, NetworkError } from '../../../utils/logNetworkError'
 import axios from 'axios'
-import { AppContext } from '../../../App'
-import { useContext, useState } from 'react'
+import { apiPathBase } from '../../../config/constants'
+import { useState } from 'react'
 
 const UserInfo = ({ user, refresh }: { user: AccountCreationRequest; refresh: () => void }) => {
-  const { apiPathBase } = useContext(AppContext)
   const { email, email_verified, name, picture, id } = user
   const [processing, setProcessing] = useState(false)
 
