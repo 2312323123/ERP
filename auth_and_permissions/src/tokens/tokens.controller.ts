@@ -7,28 +7,28 @@ import { UpdateTokenDto } from './dto/update-token.dto';
 export class TokensController {
   constructor(private readonly tokensService: TokensService) {}
 
-  @Post()
-  create(@Body() createTokenDto: CreateTokenDto) {
-    return this.tokensService.create(createTokenDto);
-  }
+  // @Post()
+  // create(@Body() createTokenDto: CreateTokenDto) {
+  //   return this.tokensService.create(createTokenDto);
+  // }
 
-  @Get()
-  findAll() {
-    return this.tokensService.findAll();
-  }
+  // @Get()
+  // findAll() {
+  //   return this.tokensService.findAll();
+  // }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.tokensService.findOne(id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.tokensService.findOne(id);
+  // }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTokenDto: UpdateTokenDto) {
-    return this.tokensService.update(id, updateTokenDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateTokenDto: UpdateTokenDto) {
+  //   return this.tokensService.update(id, updateTokenDto);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tokensService.remove(id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.tokensService.remove(id);
+  // }
 }

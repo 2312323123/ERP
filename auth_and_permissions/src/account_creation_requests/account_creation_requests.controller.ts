@@ -7,28 +7,28 @@ import { UpdateAccountCreationRequestDto } from './dto/update-account_creation_r
 export class AccountCreationRequestsController {
   constructor(private readonly accountCreationRequestsService: AccountCreationRequestsService) {}
 
-  @Post()
-  create(@Body() createAccountCreationRequestDto: CreateAccountCreationRequestDto) {
-    return this.accountCreationRequestsService.create(createAccountCreationRequestDto);
-  }
+  // @Post()
+  // create(@Body() createAccountCreationRequestDto: CreateAccountCreationRequestDto) {
+  //   return this.accountCreationRequestsService.create(createAccountCreationRequestDto);
+  // }
 
-  @Get()
-  findAll() {
-    return this.accountCreationRequestsService.findAll();
-  }
+  // @Get()
+  // findAll() {
+  //   return this.accountCreationRequestsService.findAll();
+  // }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.accountCreationRequestsService.findOne(id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.accountCreationRequestsService.findOne(id);
+  // }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAccountCreationRequestDto: UpdateAccountCreationRequestDto) {
-    return this.accountCreationRequestsService.update(id, updateAccountCreationRequestDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateAccountCreationRequestDto: UpdateAccountCreationRequestDto) {
+  //   return this.accountCreationRequestsService.update(id, updateAccountCreationRequestDto);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.accountCreationRequestsService.remove(id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.accountCreationRequestsService.remove(id);
+  // }
 }
