@@ -13,43 +13,10 @@ export class AppController {
     private readonly usersService: UsersService,
   ) {}
 
-  @Get('/api/auth')
-  getHello(): string {
-    return this.appService.getHello();
-  }
-  @Get('/api/auth/dupa')
-  getHello2(): string {
-    return this.appService.getHello();
-  }
-  @Get('/api/auth/dupa2')
-  async getHello3(): Promise<any> {
-    return await this.makeRequest();
-  }
-  @Get('/api/auth/dupa3')
-  async getHello4(): Promise<any> {
-    return await this.usersService.getUserRolesById('105887563550899714086');
-  }
-
-  async makeRequest() {
-    try {
-      const response = await fetch('http://auth_and_permissions:3000/api/auth/dupa');
-
-      // Check if the content type is JSON
-      const contentType = response.headers.get('content-type');
-      if (contentType && contentType.includes('application/json')) {
-        const data = await response.json();
-        console.log('Response data:', data);
-        return data;
-      } else {
-        // If the response is not JSON, treat it as text
-        const textData = await response.text();
-        console.log('Response is not JSON:', textData);
-        return textData;
-      }
-    } catch (error) {
-      console.error('Error making HTTP request hehe:', error);
-    }
-  }
+  // @Get('/api/auth')
+  // getHello(): string {
+  //   return this.appService.getHello();
+  // }
 
   // this version gets code from bearer in header
   @Get('/api/auth/login')
