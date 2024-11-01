@@ -33,8 +33,12 @@ const Home = () => {
   return (
     <>
       <h1>Home Page</h1>
-      <button onClick={refreshAccessToken}>refresh access token</button>
-      <button onClick={() => console.log(accessTokens)}>log access tokens</button>
+      <Button variant="contained" color="primary" onClick={refreshAccessToken}>
+        refresh access token
+      </Button>
+      <Button variant="contained" color="primary" onClick={() => console.log(accessTokens)}>
+        log access tokens
+      </Button>
       <Stack spacing={2}>
         <ListItem>
           <Button variant="contained" color="primary" onClick={takeMeToSurveyPhase}>

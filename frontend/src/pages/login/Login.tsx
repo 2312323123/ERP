@@ -3,13 +3,14 @@ import { GoogleOAuthProvider } from '@react-oauth/google'
 // import viteLogo from '/vite.svg'
 import { useState } from 'react'
 import axios from 'axios'
-import { AppContext } from '../App'
+import { AppContext } from '../../App'
 import { useContext } from 'react'
-import { logNetworkError, NetworkError } from '../utils/logNetworkError'
-import { logNetworkSuccess } from '../utils/logNetworkSuccess'
-import { useGoogleAuth } from '../hooks/auth/useGoogleAuth'
+import { logNetworkError, NetworkError } from '../../utils/logNetworkError'
+import { logNetworkSuccess } from '../../utils/logNetworkSuccess'
+import { useGoogleAuth } from '../../hooks/auth/useGoogleAuth'
 import { jwtDecode } from 'jwt-decode'
-import { router } from '../router'
+import { router } from '../../router'
+import { Box, Typography, TextField, Button } from '@mui/material'
 
 const Login = () => {
   const [receivedIdToken, setReceivedIdToken] = useState('')
@@ -108,11 +109,45 @@ const Login = () => {
   }
 
   return (
-    <div>
+    // <div className={styles.loginPage}>
+    <Box
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      minHeight="100vh"
+      sx={{
+        backgroundImage: 'url(login_page.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
       <GoogleOAuthProvider clientId={'630669205687-ukc7rkopmrfomse2g04uei1gkhdvo2o0.apps.googleusercontent.com'}>
-        <div>
+        <Box
+          sx={{
+            p: 4,
+            borderRadius: 2,
+            boxShadow: 3,
+            maxWidth: 400,
+            width: '100%',
+            textAlign: 'center',
+            background: 'white',
+          }}
+        >
+          <Typography variant="h5" gutterBottom>
+            Login
+          </Typography>
+          {/* <TextField fullWidth label="Email" variant="outlined" margin="normal" />
+          <TextField fullWidth label="Password" type="password" variant="outlined" margin="normal" /> */}
+          <Button
+            onClick={getAndProcessGoogleLoginOtpCode}
+            fullWidth
+            variant="contained"
+            color="primary"
+            sx={{ mt: 2 }}
+          >
+            Zaloguj przy użyciu Google
+          </Button>
           <div>
-            <button onClick={getAndProcessGoogleLoginOtpCode}>Zaloguj przy użyciu Google</button>
             <button onClick={acceptMaciek}>Accept Maciek as user</button>
             <button onClick={acceptMaciekStupidWay}>Accept Maciek as user (stupid way)</button>
             <button onClick={() => router.navigate('/home')}>Go Home</button>
@@ -129,9 +164,9 @@ const Login = () => {
           {accountRequestAlreadyExists && (
             <div>Poproszono już o konto. Oczekuj na akceptację, bądź skontaktuj się z kimś, kto może zaakceptować.</div>
           )}
-        </div>
+        </Box>{' '}
       </GoogleOAuthProvider>
-    </div>
+    </Box>
   )
 }
 
