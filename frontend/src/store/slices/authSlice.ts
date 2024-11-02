@@ -10,16 +10,30 @@ const initialState = {
   roles: [] as string[],
 }
 
+const extractExp = (accessToken: string) => {
+  const { exp } = jwtDecode(accessToken)
+  if (!exp) {
+    throw new Error('Access token does not have exp field 54t3r4r')
+  }
+  return exp
+}
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
     saveTokens: (state, action) => {
+      const exp = extractExp(action.payload.accessToken)
       state.accessToken = action.payload.accessToken
       state.refreshToken = action.payload.refreshToken
-      state.accessTokenExp = action.payload.accessTokenExp
+      state.accessTokenExp = exp
       state.loggedIn = true
       state.roles = jwtDecode<{ roles: string[] }>(action.payload.accessToken)?.roles ?? []
+    },
+    saveRefreshedAccessToken: (state, action) => {
+      const exp = extractExp(action.payload.accessToken)
+      state.accessToken = action.payload.accessToken
+      state.accessTokenExp = exp
     },
     logout: () => {
       return initialState
@@ -27,7 +41,7 @@ const authSlice = createSlice({
   },
 })
 
-export const { saveTokens, logout } = authSlice.actions
+export const { saveTokens, saveRefreshedAccessToken, logout } = authSlice.actions
 
 export default authSlice.reducer
 

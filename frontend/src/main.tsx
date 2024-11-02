@@ -8,11 +8,14 @@ import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
 import { Provider } from 'react-redux'
 import { store } from './store/store.ts'
+import { SnackbarProvider } from './context/SnackbarProvider.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Provider store={store}>
-      <App />
+      <SnackbarProvider>
+        <App />
+      </SnackbarProvider>
     </Provider>
   </StrictMode>,
 )

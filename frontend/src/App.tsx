@@ -1,14 +1,14 @@
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import { RouterProvider } from 'react-router-dom'
-// import { useRefreshAccessToken } from './hooks/auth/useRefreshAccessToken'
 import { createTheme, ThemeProvider } from '@mui/material'
 import { router } from './router'
 import { takeMeToSurveyPhase } from './utils/takeMeToSurveyPhase'
 import PathChangeListener from './utils/PathChangeListener'
-import { SnackbarProvider } from './context/SnackbarProvider'
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { getLoggedIn } from './store/slices/authSlice'
+import { getSnackbarValue } from './store/slices/snackbarSlice'
+import { useSnackbar } from './hooks/useSnackbar'
 
 const theme = createTheme({
   palette: {
@@ -47,14 +47,21 @@ function App() {
   //   }
   // }, [loggedIn])
 
+  const snackbarValue = useSelector(getSnackbarValue)
+  const showSnackbar = useSnackbar()
+
+  useEffect(() => {
+    if (snackbarValue) {
+      showSnackbar(snackbarValue.message, snackbarValue.severity)
+    }
+  }, [snackbarValue, showSnackbar])
+
   return (
-    <SnackbarProvider>
-      <GoogleOAuthProvider clientId={'630669205687-ukc7rkopmrfomse2g04uei1gkhdvo2o0.apps.googleusercontent.com'}>
-        <ThemeProvider theme={theme}>
-          <RouterProvider router={router} />
-        </ThemeProvider>
-      </GoogleOAuthProvider>
-    </SnackbarProvider>
+    <GoogleOAuthProvider clientId={'630669205687-ukc7rkopmrfomse2g04uei1gkhdvo2o0.apps.googleusercontent.com'}>
+      <ThemeProvider theme={theme}>
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </GoogleOAuthProvider>
   )
 }
 

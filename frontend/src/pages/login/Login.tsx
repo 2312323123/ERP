@@ -9,7 +9,6 @@ import { apiPathBase } from '../../config/constants'
 import { logNetworkError, NetworkError } from '../../utils/logNetworkError'
 import { logNetworkSuccess } from '../../utils/logNetworkSuccess'
 import { useGoogleAuth } from '../../hooks/auth/useGoogleAuth'
-import { jwtDecode } from 'jwt-decode'
 import { router } from '../../router'
 import { Box, Typography, Button } from '@mui/material'
 
@@ -39,15 +38,10 @@ const Login = () => {
       logNetworkSuccess(res, '430f394u0')
 
       if (res.data.accountExists && res.data.accessToken && res.data.refreshToken) {
-        const { exp } = jwtDecode(res.data.accessToken)
-        if (!exp) {
-          throw new Error('Access token does not have exp field 54t3r4r')
-        }
         dispatch(
           saveTokens({
             accessToken: res.data.accessToken,
             refreshToken: res.data.refreshToken,
-            accessTokenExp: exp,
           }),
         )
       } else {

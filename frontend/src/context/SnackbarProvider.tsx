@@ -14,7 +14,7 @@ export const SnackbarContext = createContext<SnackbarContextType | undefined>(un
 export const SnackbarProvider: React.FC<Props> = ({ children }: Props) => {
   const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: SnackbarSeverity }>({
     open: false,
-    message: 'dupa',
+    message: 'no message',
     severity: 'info', // Default severity
   })
   const [snackbarKey, setSnackbarKey] = useState(true)

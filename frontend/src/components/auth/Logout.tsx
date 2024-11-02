@@ -1,4 +1,4 @@
-import useLogout from '../../hooks/surveys/useLogout'
+import useLogout from '../../hooks/auth/useLogout'
 
 interface Props {
   children?: React.ReactNode

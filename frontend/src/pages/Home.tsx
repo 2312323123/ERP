@@ -9,7 +9,6 @@ import { jwtDecode } from 'jwt-decode'
 import { apiPathBase } from '../config/constants'
 import { useSelector } from 'react-redux'
 import { getAccessToken, getRefreshToken } from '../store/slices/authSlice'
-import { useRefreshAccessToken } from '../hooks/auth/useRefreshAccessToken'
 
 const Home = () => {
   const refreshToken = useSelector(getRefreshToken)
@@ -45,14 +44,9 @@ const Home = () => {
     console.log(jwtDecode(refreshToken))
   }
 
-  const refreshAccessToken = useRefreshAccessToken()
-
   return (
     <>
       <h1>Home Page</h1>
-      <Button variant="contained" color="primary" onClick={refreshAccessToken}>
-        refresh access token
-      </Button>
       <Button variant="contained" color="primary" onClick={logAccessTokens}>
         log access tokens
       </Button>
