@@ -4,6 +4,7 @@ import surveySettingsPageReducer from './slices/surveyStage/surveySettingsPageSl
 import surveyUniversalReducer from './slices/surveyStage/surveyUniversalSlice'
 import { erpApi } from '../services/erp' // Import the survey API
 import authReducer from './slices/authSlice'
+import { authApi } from '../services/auth'
 
 // Create the Redux store
 export const store = configureStore({
@@ -13,8 +14,9 @@ export const store = configureStore({
     surveyUniversal: surveyUniversalReducer,
     [erpApi.reducerPath]: erpApi.reducer, // Add erpApi reducer
     auth: authReducer,
+    [authApi.reducerPath]: authApi.reducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(erpApi.middleware), // Add erpApi middleware
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(erpApi.middleware).concat(authApi.middleware), // Add middlewares
 })
 
 // Optional: Set up typed hooks (useDispatch, useSelector)

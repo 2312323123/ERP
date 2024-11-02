@@ -26,12 +26,6 @@ import StarsIcon from '@mui/icons-material/Stars'
 import HelpIcon from '@mui/icons-material/Help'
 import FeedbackIcon from '@mui/icons-material/Feedback'
 import SettingsIcon from '@mui/icons-material/Settings'
-// import axios from 'axios'
-// import { logNetworkSuccess } from '../utils/logNetworkSuccess'
-// import { logNetworkError, NetworkError } from '../utils/logNetworkError'
-// import { AppContext } from '../App'
-// import { getActiveRecruitment, setActiveRecruitment } from '../store/slices/surveyStage/surveyUniversalSlice'
-// import { useDispatch, useSelector } from 'react-redux'
 import { useGetActiveRecruitmentQuery } from '../services/erp'
 
 const drawerWidth = 240
@@ -71,30 +65,6 @@ const SurveysNavbar = (props: Props) => {
     error: activeRecruitmentError,
     isLoading: activeRecruitmentIsLoading,
   } = useGetActiveRecruitmentQuery()
-
-  // const { apiPathBase } = useContext(AppContext)
-  // const dispatch = useDispatch()
-  // const handleFetchActiveRecruitment = useCallback(async () => {
-  //   try {
-  //     // setButtonsBlocked(true)
-  //     const res = await axios.get(`${apiPathBase}/api/surveys/active-recruitment-name-uuid`)
-  //     logNetworkSuccess(res, '34rt546y7')
-
-  //     if (res.data) {
-  //       dispatch(setActiveRecruitment({ name: res.data.name, uuid: res.data.uuid }))
-  //     } else {
-  //       dispatch(setActiveRecruitment(undefined))
-  //     }
-  //   } catch (error) {
-  //     logNetworkError(error as NetworkError, 'i87y6t5r4')
-  //   }
-  // }, [apiPathBase, dispatch])
-
-  // const activeRecruitment = useSelector(getActiveRecruitment)
-
-  // useEffect(() => {
-  //   handleFetchActiveRecruitment()
-  // }, [handleFetchActiveRecruitment])
 
   const drawer = (
     <div>

@@ -6,6 +6,9 @@ import { router } from './router'
 import { takeMeToSurveyPhase } from './utils/takeMeToSurveyPhase'
 import PathChangeListener from './utils/PathChangeListener'
 import { SnackbarProvider } from './context/SnackbarProvider'
+import { useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import { getLoggedIn } from './store/slices/authSlice'
 
 const theme = createTheme({
   palette: {
@@ -31,6 +34,8 @@ function App() {
   //     takeMeToSurveyPhase()
   //   }
   // }, [loggedIn])
+
+  // const loggedIn = useSelector(getLoggedIn)
 
   // // permament
   // useEffect(() => {

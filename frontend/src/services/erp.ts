@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { apiPathBase } from '../config/constants'
 
 // Define a TypeScript interface for the survey recruitment response
 export interface SurveyRecruitment {
@@ -39,7 +40,7 @@ export interface SurveySettingsImported extends SurveySettingsExported {
 // Define a service using a base URL and expected endpoints
 export const erpApi = createApi({
   reducerPath: 'erpApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:10016/' }),
+  baseQuery: fetchBaseQuery({ baseUrl: apiPathBase + '/' }),
   endpoints: (builder) => ({
     getAllRecruitments: builder.query<SurveyRecruitment[], void>({
       query: () => 'api/surveys/all-recruitments-uuid-name-start-date',
