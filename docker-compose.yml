@@ -143,6 +143,7 @@ services:
       - DB_NAME=${SURVEY_SERVICE_DB_NAME}
       - DB_USERNAME=${SURVEY_SERVICE_DB_USER}
       - DB_PASSWORD=${SURVEY_SERVICE_DB_PASSWORD}
+      - RSA_PUBLIC_KEY_FOR_JWT=${RSA_PUBLIC_KEY_FOR_JWT}
     stdin_open: true
     tty: true
     depends_on:

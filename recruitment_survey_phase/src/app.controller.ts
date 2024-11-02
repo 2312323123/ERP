@@ -6,6 +6,7 @@ import { CreateAcceptsSurveyDto } from './accepts_surveys/dto/create-accepts_sur
 import { CreateRecruitmentDto } from './recruitments/dto/create-recruitment.dto';
 import { RecruitmentRelatedData } from './recruitments/dto/create-recruitment-related-data-for-frontend.dto';
 import { UndefinedCheckPipe } from './pipes/undefined-check.pipe';
+import { Roles } from './auth/roles.decorator';
 
 @Controller()
 export class AppController {

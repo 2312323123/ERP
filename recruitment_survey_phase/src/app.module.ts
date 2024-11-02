@@ -14,6 +14,9 @@ import { SeederService } from './seeder/seeder.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CanEvaluateSurveysModule } from './can_evaluate_surveys/can_evaluate_surveys.module';
 import { CanPeopleSeeRecruitmentModule } from './can_people_see_recruitment/can_people_see_recruitment.module';
+import { JwtModule } from '@nestjs/jwt';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './auth/roles.guard';
 
 @Module({
   imports: [
@@ -38,8 +41,21 @@ import { CanPeopleSeeRecruitmentModule } from './can_people_see_recruitment/can_
     MarkGradeNamesModule,
     CanEvaluateSurveysModule,
     CanPeopleSeeRecruitmentModule,
+    JwtModule.register({
+      publicKey: process.env.RSA_PUBLIC_KEY_FOR_JWT, // your public RSA key
+      signOptions: {
+        algorithm: 'RS256', // use RS256 algorithm
+      },
+    }),
   ],
   controllers: [AppController],
-  providers: [AppService, SeederService],
+  providers: [
+    AppService,
+    SeederService,
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+  ],
 })
 export class AppModule {}
