@@ -106,6 +106,55 @@ got replaced by this:
 
 in some other cases checking this has been moved deeper to service.
 
+- add authorisation guards:
+  - in service's docker-compose: `- RSA_PUBLIC_KEY_FOR_JWT=${RSA_PUBLIC_KEY_FOR_JWT}`
+  - in the service: `npm install @nestjs/jwt`
+  - copy the whole `/src/auth` folder from i.e. recruitment_survey_phase
+  - new app.module.ts imports:
+
+```TS
+import { JwtModule } from '@nestjs/jwt';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './auth/roles.guard';
+```
+
+- add this to app.module.ts imports array:
+
+```TS
+
+    JwtModule.register({
+      publicKey: process.env.RSA_PUBLIC_KEY_FOR_JWT, // your public RSA key
+      signOptions: {
+        algorithm: 'RS256', // use RS256 algorithm
+      },
+    }),
+```
+
+- add this to app.module.ts providers array:
+
+```TS
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+```
+
+- and then in controller you just import Roles from auth/roles.decorator and add the roles that can access given endpoint per endpoint like this:
+
+```TS
+  @Roles('SUPERADMIN')
+  @Get('/api/surveys/admin-only')
+  getAdminResource() {
+    return { message: 'This is an admin-only resource' };
+  }
+
+  @Roles('USER', 'SUPERADMIN')
+  @Get('/api/surveys/user-or-admin')
+  getUserOrAdminResource() {
+    return { message: 'This is accessible by user or admin' };
+  }
+```
+
 ---
 
 #### Configuring Dockerfile and docker-compose.yml for the new service
