@@ -271,7 +271,16 @@ CMD [ "npm", "run", "dev" ]
     `showSnackbar('Zapisano zmiany!', 'success')` for success,
     `showSnackbar('An error occurred.', 'error')showSnackbar('An error occurred.', 'error')` for error
     there's also 'info' and 'warning'
+    - the other way is `dispatch(setSnackbar({ message: \<message\>, severity \<severity\>}))`
   - the whole mutation action with snackbar may be isolated like in the case of useSaveRecruitmentSettings.ts, then all you do is call saveRecruitmentSettings()
+  - appending of bearer tokens to api requests is done automatically by changing `baseQuery: fetchBaseQuery({ baseUrl: apiPathBase + '/' }),` to `baseQuery: baseQueryWithReauth,` in api definitions in services folder (and when you don't want to have it take effect in a particular endpoint, you put skipAuth in extraOptions, next to query, like this:
+  ```TS
+    baseQueryTestSkipAuth: builder.query<void, void>({
+      query: () => 'api/surveys/all-recruitments-uuid-name-start-date',
+      extraOptions: { skipAuth: true },
+    }),
+  ```
+  )
 
 #### some tech used in frontend
 
