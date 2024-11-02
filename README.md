@@ -155,6 +155,15 @@ import { RolesGuard } from './auth/roles.guard';
   }
 ```
 
+- if the new microservice sets up some new roles:
+  - go to its folder
+  - `npm install @nestjs/axios`
+  - `nest g s`
+  - `init_roles`
+  - then copy init roles contents from some other service, i.e. auth_and_permissions one
+  - if it doesn't see nest/axios in here `import { HttpService } from '@nestjs/axios';`, then for me restarting IDE after trying everything else has helped
+  - and also you have to put `HttpModule` from @nestjs/axios among app.module.ts imports array
+
 ---
 
 #### Configuring Dockerfile and docker-compose.yml for the new service
@@ -405,3 +414,6 @@ and you still need to replace newlines in private key with \n, and then store bo
       throw new NotFoundException('Recruitment not found');
     }
 ```
+
+- generate CRUD component boilerplate (I've used this per-table): `nest g resource`, https://docs.nestjs.com/recipes/crud-generator
+- generate service (used for services that were not included in the above): `nest g s`, https://docs.nestjs.com/cli/usages
