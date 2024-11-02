@@ -17,6 +17,8 @@ import { CanPeopleSeeRecruitmentModule } from './can_people_see_recruitment/can_
 import { JwtModule } from '@nestjs/jwt';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './auth/roles.guard';
+import { InitRolesService } from './init_roles/init_roles.service';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -47,6 +49,7 @@ import { RolesGuard } from './auth/roles.guard';
         algorithm: 'RS256', // use RS256 algorithm
       },
     }),
+    HttpModule,
   ],
   controllers: [AppController],
   providers: [
@@ -56,6 +59,7 @@ import { RolesGuard } from './auth/roles.guard';
       provide: APP_GUARD,
       useClass: RolesGuard,
     },
+    InitRolesService,
   ],
 })
 export class AppModule {}
