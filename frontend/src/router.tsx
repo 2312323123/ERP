@@ -18,7 +18,7 @@ export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<PathChangeListener />}>
       <Route path="login" element={<Login />} />
-      <Route index element={<Navigate to="/home" replace />} />
+      <Route index element={<Navigate to="/login" replace />} /> {/* this line makes you start at /login */}
       <Route path="/home" element={<Navbar />}>
         <Route index element={<Home />} />
         <Route path="other-page" element={<OtherPage />} />

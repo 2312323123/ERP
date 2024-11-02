@@ -35,17 +35,17 @@ function App() {
   //   }
   // }, [loggedIn])
 
-  // const loggedIn = useSelector(getLoggedIn)
+  const loggedIn = useSelector(getLoggedIn)
 
-  // // permament
-  // useEffect(() => {
-  //   // if not logged in, redirect to login page
-  //   if (!loggedIn) {
-  //     router.navigate('/login')
-  //   } else {
-  //     router.navigate('/')
-  //   }
-  // }, [loggedIn])
+  // permament
+  useEffect(() => {
+    // if not logged in, redirect to login page
+    if (!loggedIn) {
+      router.navigate('/login')
+    } else {
+      router.navigate('/home')
+    }
+  }, [loggedIn])
 
   const snackbarValue = useSelector(getSnackbarValue)
   const showSnackbar = useSnackbar()
