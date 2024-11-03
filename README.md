@@ -110,7 +110,7 @@ in some other cases checking this has been moved deeper to service.
   - in service's docker-compose: `- RSA_PUBLIC_KEY_FOR_JWT=${RSA_PUBLIC_KEY_FOR_JWT}`
   - in the service: `npm install @nestjs/jwt`
   - copy the whole `/src/auth` folder from i.e. recruitment_survey_phase
-  - new app.module.ts imports:
+  - add new app.module.ts imports:
 
 ```TS
 import { JwtModule } from '@nestjs/jwt';
@@ -154,6 +154,7 @@ import { RolesGuard } from './auth/roles.guard';
     return { message: 'This is accessible by user or admin' };
   }
 ```
+and if there is no role required, then chances are some token is being sent as parameter - in such case please verify the token as soon as it enters the system, like was done in `logout` in app.controller.js of auth_and_permissions
 
 - if the new microservice sets up some new roles:
   - go to its folder
