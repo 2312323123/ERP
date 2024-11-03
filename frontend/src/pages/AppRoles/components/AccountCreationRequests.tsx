@@ -1,10 +1,6 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
-import { useCallback, useEffect, useState } from 'react'
-import { logNetworkSuccess } from '../../../utils/logNetworkSuccess'
-import { logNetworkError, NetworkError } from '../../../utils/logNetworkError'
-import axios from 'axios'
 import UserInfo from './UserInfo'
-import { apiPathBase } from '../../../config/constants'
+import { useGetAccountCreationRequestsQuery } from '../../../services/auth'
 
 export interface AccountCreationRequest {
   email: string
@@ -18,26 +14,7 @@ export interface AccountCreationRequest {
 
 const AccountCreationRequests = () => {
   // [{role, description}, ...]
-  const [allAccountCreationRequests, setAccountCreationRequests] = useState<AccountCreationRequest[]>()
-
-  const refresh = useCallback(() => {
-    // get all roles
-    const getAllRoles = async () => {
-      try {
-        const res = await axios.get(`${apiPathBase}/api/auth/get-account-creation-requests`)
-        logNetworkSuccess(res, 'i7u6yt54')
-        setAccountCreationRequests(res.data)
-      } catch (error) {
-        logNetworkError(error as NetworkError, 'e458i54r')
-      }
-    }
-
-    getAllRoles()
-  }, [])
-
-  useEffect(() => {
-    refresh()
-  }, [refresh])
+  const { data: allAccountCreationRequests, error, isLoading } = useGetAccountCreationRequestsQuery()
 
   return (
     <>
@@ -57,7 +34,7 @@ const AccountCreationRequests = () => {
               allAccountCreationRequests.map((row) => (
                 <TableRow key={row.id}>
                   <TableCell component="th" scope="row">
-                    <UserInfo user={row} refresh={refresh} />
+                    <UserInfo user={row} />
                   </TableCell>
                 </TableRow>
               ))}

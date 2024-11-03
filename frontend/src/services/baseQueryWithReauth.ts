@@ -1,7 +1,6 @@
 import { BaseQueryApi, BaseQueryFn, FetchArgs, fetchBaseQuery, FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { apiPathBase } from '../config/constants'
 import { RootState } from '../store/store'
-import { jwtDecode } from 'jwt-decode'
 import { logout, saveRefreshedAccessToken } from '../store/slices/authSlice'
 import { setSnackbar } from '../store/slices/snackbarSlice'
 import { router } from '../router'
@@ -43,7 +42,6 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
         url: 'api/auth/refresh',
         method: 'POST',
         body: {
-          id: (jwtDecode(refreshToken) as { id: string }).id, // refreshToken has id field
           refresh_token: refreshToken,
         },
       },

@@ -1,12 +1,8 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
-import { useCallback, useEffect, useState } from 'react'
-import { logNetworkSuccess } from '../../../utils/logNetworkSuccess'
-import { logNetworkError, NetworkError } from '../../../utils/logNetworkError'
-import axios from 'axios'
-import { apiPathBase } from '../../../config/constants'
 import UserInfoNoButtons from './UserInfoNoButtons'
 import RoleButtonOwned from './RoleButtonOwned'
 import RoleButtonNotOwned from './RoleButtonNotOwned'
+import { useGetUsersWithTheirRolesQuery } from '../../../services/auth'
 
 export interface UserWithTheirRoles {
   createdAt: string
@@ -21,30 +17,7 @@ export interface UserWithTheirRoles {
 }
 
 const UsersWithTheirRoles = ({ allRolesRoles }: { allRolesRoles: string[] }) => {
-  const [buttonsBlocked, setButtonsBlocked] = useState(false)
-
-  // [{role, description}, ...]
-  const [allUsersWithTheirRoles, setAllUsersWithTheirRoles] = useState<UserWithTheirRoles[]>()
-
-  const refresh = useCallback(() => {
-    // get all roles
-    const getAllRoles = async () => {
-      try {
-        const res = await axios.get(`${apiPathBase}/api/auth/get-users-with-their-roles`)
-        logNetworkSuccess(res, 'e47tr3e9')
-        setAllUsersWithTheirRoles(res.data)
-        setButtonsBlocked(false)
-      } catch (error) {
-        logNetworkError(error as NetworkError, 'i8t54t54')
-      }
-    }
-
-    getAllRoles()
-  }, [])
-
-  useEffect(() => {
-    refresh()
-  }, [refresh])
+  const { data: allUsersWithTheirRoles, error, isLoading } = useGetUsersWithTheirRolesQuery()
 
   return (
     <>
@@ -70,26 +43,14 @@ const UsersWithTheirRoles = ({ allRolesRoles }: { allRolesRoles: string[] }) => 
                   </TableCell>
                   <TableCell align="left">
                     {row.roles.map((role) => (
-                      <RoleButtonOwned
-                        user={row}
-                        role={role.role}
-                        buttonsBlocked={buttonsBlocked}
-                        setButtonsBlocked={setButtonsBlocked}
-                        refresh={refresh}
-                      />
+                      <RoleButtonOwned key={role.role} user={row} role={role.role} buttonsBlocked={isLoading} />
                     ))}
                   </TableCell>
                   <TableCell align="left">
                     {allRolesRoles
                       .filter((role) => !row.roles.map((role) => role.role).includes(role))
                       .map((role) => (
-                        <RoleButtonNotOwned
-                          user={row}
-                          role={role}
-                          buttonsBlocked={buttonsBlocked}
-                          setButtonsBlocked={setButtonsBlocked}
-                          refresh={refresh}
-                        />
+                        <RoleButtonNotOwned key={role} user={row} role={role} buttonsBlocked={isLoading} />
                       ))}
                   </TableCell>
                 </TableRow>

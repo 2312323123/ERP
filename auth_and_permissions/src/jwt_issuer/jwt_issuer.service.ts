@@ -75,7 +75,9 @@ export class JwtIssuerService {
     });
   }
 
-  async removeRefreshToken(id: string, token: string): Promise<void> {
+  async removeRefreshToken(token: string): Promise<void> {
+    const { id } = this.jwtService.decode(token).id;
+
     const tokens = await this.tokensService.findOne(id);
     if (!tokens) {
       throw new NotFoundException('Tokens entry not found 434r43r2');
@@ -95,7 +97,16 @@ export class JwtIssuerService {
     await this.tokensService.updateRefreshTokens(id, in_app_refresh_tokens);
   }
 
-  async refresh(id: string, refreshToken: string) {
+  async refresh(refreshToken: string) {
+    try {
+      // Simply verify the token
+      this.jwtService.verify(refreshToken);
+    } catch {
+      throw new UnauthorizedException('Invalid JWT token');
+    }
+
+    const { id } = this.jwtService.decode(refreshToken);
+
     const tokens = await this.tokensService.findOne(id);
     if (!tokens) {
       throw new NotFoundException('Tokens entry not found 5r3542');

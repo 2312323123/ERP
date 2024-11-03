@@ -83,24 +83,21 @@ const Login = () => {
     }
   }
 
-  const acceptMaciek = async () => {
+  const acceptDwaciekStupidWay = async () => {
     try {
-      const res = await axios.post(`${apiPathBase}/api/auth/account-creation-decision`, {
-        id: '105887563550899714086',
-        action: 'accept',
-      })
-      logNetworkSuccess(res, 'i7764t4')
-    } catch (error) {
-      logNetworkError(error as NetworkError, 'u565t43r')
-    }
-  }
-
-  const acceptMaciekStupidWay = async () => {
-    try {
-      const res = await axios.post(`${apiPathBase}/api/auth/account-creation-decision-maciek`)
+      const res = await axios.post(`${apiPathBase}/api/auth/let-dwaciek-in`)
       logNetworkSuccess(res, '6yi7i8uy')
     } catch (error) {
       logNetworkError(error as NetworkError, '23er46y')
+    }
+  }
+
+  const giveMeSuperadmin = async () => {
+    try {
+      const res = await axios.post(`${apiPathBase}/api/auth/give-dwaciek-superadmin`)
+      logNetworkSuccess(res, '654534r4')
+    } catch (error) {
+      logNetworkError(error as NetworkError, '3r4ty76')
     }
   }
 
@@ -144,8 +141,8 @@ const Login = () => {
             Zaloguj przy użyciu Google
           </Button>
           <div>
-            <button onClick={acceptMaciek}>Accept Maciek as user</button>
-            <button onClick={acceptMaciekStupidWay}>Accept Maciek as user (stupid way)</button>
+            <button onClick={giveMeSuperadmin}>Give Me admin (stupid way)</button>
+            <button onClick={acceptDwaciekStupidWay}>Let Me in (stupid way)</button>
             <button onClick={() => router.navigate('/home')}>Go Home</button>
           </div>
           {receivedIdToken && (

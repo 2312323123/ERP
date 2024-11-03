@@ -298,13 +298,13 @@ export class AppService {
   }
 
   // login purposes
-  async logout(id: string, refreshToken: string) {
-    await this.jwtIssuerService.removeRefreshToken(id, refreshToken);
+  async logout(refreshToken: string) {
+    await this.jwtIssuerService.removeRefreshToken(refreshToken);
   }
 
   // login purposes
-  async refresh(id: string, refreshToken: string) {
-    return this.jwtIssuerService.refresh(id, refreshToken);
+  async refresh(refreshToken: string) {
+    return this.jwtIssuerService.refresh(refreshToken);
   }
 
   // role panel purposes

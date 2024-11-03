@@ -13,10 +13,22 @@ import { HstoreInitializerService } from './hstore_initializer/hstore_initialize
 import { TokensModule } from './tokens/tokens.module';
 import { JwtModule } from '@nestjs/jwt';
 import { EmailService } from './email/email.service';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './auth/roles.guard';
 
 @Module({
   controllers: [AppController],
-  providers: [AppService, InitRolesService, JwtIssuerService, HstoreInitializerService, EmailService],
+  providers: [
+    AppService,
+    InitRolesService,
+    JwtIssuerService,
+    HstoreInitializerService,
+    EmailService,
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+  ],
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',

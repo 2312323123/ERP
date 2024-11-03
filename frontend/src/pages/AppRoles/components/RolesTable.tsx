@@ -1,31 +1,10 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
-import { useEffect } from 'react'
-import { logNetworkSuccess } from '../../../utils/logNetworkSuccess'
-import { logNetworkError, NetworkError } from '../../../utils/logNetworkError'
-import axios from 'axios'
-import { apiPathBase } from '../../../config/constants'
 
 interface Props {
   allRoles: { role: string; description: string }[]
-  setAllRoles: (value: { role: string; description: string }[]) => void
 }
 
-const RolesTable = ({ allRoles, setAllRoles }: Props) => {
-  useEffect(() => {
-    // get all roles
-    const getAllRoles = async () => {
-      try {
-        const res = await axios.get(`${apiPathBase}/api/auth/get-all-roles`)
-        logNetworkSuccess(res, '67u786y')
-        setAllRoles(res.data)
-      } catch (error) {
-        logNetworkError(error as NetworkError, '3r4ty76')
-      }
-    }
-
-    getAllRoles()
-  }, [setAllRoles])
-
+const RolesTable = ({ allRoles }: Props) => {
   return (
     <>
       <Typography variant="h3" component="h3">

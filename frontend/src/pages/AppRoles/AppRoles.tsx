@@ -1,13 +1,41 @@
 import { Box, Button } from '@mui/material'
-import { useState } from 'react'
 import { router } from '../../router'
 import RolesTable from './components/RolesTable'
 import AccountCreationRequests from './components/AccountCreationRequests'
 import UsersWithTheirRoles from './components/UsersWithTheirRoles'
+import { useGetAllRolesQuery } from '../../services/auth'
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 
 const AppRoles = () => {
   // [{role, description}, ...]
-  const [allRoles, setAllRoles] = useState<{ role: string; description: string }[]>([])
+  const { data: allRoles, error, isLoading } = useGetAllRolesQuery()
+
+  if (error) {
+    if ((error as FetchBaseQueryError).status === 401) {
+      return (
+        <>
+          <Button variant="contained" color="primary" onClick={() => router.navigate('/home')}>
+            Back to Home
+          </Button>
+          <div>Forbidden</div>
+        </>
+      )
+    } else {
+      return (
+        <>
+          <Button variant="contained" color="primary" onClick={() => router.navigate('/home')}>
+            Back to Home
+          </Button>
+          <div>Error:</div>
+          <pre>{JSON.stringify(error, null, 2)}</pre>
+        </>
+      )
+    }
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
 
   return (
     <>
@@ -17,11 +45,11 @@ const AppRoles = () => {
       <br />
       <br />
       <div>AppRoles</div>
-      <RolesTable allRoles={allRoles} setAllRoles={setAllRoles} />
+      {allRoles && <RolesTable allRoles={allRoles} />}
       <Box my={2} /> {/* Spacer with margin on the y-axis */}
       <AccountCreationRequests />
       <Box my={2} /> {/* Spacer with margin on the y-axis */}
-      <UsersWithTheirRoles allRolesRoles={allRoles.map((role) => role.role)} />
+      {allRoles && <UsersWithTheirRoles allRolesRoles={allRoles.map((role) => role.role)} />}
     </>
   )
 }

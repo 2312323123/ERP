@@ -1,44 +1,24 @@
 import { Button } from '@mui/material'
-import axios from 'axios'
-import { logNetworkSuccess } from '../../../utils/logNetworkSuccess'
-import { logNetworkError, NetworkError } from '../../../utils/logNetworkError'
 import { UserWithTheirRoles } from './UsersWithTheirRoles'
-import { apiPathBase } from '../../../config/constants'
+import useGiveRole from '../../../hooks/roles/useGiveRole'
 
 interface Props {
   user: UserWithTheirRoles
   role: string
   buttonsBlocked: boolean
-  setButtonsBlocked: (value: boolean) => void
-  refresh: () => void
 }
 
-const RoleButtonNotOwned = ({ user, role, buttonsBlocked, setButtonsBlocked, refresh }: Props) => {
+const RoleButtonNotOwned = ({ user, role, buttonsBlocked }: Props) => {
   const { id } = user
-
-  const handleClick = async () => {
-    try {
-      setButtonsBlocked(true)
-      const res = await axios.post(`${apiPathBase}/api/auth/give-role`, {
-        id,
-        role,
-      })
-      logNetworkSuccess(res, 'r46y7ut4')
-      refresh()
-    } catch (error) {
-      logNetworkError(error as NetworkError, 'u67y4r4r3')
-      alert('uh oh u67y4r4r3')
-      setButtonsBlocked(false)
-    }
-  }
+  const { isLoading, callback } = useGiveRole(id, role)
 
   return (
     <Button
       sx={{ margin: '8px' }}
       variant="contained"
       color="secondary"
-      onClick={() => handleClick()}
-      disabled={buttonsBlocked}
+      onClick={callback}
+      disabled={buttonsBlocked || isLoading}
     >
       {role}
     </Button>

@@ -9,7 +9,7 @@ export class InitRolesService implements OnModuleInit {
   postDatas = [
     {
       role: 'SUPERADMIN',
-      description: 'System administrator, has all the privileges, role created by auth service',
+      description: 'System administrator, can give/take roles & accept people. Role created by auth service',
     },
     {
       role: 'USER',
