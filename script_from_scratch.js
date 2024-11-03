@@ -6,15 +6,32 @@ function myFunc() {
   for (var i = 0; i < formResponses.length; i++) {
     // this I can work on
     var formResponse = formResponses[i];
-    var itemResponses = formResponse.getItemResponses();
-    for (var j = 0; j < itemResponses.length; j++) {
-      var itemResponse = itemResponses[j];
-      Logger.log(
-        'question: "%s", response: "%s"',
-        itemResponse.getItem().getTitle(),
-        itemResponse.getResponse()
+
+    const form = FormApp.getActiveForm(); // Get the active form
+    const items = form.getItems(); // Get all items in the form
+    const itemResponses = formResponse.getItemResponses(); // Get the item responses
+
+    const responseArray = items.map((item) => {
+      const itemResponse = itemResponses.find(
+        (response) => response.getItem().getId() === item.getId()
       );
-    }
+      return {
+        index: items.indexOf(item), // Get the actual question index
+        question: item.getTitle(),
+        answer: itemResponse ? itemResponse.getResponse() : null, // Handle case where there's no response
+      };
+    });
+
+    Logger.log(JSON.stringify(responseArray));
+
+    // const form = FormApp.getActiveForm();
+    // const items = form.getItems();
+    // const formData = items.map((item) => ({
+    //   question: item.getTitle(),
+    //   type: item.getType(),
+    // }));
+
+    // Logger.log(JSON.stringify(formData));
 
     // end
   }
