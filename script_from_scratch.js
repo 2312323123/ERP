@@ -16,8 +16,8 @@ function myFunc() {
         (response) => response.getItem().getId() === item.getId()
       );
       return {
-        index: items.indexOf(item), // Get the actual question index
         question: item.getTitle(),
+        type: item.getType(),
         answer: itemResponse ? itemResponse.getResponse() : null, // Handle case where there's no response
       };
     });
