@@ -1,7 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 import counterReducer from './slices/counterSlice'
 import surveySettingsPageReducer from './slices/surveyStage/surveySettingsPageSlice'
-import surveyUniversalReducer from './slices/surveyStage/surveyUniversalSlice'
 import { erpApi } from '../services/erp' // Import the survey API
 import authReducer from './slices/authSlice'
 import { authApi } from '../services/auth'
@@ -12,7 +11,6 @@ export const store = configureStore({
   reducer: {
     counter: counterReducer,
     surveySettingsPage: surveySettingsPageReducer,
-    surveyUniversal: surveyUniversalReducer,
     [erpApi.reducerPath]: erpApi.reducer, // Add erpApi reducer
     auth: authReducer,
     [authApi.reducerPath]: authApi.reducer,

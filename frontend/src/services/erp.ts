@@ -71,6 +71,78 @@ export const erpApi = createApi({
       },
     }),
 
+    getAcceptsSurveys: builder.query<{ accepts_surveys: boolean }, void>({
+      query: () => 'api/surveys/accepts-surveys',
+      providesTags: [{ type: 'SurveyRecruitment', id: 'ACCEPTS_SURVEYS' }],
+    }),
+
+    setAcceptsSurveys: builder.mutation<void, boolean>({
+      query: (acceptsSurveys) => ({
+        url: 'api/surveys/accepts-surveys',
+        method: 'POST',
+        body: { accepts_surveys: acceptsSurveys },
+      }),
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+        try {
+          // Wait for the mutation to finish
+          await queryFulfilled
+
+          // Invalidate the cached data for the list to trigger a refetch
+          dispatch(erpApi.util.invalidateTags([{ type: 'SurveyRecruitment', id: 'ACCEPTS_SURVEYS' }]))
+        } catch (error) {
+          console.error('Error setting accepts surveys', error)
+        }
+      },
+    }),
+
+    getRecruitmentVisible: builder.query<{ can_people_see_recruitment: boolean }, void>({
+      query: () => 'api/surveys/can-people-see-recruitment',
+      providesTags: [{ type: 'SurveyRecruitment', id: 'RECRUITMENT_VISIBLE' }],
+    }),
+
+    setRecruitmentVisible: builder.mutation<void, boolean>({
+      query: (recruitmentVisible) => ({
+        url: 'api/surveys/can-people-see-recruitment',
+        method: 'POST',
+        body: { can_people_see_recruitment: recruitmentVisible },
+      }),
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+        try {
+          // Wait for the mutation to finish
+          await queryFulfilled
+
+          // Invalidate the cached data for the list to trigger a refetch
+          dispatch(erpApi.util.invalidateTags([{ type: 'SurveyRecruitment', id: 'RECRUITMENT_VISIBLE' }]))
+        } catch (error) {
+          console.error('Error setting recruitment visible', error)
+        }
+      },
+    }),
+
+    getEvaluatorsCanEvaluate: builder.query<{ can_evaluate_surveys: boolean }, void>({
+      query: () => 'api/surveys/can-evaluate-surveys',
+      providesTags: [{ type: 'SurveyRecruitment', id: 'EVALUATE_SURVEYS' }],
+    }),
+
+    setEvaluatorsCanEvaluate: builder.mutation<void, boolean>({
+      query: (canEvaluateSurveys) => ({
+        url: 'api/surveys/can-evaluate-surveys',
+        method: 'POST',
+        body: { can_evaluate_surveys: canEvaluateSurveys },
+      }),
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+        try {
+          // Wait for the mutation to finish
+          await queryFulfilled
+
+          // Invalidate the cached data for the list to trigger a refetch
+          dispatch(erpApi.util.invalidateTags([{ type: 'SurveyRecruitment', id: 'EVALUATE_SURVEYS' }]))
+        } catch (error) {
+          console.error('Error setting evaluators can evaluate', error)
+        }
+      },
+    }),
+
     // Define the POST mutation
     createRecruitment: builder.mutation<SurveyRecruitment, Partial<SurveyRecruitment>>({
       query: (newRecruitment) => ({
@@ -164,6 +236,12 @@ export const {
   useCreateRecruitmentMutation,
   useGetActiveRecruitmentSettingsQuery,
   useSetActiveRecruitmentMutation,
+  useGetAcceptsSurveysQuery,
+  useSetAcceptsSurveysMutation,
+  useGetRecruitmentVisibleQuery,
+  useSetRecruitmentVisibleMutation,
+  useGetEvaluatorsCanEvaluateQuery,
+  useSetEvaluatorsCanEvaluateMutation,
   useSaveRecruitmentSettingsMutation,
   useDeleteRecruitmentMutation,
 } = erpApi

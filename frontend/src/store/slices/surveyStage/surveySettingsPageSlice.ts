@@ -133,7 +133,6 @@ const surveySettingsPageSlice = createSlice({
 
 // Export actions for dispatching
 export const {
-  // setEvaluatorsCanEvaluate,
   setGradingInstruction,
   setFieldsNotToShow,
   handleFieldsNotToShowChange,
@@ -162,10 +161,6 @@ export const {
 export default surveySettingsPageSlice.reducer
 
 // Selectors
-// export const getEvaluatorsCanEvaluate = (state: RootState) => state.surveySettingsPage.evaluatorsCanEvaluate
-// export const getGradingInstruction = (state: RootState) =>
-//   state.surveySettingsPage.surveySettingsEditable.gradingInstruction
-
 export const getGradingInstruction = (state: RootState) =>
   state.surveySettingsPage.surveySettingsEditable.gradingInstruction
 export const getFieldsNotToShow = (state: RootState) => state.surveySettingsPage.surveySettingsEditable.fieldsNotToShow
