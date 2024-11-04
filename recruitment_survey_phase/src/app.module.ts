@@ -19,9 +19,14 @@ import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './auth/roles.guard';
 import { InitRolesService } from './init_roles/init_roles.service';
 import { HttpModule } from '@nestjs/axios';
+import { MongooseModule } from '@nestjs/mongoose';
+import { SurveysModule } from './surveys/surveys.module';
 
 @Module({
   imports: [
+    MongooseModule.forRoot(
+      `mongodb://${process.env.SURVEY_SERVICE_MONGO_USER}:${process.env.SURVEY_SERVICE_MONGO_PASSWORD}@mongo:27017/surveys_db`,
+    ),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_PSQL_SERVICE_NAME,
@@ -50,6 +55,7 @@ import { HttpModule } from '@nestjs/axios';
       },
     }),
     HttpModule,
+    SurveysModule,
   ],
   controllers: [AppController],
   providers: [

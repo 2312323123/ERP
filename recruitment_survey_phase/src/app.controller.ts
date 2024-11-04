@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Headers, HttpCode, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 import { CreateCanPeopleSeeRecruitmentDto } from './can_people_see_recruitment/dto/create-can_people_see_recruitment.dto';
 import { CreateCanEvaluateSurveyDto } from './can_evaluate_surveys/dto/create-can_evaluate_survey.dto';
@@ -15,11 +15,6 @@ export class AppController {
   // @Get()
   // getHello1(): string {
   //   return this.appService.getHello();
-  // }
-
-  // @Get('/api/surveys')
-  // getHello(): string {
-  //   return 'Hello World auth!';
   // }
 
   @Roles('USER', 'SUPERADMIN')
@@ -117,5 +112,13 @@ export class AppController {
       throw new BadRequestException('Invalid recruitment UUID');
     }
     await this.appService.deleteRecruitment(uuid);
+  }
+
+  @Post('/api/surveys/new-survey')
+  async createSurvey(
+    @Headers('authorization') authHeader: string,
+    @Body('responses', UndefinedCheckPipe) responses: [],
+  ) {
+    return this.appService.newSurvey(authHeader, responses);
   }
 }

@@ -1,1 +1,3 @@
-export class CreateSurveyMetadataDto {}
+export class CreateSurveyMetadataDto {
+  recruitmentUuid: string;
+}

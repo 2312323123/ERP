@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ActiveRecruitmentService } from './active_recruitment/active_recruitment.service';
 import { RecruitmentsService } from './recruitments/recruitments.service';
 import { CanPeopleSeeRecruitmentService } from './can_people_see_recruitment/can_people_see_recruitment.service';
@@ -15,7 +15,18 @@ import { FieldsHiddenForSurveyEvaluatorsService } from './fields_hidden_for_surv
 import { EvaluationSchemasService } from './evaluation_schemas/evaluation_schemas.service';
 import { MarkGradeNamesService } from './mark_grade_names/mark_grade_names.service';
 import { CreateMarkGradeNameDto } from './mark_grade_names/dto/create-mark_grade_name.dto';
+import { SurveysService } from './surveys/surveys.service';
+import { SurveyMetadatasService } from './survey_metadatas/survey_metadatas.service';
 
+function extractBearerToken(authHeader: string) {
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    throw new UnauthorizedException('No Bearer token found');
+  }
+
+  const token = authHeader.split(' ')[1]; // Extract the token part
+  // You can now use the token for further processing, like verifying it
+  return token;
+}
 @Injectable()
 export class AppService {
   constructor(
@@ -27,6 +38,8 @@ export class AppService {
     private readonly fieldsHiddenForSurveyEvaluatorsService: FieldsHiddenForSurveyEvaluatorsService,
     private readonly evaluationSchemasService: EvaluationSchemasService,
     private readonly markGradeNamesService: MarkGradeNamesService,
+    private readonly surveysService: SurveysService,
+    private readonly surveyMetadatasService: SurveyMetadatasService,
   ) {}
 
   getHello(): string {
@@ -120,5 +133,40 @@ export class AppService {
 
   async deleteRecruitment(uuid: string) {
     await this.recruitmentsService.delete(uuid);
+  }
+
+  async newSurvey(authHeader: string, responses: []) {
+    const token = extractBearerToken(authHeader);
+
+    // also throws if no active recruitment
+    const activeRecruitmentToken = await this.activeRecruitmentService.getActiveRecruitmentToken();
+
+    if (token !== activeRecruitmentToken) {
+      throw new BadRequestException();
+    }
+
+    if (!responses.length) {
+      throw new BadRequestException();
+    }
+
+    const activeRecruitmentNameUuid = await this.getActiveRecruitmentNameUuid();
+
+    if (!activeRecruitmentNameUuid) {
+      throw new BadRequestException();
+    }
+
+    // check if accepts_surveys is true
+    const acceptsSurveys = await this.acceptsSurveysService.getAcceptsSurveys();
+
+    if (!acceptsSurveys.accepts_surveys) {
+      throw new BadRequestException('Surveys accepting is turned off');
+    }
+
+    const surveyMetadata = await this.surveyMetadatasService.create({
+      recruitmentUuid: activeRecruitmentNameUuid.uuid,
+    });
+
+    // save the responses
+    await this.surveysService.create({ uuid: surveyMetadata.uuid, responses });
   }
 }

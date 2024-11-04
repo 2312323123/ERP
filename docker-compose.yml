@@ -38,19 +38,23 @@ services:
   #   networks:
   #     - backend
 
-  # mongo:
-  #   image: mongo
-  #   restart: always
-  #   environment:
-  #     MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-  #     MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-  #     MONGO_INITDB_DATABASE: surveys_db # Set the default database name
-  #   # UNCOMMENT THIS TO PERSIST DATA
-  #   # volumes:
-  #   #   - mongo_data:/data/db # Persist data
-  #   networks:
-  #     - backend
-  #     - db_admin_mongo
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    # UNCOMMENT THIS TO PERSIST DATA
+    # volumes:
+    #   - mongo_data:/data/db # Persist data
+    ports:
+      - "27017:27017"
+    networks:
+      - backend
+      - db_admin_mongo
+    configs:
+      - source: mongo-init-script
+        target: /docker-entrypoint-initdb.d/mongo-init.js
 
   pgadmin:
     build:
@@ -81,19 +85,19 @@ services:
     depends_on:
       - db-psql
 
-  # mongo-express:
-  #   image: mongo-express
-  #   restart: always
-  #   ports:
-  #     - 8081:8081
-  #   environment:
-  #     ME_CONFIG_BASICAUTH_USERNAME: ${ME_CONFIG_BASICAUTH_USERNAME}
-  #     ME_CONFIG_BASICAUTH_PASSWORD: ${ME_CONFIG_BASICAUTH_PASSWORD}
-  #     ME_CONFIG_MONGODB_URL: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/
-  #   networks:
-  #     - db_admin_mongo
-  #   depends_on:
-  #     - mongo
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: ${ME_CONFIG_BASICAUTH_USERNAME}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${ME_CONFIG_BASICAUTH_PASSWORD}
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/
+    networks:
+      - db_admin_mongo
+    depends_on:
+      - mongo
 
   auth_and_permissions:
     build:
@@ -144,10 +148,13 @@ services:
       - DB_USERNAME=${SURVEY_SERVICE_DB_USER}
       - DB_PASSWORD=${SURVEY_SERVICE_DB_PASSWORD}
       - RSA_PUBLIC_KEY_FOR_JWT=${RSA_PUBLIC_KEY_FOR_JWT}
+      - SURVEY_SERVICE_MONGO_USER=${SURVEY_SERVICE_MONGO_USER}
+      - SURVEY_SERVICE_MONGO_PASSWORD=${SURVEY_SERVICE_MONGO_PASSWORD}
     stdin_open: true
     tty: true
     depends_on:
       - db-psql
+      - mongo
 
   # erp-backend:
   #   build:
@@ -205,6 +212,23 @@ networks:
   db_admin_mongo:
 
 configs:
+  mongo-init-script:
+    content: |
+      // Switch to the `surveys_db` database
+      db = db.getSiblingDB("surveys_db");
+
+      // Create the user within `surveys_db`
+      db.createUser({
+        user: "${SURVEY_SERVICE_MONGO_USER}",
+        pwd: "${SURVEY_SERVICE_MONGO_PASSWORD}",
+        roles: [
+          {
+            role: "readWrite",
+            db: "surveys_db",
+          },
+        ],
+      });
+      // 'mongodb://${SURVEY_SERVICE_MONGO_USER}:${SURVEY_SERVICE_MONGO_PASSWORD}@localhost:27017/surveys_db',
   db-psql-create_databases.sql:
     content: |
       /*

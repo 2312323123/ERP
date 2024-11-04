@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateActiveRecruitmentDto } from './dto/create-active_recruitment.dto';
 import { UpdateActiveRecruitmentDto } from './dto/update-active_recruitment.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -13,25 +13,25 @@ export class ActiveRecruitmentService {
     @InjectRepository(Recruitment) private recruitmentRepository: Repository<Recruitment>,
   ) {}
 
-  create(createActiveRecruitmentDto: CreateActiveRecruitmentDto) {
-    return 'This action adds a new activeRecruitment';
-  }
+  // create(createActiveRecruitmentDto: CreateActiveRecruitmentDto) {
+  //   return 'This action adds a new activeRecruitment';
+  // }
 
-  findAll() {
-    return `This action returns all activeRecruitment`;
-  }
+  // findAll() {
+  //   return `This action returns all activeRecruitment`;
+  // }
 
-  findOne(id: number) {
-    return `This action returns a #${id} activeRecruitment`;
-  }
+  // findOne(id: number) {
+  //   return `This action returns a #${id} activeRecruitment`;
+  // }
 
-  update(id: number, updateActiveRecruitmentDto: UpdateActiveRecruitmentDto) {
-    return `This action updates a #${id} activeRecruitment`;
-  }
+  // update(id: number, updateActiveRecruitmentDto: UpdateActiveRecruitmentDto) {
+  //   return `This action updates a #${id} activeRecruitment`;
+  // }
 
-  remove(id: number) {
-    return `This action removes a #${id} activeRecruitment`;
-  }
+  // remove(id: number) {
+  //   return `This action removes a #${id} activeRecruitment`;
+  // }
 
   async getActiveRecruitmentNameUuid(): Promise<{ name: string; uuid: string } | undefined> {
     const activeRecruitment = (
@@ -46,6 +46,23 @@ export class ActiveRecruitmentService {
       return { name: activeRecruitment.recruitment.name ?? '', uuid: activeRecruitment.recruitment.uuid };
     }
     return undefined;
+  }
+
+  async getActiveRecruitmentToken(): Promise<string> {
+    // could use .findOneOrFail() instead of .find() and then [0]
+    const activeRecruitment = (
+      await this.activeRecruitmentRepository.find({
+        order: { recruitment_uuid: 'ASC' }, // Replace 'id' with the appropriate column
+        take: 1, // Take only the first record,
+        relations: ['recruitment'], // Load the 'recruitment' relationship
+      })
+    )[0];
+
+    try {
+      return activeRecruitment.recruitment.survey_sending_secret;
+    } catch {
+      throw new NotFoundException('No active recruitment found');
+    }
   }
 
   async setActiveRecruitment(recruitmentUuid: string) {
