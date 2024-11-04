@@ -14,7 +14,7 @@
 Everything is created automatically on startup except:
 
 - .env file variables in project's root directory, you set them yourself
-- db contents in postgres and mongo, they are created as system is used
+- db contents in postgres and mongo db contents, they are created as system is used
 
 ### Configuring nest.js backend service:
 
@@ -154,6 +154,7 @@ import { RolesGuard } from './auth/roles.guard';
     return { message: 'This is accessible by user or admin' };
   }
 ```
+
 and if there is no role required, then chances are some token is being sent as parameter - in such case please verify the token as soon as it enters the system, like was done in `logout` in app.controller.js of auth_and_permissions
 
 - if the new microservice sets up some new roles:
@@ -180,6 +181,7 @@ depends_on:
   - db-psql
 ```
 
+- Similar in case you use mongo, add new user with their db and use that, and depends_on makes sense here, too. On Nest.js side, I've set up mongo using their docs: https://docs.nestjs.com/techniques/mongodb, and in docker-compose you can create new user with their database in configs part and then copy approach with env variables for username & password used in surveys microservice if you need mongo for whatever reason
 - When you copy docker-compose.yml service, pay attention to set correct stuff
 
 Dockerfile:
@@ -196,6 +198,7 @@ To completely remove and restart one service in running docker-compose (in this 
 `docker-compose rm -svf db-psql; docker-compose up -d --build db-psql` \
 `docker-compose rm -svf auth_and_permissions; docker-compose up -d --build auth_and_permissions` \
 `docker-compose rm -svf recruitment_survey_phase; docker-compose up -d --build recruitment_survey_phase` \
+`docker-compose rm -svf mongo; docker-compose up -d --build mongo` \
 If you changed just ports / or want to add newly created service to running docker compose: \
 `docker-compose up -d`
 
