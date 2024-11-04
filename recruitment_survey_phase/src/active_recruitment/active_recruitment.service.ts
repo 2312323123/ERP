@@ -49,20 +49,18 @@ export class ActiveRecruitmentService {
   }
 
   async getActiveRecruitmentToken(): Promise<string> {
-    // could use .findOneOrFail() instead of .find() and then [0]
-    const activeRecruitment = (
-      await this.activeRecruitmentRepository.find({
-        order: { recruitment_uuid: 'ASC' }, // Replace 'id' with the appropriate column
-        take: 1, // Take only the first record,
-        relations: ['recruitment'], // Load the 'recruitment' relationship
-      })
-    )[0];
-
+    let activeRecruitment;
     try {
-      return activeRecruitment.recruitment.survey_sending_secret;
+      activeRecruitment = await this.activeRecruitmentRepository.findOneOrFail({
+        where: {},
+        order: { recruitment_uuid: 'ASC' },
+        relations: ['recruitment'], // load the 'recruitment' relationship
+      });
     } catch {
       throw new NotFoundException('No active recruitment found');
     }
+
+    return activeRecruitment.recruitment.survey_sending_secret;
   }
 
   async setActiveRecruitment(recruitmentUuid: string) {
