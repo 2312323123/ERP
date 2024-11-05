@@ -41,7 +41,7 @@ export class JwtIssuerService {
   }
 
   async addNewErpRefreshToken(id: string, token: string): Promise<void> {
-    const exp = this.jwtService.decode(token).exp;
+    const { exp } = this.jwtService.decode(token);
 
     // Retrieve the tokens entry from the database
     const tokens = await this.tokensService.findOne(id);
@@ -76,7 +76,7 @@ export class JwtIssuerService {
   }
 
   async removeRefreshToken(token: string): Promise<void> {
-    const { id } = this.jwtService.decode(token).id;
+    const { id } = this.jwtService.decode(token);
 
     const tokens = await this.tokensService.findOne(id);
     if (!tokens) {
