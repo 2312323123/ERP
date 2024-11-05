@@ -60,11 +60,7 @@ const SurveysNavbar = (props: Props) => {
     }
   }
 
-  const {
-    data: activeRecruitment,
-    error: activeRecruitmentError,
-    isLoading: activeRecruitmentIsLoading,
-  } = useGetActiveRecruitmentQuery()
+  const { data: activeRecruitment } = useGetActiveRecruitmentQuery()
 
   const drawer = (
     <div>

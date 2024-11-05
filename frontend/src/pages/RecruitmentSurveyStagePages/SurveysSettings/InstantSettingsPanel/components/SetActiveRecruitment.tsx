@@ -6,22 +6,11 @@ import {
 } from '../../../../../services/erp'
 
 const SetActiveRecruitment = () => {
-  const {
-    data: activeRecruitment,
-    error: activeRecruitmentError,
-    isLoading: activeRecruitmentIsLoading,
-  } = useGetActiveRecruitmentQuery()
-  const { data: recruitments, error, isLoading } = useGetAllRecruitmentsQuery()
+  const { data: activeRecruitment } = useGetActiveRecruitmentQuery()
+  const { data: recruitments } = useGetAllRecruitmentsQuery()
 
   // Destructure the mutation hook
-  const [
-    setActiveRecruitment,
-    {
-      isLoading: setActiveRecruitmentIsLoading,
-      isSuccess: setActiveRecruitmentIsSuccess,
-      isError: setActiveRecruitmentIsError,
-    },
-  ] = useSetActiveRecruitmentMutation()
+  const [setActiveRecruitment] = useSetActiveRecruitmentMutation()
 
   const handleSaveChanges = () => {
     const confirmSave = window.confirm(

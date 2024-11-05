@@ -3,16 +3,8 @@ import { useGetActiveRecruitmentQuery, useGetActiveRecruitmentSettingsQuery } fr
 import useDeleteRecruitment from '../../../../hooks/surveys/useDeleteRecruitment'
 
 const DeleteRecruitmentPanel = () => {
-  const {
-    data: activeRecruitment,
-    error: activeRecruitmentError,
-    isLoading: activeRecruitmentIsLoading,
-  } = useGetActiveRecruitmentQuery()
-  const {
-    data: activeRecruitmentSettings,
-    error: activeRecruitmentSettingsError,
-    isLoading: activeRecruitmentSettingsIsLoading,
-  } = useGetActiveRecruitmentSettingsQuery(activeRecruitment?.uuid ?? '')
+  const { data: activeRecruitment } = useGetActiveRecruitmentQuery()
+  const { data: activeRecruitmentSettings } = useGetActiveRecruitmentSettingsQuery(activeRecruitment?.uuid ?? '')
 
   const deleteActiveRecruitment = useDeleteRecruitment()
 

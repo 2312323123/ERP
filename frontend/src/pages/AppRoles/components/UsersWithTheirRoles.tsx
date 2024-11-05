@@ -17,7 +17,7 @@ export interface UserWithTheirRoles {
 }
 
 const UsersWithTheirRoles = ({ allRolesRoles }: { allRolesRoles: string[] }) => {
-  const { data: allUsersWithTheirRoles, error, isLoading } = useGetUsersWithTheirRolesQuery()
+  const { data: allUsersWithTheirRoles, isLoading } = useGetUsersWithTheirRolesQuery()
 
   return (
     <>

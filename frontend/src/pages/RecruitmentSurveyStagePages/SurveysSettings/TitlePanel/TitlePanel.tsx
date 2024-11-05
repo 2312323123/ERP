@@ -2,11 +2,7 @@ import { Container, Typography } from '@mui/material'
 import { useGetActiveRecruitmentQuery } from '../../../../services/erp'
 
 const TitlePanel = () => {
-  const {
-    data: activeRecruitment,
-    error: activeRecruitmentError,
-    isLoading: activeRecruitmentIsLoading,
-  } = useGetActiveRecruitmentQuery()
+  const { data: activeRecruitment } = useGetActiveRecruitmentQuery()
 
   return (
     <Container maxWidth="md">

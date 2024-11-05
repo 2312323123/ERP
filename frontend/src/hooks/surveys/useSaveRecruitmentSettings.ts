@@ -5,7 +5,7 @@ import { useSnackbar } from '../useSnackbar'
 import { useEffect } from 'react'
 
 const useSaveRecruitmentSettings = () => {
-  const [saveRecruitmentSettings, { isLoading, isSuccess, isError }] = useSaveRecruitmentSettingsMutation()
+  const [saveRecruitmentSettings, { isSuccess, isError }] = useSaveRecruitmentSettingsMutation()
   const surveySettingsEditable = useSelector(getSurveySettingsEditable)
   const showSnackbar = useSnackbar()
   useEffect(() => {

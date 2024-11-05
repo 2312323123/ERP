@@ -3,7 +3,7 @@ import useSetAcceptsSurveys from '../../../../../hooks/surveys/useSetAcceptsSurv
 import { useGetAcceptsSurveysQuery } from '../../../../../services/erp'
 
 const AcceptsSurveysSwitch = () => {
-  const { data, error, isLoading: acceptsSurveysIsLoading } = useGetAcceptsSurveysQuery()
+  const { data, isLoading: acceptsSurveysIsLoading } = useGetAcceptsSurveysQuery()
 
   const { isLoading, callback } = useSetAcceptsSurveys()
 

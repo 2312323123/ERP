@@ -58,7 +58,7 @@ export const erpApi = createApi({
         method: 'POST',
         body: { recruitment_uuid: recruitmentUuid },
       }),
-      onQueryStarted: async (recruitmentUuid, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
         try {
           // Wait for the mutation to finish
           await queryFulfilled
@@ -150,7 +150,7 @@ export const erpApi = createApi({
         method: 'POST',
         body: newRecruitment,
       }),
-      onQueryStarted: async (newRecruitment, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
         try {
           // Wait for the mutation to finish
           await queryFulfilled
@@ -174,7 +174,7 @@ export const erpApi = createApi({
         method: 'POST',
         body: surveySettings,
       }),
-      onQueryStarted: async (surveySettings, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
         try {
           // Wait for the mutation to finish
           await queryFulfilled
@@ -206,7 +206,7 @@ export const erpApi = createApi({
           body: { uuid: recruitmentUuid },
         }
       },
-      onQueryStarted: async (recruitmentUuid, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
         try {
           // Wait for the mutation to finish
           await queryFulfilled

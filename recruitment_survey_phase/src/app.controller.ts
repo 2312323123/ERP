@@ -12,7 +12,7 @@ import { Roles } from './auth/roles.decorator';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  // @Get()
+  // @Get('/api/surveys/hello')
   // getHello1(): string {
   //   return this.appService.getHello();
   // }

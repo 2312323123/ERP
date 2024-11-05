@@ -16,7 +16,6 @@ import {
   getMark3Tag,
   getMark4Tag,
   getMark5Tag,
-  getSurveySettingsEditable,
   setDemoEvaluationStateComment,
   setDemoEvaluationStateMarks,
   setSurveySettingsEditable,
@@ -25,16 +24,8 @@ import { useGetActiveRecruitmentQuery, useGetActiveRecruitmentSettingsQuery } fr
 import { useEffect } from 'react'
 
 const RecruitmentSettingsPanel = () => {
-  const {
-    data: activeRecruitment,
-    error: activeRecruitmentError,
-    isLoading: activeRecruitmentIsLoading,
-  } = useGetActiveRecruitmentQuery()
-  const {
-    data: activeRecruitmentSettings,
-    error: activeRecruitmentSettingsError,
-    isLoading: activeRecruitmentSettingsIsLoading,
-  } = useGetActiveRecruitmentSettingsQuery(activeRecruitment?.uuid ?? '')
+  const { data: activeRecruitment } = useGetActiveRecruitmentQuery()
+  const { data: activeRecruitmentSettings } = useGetActiveRecruitmentSettingsQuery(activeRecruitment?.uuid ?? '')
 
   const dispatch = useDispatch()
 
@@ -71,8 +62,6 @@ const RecruitmentSettingsPanel = () => {
     dispatch(setDemoEvaluationStateMarks(result.marks))
     dispatch(setDemoEvaluationStateComment(result.comment))
   }
-
-  const surveySettingsEditable = useSelector(getSurveySettingsEditable)
 
   return (
     <>

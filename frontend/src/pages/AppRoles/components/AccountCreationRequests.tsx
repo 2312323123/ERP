@@ -14,7 +14,7 @@ export interface AccountCreationRequest {
 
 const AccountCreationRequests = () => {
   // [{role, description}, ...]
-  const { data: allAccountCreationRequests, error, isLoading } = useGetAccountCreationRequestsQuery()
+  const { data: allAccountCreationRequests } = useGetAccountCreationRequestsQuery()
 
   return (
     <>

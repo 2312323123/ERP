@@ -1,0 +1,16 @@
+# this is the docker-compose file for production
+# to run:
+# docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --build -d
+
+services:
+  auth_and_permissions:
+    build:
+      target: production # in Dockerfile
+
+  recruitment_survey_phase:
+    build:
+      target: production # in Dockerfile
+
+  frontend:
+    build:
+      target: production # in Dockerfile

@@ -1,3 +1,5 @@
+# this is the base docker-compose file, rather run the system using docker-compose.override.yml and docker-compose.prod.yml
+
 # you have to create .env file next to this file with credentials for it to work
 # also put microservices databases credentials here as well as in init-db/create_databases.sql
 services:
@@ -12,7 +14,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     # UNCOMMENT THIS TO PERSIST DATA
     # volumes:
-    # - ./db_postgres/db_data:/var/lib/postgresql/data
+    # - ./db_postgres/db_data:/var/lib/postgresql/data  # Persist data # One day could be checked for performance vs when named volume
     configs:
       - source: db-psql-create_databases.sql
         target: /docker-entrypoint-initdb.d/create_databases.sql
@@ -46,9 +48,9 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
     # UNCOMMENT THIS TO PERSIST DATA
     # volumes:
-    #   - mongo_data:/data/db # Persist data
-    ports:
-      - "27017:27017"
+    #   - mongo_data:/data/db # Persist data # One day could be checked for performance vs when named volume
+    expose:
+      - "27017" # documentation purposes
     networks:
       - backend
       - db_admin_mongo
@@ -103,17 +105,10 @@ services:
     build:
       context: ./auth_and_permissions
       dockerfile: Dockerfile
-    # ports:
-    #   - "3000:3000" # Expose the NestJS application port
-    volumes:
-      - ./auth_and_permissions:/app
-      - /app/node_modules
     networks:
       - backend
     environment:
-      - NODE_ENV=development
       - DB_PSQL_SERVICE_NAME=${DB_PSQL_SERVICE_NAME}
-      # command: npm run start:dev
       - DB_NAME=${AUTH_SERVICE_DB_NAME}
       - DB_USERNAME=${AUTH_SERVICE_DB_USER}
       - DB_PASSWORD=${AUTH_SERVICE_DB_PASSWORD}
@@ -124,8 +119,8 @@ services:
       - RSA_PUBLIC_KEY_FOR_JWT=${RSA_PUBLIC_KEY_FOR_JWT}
       - AUTH_NO_REPLY_EMAIL=${AUTH_NO_REPLY_EMAIL}
       - AUTH_NO_REPLY_EMAIL_PASSWORD=${AUTH_NO_REPLY_EMAIL_PASSWORD}
-    stdin_open: true
-    tty: true
+    expose:
+      - "3000" # documentation purposes
     depends_on:
       - db-psql
 
@@ -133,61 +128,30 @@ services:
     build:
       context: ./recruitment_survey_phase
       dockerfile: Dockerfile
-    ports:
-      - "3000:3000" # Expose the NestJS application port
-    volumes:
-      - ./recruitment_survey_phase:/app
-      - /app/node_modules
     networks:
       - backend
     environment:
-      - NODE_ENV=development
       - DB_PSQL_SERVICE_NAME=${DB_PSQL_SERVICE_NAME}
-      # command: npm run start:dev
       - DB_NAME=${SURVEY_SERVICE_DB_NAME}
       - DB_USERNAME=${SURVEY_SERVICE_DB_USER}
       - DB_PASSWORD=${SURVEY_SERVICE_DB_PASSWORD}
       - RSA_PUBLIC_KEY_FOR_JWT=${RSA_PUBLIC_KEY_FOR_JWT}
       - SURVEY_SERVICE_MONGO_USER=${SURVEY_SERVICE_MONGO_USER}
       - SURVEY_SERVICE_MONGO_PASSWORD=${SURVEY_SERVICE_MONGO_PASSWORD}
-    stdin_open: true
-    tty: true
+    expose:
+      - "3000" # documentation purposes
     depends_on:
       - db-psql
       - mongo
-
-  # erp-backend:
-  #   build:
-  #     context: ./ERP-backend # Point to the directory containing your Dockerfile
-  #     dockerfile: Dockerfile # Specify Dockerfile if it's named differently
-  #   # ports:
-  #   #   - "3000:3000" # Expose the NestJS application port
-  #   volumes:
-  #     - ./ERP-backend:/app # Mount the current directory to /app in the container for hot reloading
-  #     - /app/node_modules # Avoid mounting node_modules from the host machine
-  #   networks:
-  #     - backend
-  #   environment:
-  #     - NODE_ENV=development # Set the environment to development
-  #   command: npm run start:dev # Start the NestJS app with hot reloading
-  #   stdin_open: true # Keep stdin open
-  #   tty: true # Allocate a pseudo-TTY
 
   frontend:
     build:
       context: ./frontend # Specify the build context (directory where the Dockerfile is located)
       dockerfile: Dockerfile # Specify the Dockerfile name (if it's named differently)
-    # ports:
-    #   - "8080:8080"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
     networks:
       - frontend
-    stdin_open: true
-    tty: true
     expose:
-      - "8080"
+      - "8080" # documentation purposes
 
   nginx:
     build:
@@ -202,7 +166,9 @@ services:
       - "10016:80" # Exposes port 80 on the host and forwards it to port 80 in the container.
     depends_on:
       - auth_and_permissions
+      - recruitment_survey_phase
       - frontend
+      # maybe putting pgadmin here can make it cooperate with nginx...
 
 networks:
   frontend: # if named frontend_network, for some reason does not work

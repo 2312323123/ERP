@@ -3,7 +3,7 @@ import useSetRecruitmentVisible from '../../../../../hooks/surveys/useSetRecruit
 import { useGetRecruitmentVisibleQuery } from '../../../../../services/erp'
 
 const RecruitmentVisibleSwitch = () => {
-  const { data, error, isLoading: recruitmentVisibleIsLoading } = useGetRecruitmentVisibleQuery()
+  const { data, isLoading: recruitmentVisibleIsLoading } = useGetRecruitmentVisibleQuery()
 
   const { isLoading, callback } = useSetRecruitmentVisible()
 

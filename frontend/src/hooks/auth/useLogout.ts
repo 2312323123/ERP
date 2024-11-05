@@ -7,7 +7,7 @@ import { router } from '../../router'
 
 // component's goal is to ask api for logout, and if there's error, alert, if not, set logged in to false
 const useLogout = () => {
-  const [logoutMutation, { isLoading, isSuccess, isError }] = useLogoutMutation()
+  const [logoutMutation, { isSuccess, isError }] = useLogoutMutation()
   const refreshToken = useSelector(getRefreshToken)
   const showSnackbar = useSnackbar()
   const dispatch = useDispatch()

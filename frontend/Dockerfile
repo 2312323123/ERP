@@ -1,16 +1,25 @@
-FROM node:16
-
-# Set the working directory
+FROM node:16 AS development
 WORKDIR '/app'
-
-# Copy package.json and package-lock.json to the working directory
-COPY ./package.json .
-
-# Install dependencies
+COPY ./package.json ./
+COPY ./package-lock.json ./
 RUN npm install
-
-# Copy the rest of the application code
 COPY . .
-
-# Start the React app
 CMD [ "npm", "run", "dev" ]
+
+FROM node:16 AS build
+WORKDIR '/app'
+COPY ./package.json ./
+COPY ./package-lock.json ./
+RUN npm install
+COPY . .
+ENV NODE_ENV=production
+RUN npm run build
+
+FROM node:16-alpine AS production
+WORKDIR '/app'
+COPY --from=build /app/dist ./dist
+COPY ./package.json ./
+COPY ./package-lock.json ./
+RUN npm install --only=production
+RUN npm install -g serve
+CMD [ "serve", "-s", "dist", "-l", "8080" ]

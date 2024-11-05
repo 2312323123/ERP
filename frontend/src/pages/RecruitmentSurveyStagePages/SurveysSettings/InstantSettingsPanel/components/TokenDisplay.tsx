@@ -5,16 +5,9 @@ import { useGetActiveRecruitmentQuery, useGetActiveRecruitmentSettingsQuery } fr
 
 const TokenDisplay = () => {
   const [showData, setShowData] = useState(false)
-  const {
-    data: activeRecruitment,
-    error: activeRecruitmentError,
-    isLoading: activeRecruitmentIsLoading,
-  } = useGetActiveRecruitmentQuery()
-  const {
-    data: activeRecruitmentSettings,
-    error: activeRecruitmentSettingsError,
-    isLoading: activeRecruitmentSettingsIsLoading,
-  } = useGetActiveRecruitmentSettingsQuery(activeRecruitment?.uuid ?? '')
+  const { data: activeRecruitment } = useGetActiveRecruitmentQuery()
+  const { data: activeRecruitmentSettings, error: activeRecruitmentSettingsError } =
+    useGetActiveRecruitmentSettingsQuery(activeRecruitment?.uuid ?? '')
 
   const handleToggleShowData = () => setShowData(!showData)
 

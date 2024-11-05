@@ -8,13 +8,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useLayoutEffect } from 'react'
 
 const CopyFromSelectField = () => {
-  const {
-    data: activeRecruitment,
-    error: activeRecruitmentError,
-    isLoading: activeRecruitmentIsLoading,
-  } = useGetActiveRecruitmentQuery()
+  const { data: activeRecruitment } = useGetActiveRecruitmentQuery()
 
-  const { data: recruitments, error } = useGetAllRecruitmentsQuery()
+  const { data: recruitments } = useGetAllRecruitmentsQuery()
   const dispatch = useDispatch()
   const recruitmentToCopyFrom = useSelector(getRecruitmentToCopyFrom)
 

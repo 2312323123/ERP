@@ -7,13 +7,8 @@ import RecruitmentVisibleSwitch from './components/RecruitmentVisibleSwitch'
 import EvaluatorsCanEvaluateSwitch from './components/EvaluatorsCanEvaluateSwitch'
 
 const InstantSettingsPanel = () => {
-  // const activeRecruitment = useSelector(getActiveRecruitment)
-  const {
-    data: activeRecruitment,
-    error: activeRecruitmentError,
-    isLoading: activeRecruitmentIsLoading,
-  } = useGetActiveRecruitmentQuery()
-  const { data: recruitments, error, isLoading } = useGetAllRecruitmentsQuery()
+  const { data: activeRecruitment } = useGetActiveRecruitmentQuery()
+  const { data: recruitments } = useGetAllRecruitmentsQuery()
 
   return (
     <Container maxWidth="md">

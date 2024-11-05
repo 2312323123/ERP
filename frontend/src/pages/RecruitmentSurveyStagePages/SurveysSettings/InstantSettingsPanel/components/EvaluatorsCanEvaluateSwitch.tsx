@@ -3,7 +3,7 @@ import useSetEvaluatorsCanEvaluate from '../../../../../hooks/surveys/useSetEval
 import { useGetEvaluatorsCanEvaluateQuery } from '../../../../../services/erp'
 
 const EvaluatorsCanEvaluateSwitch = () => {
-  const { data, error, isLoading: evaluatorsCanEvaluateIsLoading } = useGetEvaluatorsCanEvaluateQuery()
+  const { data, isLoading: evaluatorsCanEvaluateIsLoading } = useGetEvaluatorsCanEvaluateQuery()
 
   const { isLoading, callback } = useSetEvaluatorsCanEvaluate()
 

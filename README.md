@@ -11,10 +11,17 @@
 
 ### First thing to know
 
+To run this system:
+
 Everything is created automatically on startup except:
 
 - .env file variables in project's root directory, you set them yourself
 - db contents in postgres and mongo db contents, they are created as system is used
+
+Commands to run it:
+
+- production: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --build -d
+- development: docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build
 
 ### Configuring nest.js backend service:
 
@@ -191,7 +198,7 @@ Dockerfile:
 
 ---
 
-#### Some useful Docker commands:
+#### Some useful Docker commands/info:
 
 To completely remove and restart one service in running docker-compose (in this example nginx): \
 `docker-compose rm -svf nginx; docker-compose up -d --build nginx` \
@@ -201,6 +208,11 @@ To completely remove and restart one service in running docker-compose (in this 
 `docker-compose rm -svf mongo; docker-compose up -d --build mongo` \
 If you changed just ports / or want to add newly created service to running docker compose: \
 `docker-compose up -d`
+
+##### docker-compose files division
+
+There are three docker-dompose...yml files, because that's the way how I got development and production division to work.
+If you want to not turn off some service, it's probably good to comment it out in both the one you're using and .dev. or .prod., respectively (maybe it would work without the .dev. / .prod. part, not checked).
 
 #### Adding to nginx:
 
@@ -234,7 +246,6 @@ export default defineConfig({
     port: 8080,
     strictPort: true,
     host: true,
-    // origin: "http://localhost:8080",
     watch: {
       usePolling: true,
     },
@@ -403,6 +414,11 @@ and you still need to replace newlines in private key with \n, and then store bo
 - ts variables: lowerCamelCase
 - network endpoints urls: kebab-case
 - ...more?
+
+### RTK Query accessing data in a nutshell:
+
+- const [something, { isLoading, isSuccess, isError }] = useSomethingMutation()
+- const { data: something, error, isLoading } = useSomeQuery()
 
 ### Nest cheat sheet:
 
