@@ -90,14 +90,15 @@ services:
   mongo-express:
     image: mongo-express
     restart: always
-    ports:
-      - 8081:8081
     environment:
       ME_CONFIG_BASICAUTH_USERNAME: ${ME_CONFIG_BASICAUTH_USERNAME}
       ME_CONFIG_BASICAUTH_PASSWORD: ${ME_CONFIG_BASICAUTH_PASSWORD}
       ME_CONFIG_MONGODB_URL: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/
+      ME_CONFIG_SITE_BASEURL: /api/mongolia/ # this is the base url for the mongo-express for working with nginx
     networks:
       - db_admin_mongo
+    expose:
+      - "8081" # documentation purposes
     depends_on:
       - mongo
 
@@ -168,6 +169,7 @@ services:
       - auth_and_permissions
       - recruitment_survey_phase
       - frontend
+      - mongo-express
       # maybe putting pgadmin here can make it cooperate with nginx...
 
 networks:

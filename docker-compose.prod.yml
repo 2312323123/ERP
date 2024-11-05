@@ -2,6 +2,10 @@
 # to run:
 # docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --build -d
 
+# and if you want to just build it:
+# docker-compose -f docker-compose.yml -f docker-compose.prod.yml build
+# and if you want then to just run it:
+# docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --no-build
 services:
   auth_and_permissions:
     build:
