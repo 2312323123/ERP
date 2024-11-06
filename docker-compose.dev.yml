@@ -3,6 +3,16 @@
 #  docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build
 
 services:
+  # mongo:
+  #   ports:
+  #     - "27017:27017"
+  #   stdin_open: true # not sure if this is needed
+  #   tty: true # not sure if this is needed
+
+  # mongo_express:
+  #   ports:
+  #     - "8081:8081"
+
   auth_and_permissions:
     build:
       target: development # in Dockerfile

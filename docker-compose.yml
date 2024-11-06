@@ -25,7 +25,7 @@ services:
   # curl_service:
   #   image: curlimages/curl:latest
   #   depends_on:
-  #     - auth_and_permissions # Wait for this service to be available
+  #     - mongo_express # Wait for this service to be available
   #   entrypoint: ["sleep", "infinity"] # Keep the container running
   #   networks:
   #     - outside
@@ -41,6 +41,7 @@ services:
   #     - backend
 
   mongo:
+    # docker-compose exec -it mongo /bin/bash
     image: mongo
     restart: always
     environment:
@@ -87,7 +88,7 @@ services:
     depends_on:
       - db-psql
 
-  mongo-express:
+  mongo_express:
     image: mongo-express
     restart: always
     environment:
@@ -97,6 +98,8 @@ services:
       ME_CONFIG_SITE_BASEURL: /api/mongolia/ # this is the base url for the mongo-express for working with nginx
     networks:
       - db_admin_mongo
+    # ports:
+    #   - "8081:8081"
     expose:
       - "8081" # documentation purposes
     depends_on:
@@ -169,7 +172,7 @@ services:
       - auth_and_permissions
       - recruitment_survey_phase
       - frontend
-      - mongo-express
+      - mongo_express
       # maybe putting pgadmin here can make it cooperate with nginx...
 
 networks:
