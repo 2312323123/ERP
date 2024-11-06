@@ -2,36 +2,36 @@
 # to run:
 #  docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build
 
-services:
-  auth_and_permissions:
-    build:
-      target: development # in Dockerfile
-    # ports:
-    #   - "3000:3000" # Expose the NestJS application port
-    volumes:
-      - ./auth_and_permissions:/app
-      - /app/node_modules
-    stdin_open: true
-    tty: true
+# services:
+#   auth_and_permissions:
+#     build:
+#       target: development # in Dockerfile
+#     # ports:
+#     #   - "3000:3000" # Expose the NestJS application port
+#     volumes:
+#       - ./auth_and_permissions:/app
+#       - /app/node_modules
+#     stdin_open: true
+#     tty: true
 
-  recruitment_survey_phase:
-    build:
-      target: development # in Dockerfile
-    # ports:
-    #   - "3000:3000" # Expose the NestJS application port
-    volumes:
-      - ./recruitment_survey_phase:/app
-      - /app/node_modules
-    stdin_open: true
-    tty: true
+#   recruitment_survey_phase:
+#     build:
+#       target: development # in Dockerfile
+#     # ports:
+#     #   - "3000:3000" # Expose the NestJS application port
+#     volumes:
+#       - ./recruitment_survey_phase:/app
+#       - /app/node_modules
+#     stdin_open: true
+#     tty: true
 
-  frontend:
-    build:
-      target: development # in Dockerfile
-    # ports:
-    #   - "8080:8080"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    stdin_open: true
-    tty: true
+#   frontend:
+#     build:
+#       target: development # in Dockerfile
+#     # ports:
+#     #   - "8080:8080"
+#     volumes:
+#       - ./frontend:/app
+#       - /app/node_modules
+#     stdin_open: true
+#     tty: true
