@@ -100,7 +100,7 @@ services:
   #   depends_on:
   #     - db-psql
 
-  # mongo-express:
+  # mongo_express:
   #   image: mongo-express
   #   restart: always
   #   environment:
@@ -124,10 +124,11 @@ services:
       ME_CONFIG_BASICAUTH_USERNAME: ${ME_CONFIG_BASICAUTH_USERNAME}
       ME_CONFIG_BASICAUTH_PASSWORD: ${ME_CONFIG_BASICAUTH_PASSWORD}
       ME_CONFIG_MONGODB_URL: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/
+      ME_CONFIG_SITE_BASEURL: /api/mongolia/ # this is the base url for the mongo-express for working with nginx
     networks:
       - db_admin_mongo
-    ports:
-      - "8081:8081"
+    # ports:
+    #   - "8081:8081"
     expose:
       - "8081" # documentation purposes
     depends_on:
@@ -185,23 +186,23 @@ services:
   #   expose:
   #     - "8080" # documentation purposes
 
-  # nginx:
-  #   build:
-  #     context: ./API-gateway
-  #   networks:
-  #     - outside
-  #     - backend
-  #     - frontend
-  #     - db_admin_sql
-  #     - db_admin_mongo
-  #   ports:
-  #     - "10016:80" # Exposes port 80 on the host and forwards it to port 80 in the container.
-  #   depends_on:
-  #     - auth_and_permissions
-  #     - recruitment_survey_phase
-  #     - frontend
-  #     - mongo-express
-  #     # maybe putting pgadmin here can make it cooperate with nginx...
+  nginx:
+    build:
+      context: ./API-gateway
+    networks:
+      - outside
+      - backend
+      - frontend
+      - db_admin_sql
+      - db_admin_mongo
+    ports:
+      - "10016:80" # Exposes port 80 on the host and forwards it to port 80 in the container.
+    depends_on:
+      # - auth_and_permissions
+      # - recruitment_survey_phase
+      # - frontend
+      - mongo_express
+      # maybe putting pgadmin here can make it cooperate with nginx...
 
 networks:
   frontend: # if named frontend_network, for some reason does not work
