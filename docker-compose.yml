@@ -21,18 +21,18 @@ services:
   #     - source: db-psql-init.sql
   #       target: /docker-entrypoint-initdb.d/init.sql
 
-  # # docker-compose exec -it curl_service sh
-  # curl_service:
-  #   image: curlimages/curl:latest
-  #   depends_on:
-  #     - auth_and_permissions # Wait for this service to be available
-  #   entrypoint: ["sleep", "infinity"] # Keep the container running
-  #   networks:
-  #     - outside
-  #     - backend
-  #     - frontend
-  #     - db_admin_sql
-  #     - db_admin_mongo
+  # docker-compose exec -it curl_service sh
+  curl_service:
+    image: curlimages/curl:latest
+    depends_on:
+      - mongo_express # Wait for this service to be available
+    entrypoint: ["sleep", "infinity"] # Keep the container running
+    networks:
+      - outside
+      - backend
+      - frontend
+      - db_admin_sql
+      - db_admin_mongo
 
   # psql-client:
   #   image: postgres:13
@@ -117,7 +117,7 @@ services:
   #   depends_on:
   #     - mongo
 
-  mongo-express:
+  mongo_express:
     image: mongo-express
     restart: always
     environment:
