@@ -3,36 +3,36 @@
 # you have to create .env file next to this file with credentials for it to work
 # also put microservices databases credentials here as well as in init-db/create_databases.sql
 services:
-  # # if you change this name, you have to change it in DB_PSQL_SERVICE_NAME as well
-  # db-psql:
-  #   image: postgres:latest
-  #   networks:
-  #     - backend
-  #     - db_admin_sql
-  #   environment:
-  #     POSTGRES_USER: ${POSTGRES_USER}
-  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-  #   # UNCOMMENT THIS TO PERSIST DATA
-  #   # volumes:
-  #   # - ./db_postgres/db_data:/var/lib/postgresql/data  # Persist data # One day could be checked for performance vs when named volume
-  #   configs:
-  #     - source: db-psql-create_databases.sql
-  #       target: /docker-entrypoint-initdb.d/create_databases.sql
-  #     - source: db-psql-init.sql
-  #       target: /docker-entrypoint-initdb.d/init.sql
-
-  # docker-compose exec -it curl_service sh
-  curl_service:
-    image: curlimages/curl:latest
-    depends_on:
-      - mongo_express # Wait for this service to be available
-    entrypoint: ["sleep", "infinity"] # Keep the container running
+  # if you change this name, you have to change it in DB_PSQL_SERVICE_NAME as well
+  db-psql:
+    image: postgres:latest
     networks:
-      - outside
       - backend
-      - frontend
       - db_admin_sql
-      - db_admin_mongo
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    # UNCOMMENT THIS TO PERSIST DATA
+    # volumes:
+    # - ./db_postgres/db_data:/var/lib/postgresql/data  # Persist data # One day could be checked for performance vs when named volume
+    configs:
+      - source: db-psql-create_databases.sql
+        target: /docker-entrypoint-initdb.d/create_databases.sql
+      - source: db-psql-init.sql
+        target: /docker-entrypoint-initdb.d/init.sql
+
+  # # docker-compose exec -it curl_service sh
+  # curl_service:
+  #   image: curlimages/curl:latest
+  #   depends_on:
+  #     - mongo_express # Wait for this service to be available
+  #   entrypoint: ["sleep", "infinity"] # Keep the container running
+  #   networks:
+  #     - outside
+  #     - backend
+  #     - frontend
+  #     - db_admin_sql
+  #     - db_admin_mongo
 
   # psql-client:
   #   image: postgres:13
@@ -71,51 +71,34 @@ services:
   #   stdin_open: true
   #   tty: true
 
-  # pgadmin:
-  #   build:
-  #     context: .
-  #     dockerfile: ./pgadmin/dockerfile_for_pgadmin
-  #   networks:
-  #     - db_admin_sql
-  #   environment:
-  #     PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL_PART_BEFORE_AT}@${PGADMIN_DEFAULT_EMAIL_PART_AFTER_AT}
-  #     PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
-  #     PGADMIN_LISTEN_PORT: 5050
-  #   ports:
-  #     - "5050:5050"
-  #   # process to find this was pain
-  #   entrypoint: >
-  #     /bin/sh -c "
-  #     mkdir -p /var/lib/pgadmin/storage/${PGADMIN_DEFAULT_EMAIL_PART_BEFORE_AT}_${PGADMIN_DEFAULT_EMAIL_PART_AFTER_AT}/;
-  #     cp /tmp/mountpoint.pgpass /var/lib/pgadmin/storage/${PGADMIN_DEFAULT_EMAIL_PART_BEFORE_AT}_${PGADMIN_DEFAULT_EMAIL_PART_AFTER_AT}/.pgpass;
-  #     chown pgadmin:root /var/lib/pgadmin/storage/${PGADMIN_DEFAULT_EMAIL_PART_BEFORE_AT}_${PGADMIN_DEFAULT_EMAIL_PART_AFTER_AT}/.pgpass;
-  #     chmod 600 /var/lib/pgadmin/storage/${PGADMIN_DEFAULT_EMAIL_PART_BEFORE_AT}_${PGADMIN_DEFAULT_EMAIL_PART_AFTER_AT}/.pgpass;
-  #     /entrypoint.sh
-  #     "
-  #   configs:
-  #     - source: pgadmin-servers.json
-  #       target: /pgadmin4/servers.json
-  #     - source: pgadmin-pgpass
-  #       target: /tmp/mountpoint.pgpass
-  #   depends_on:
-  #     - db-psql
-
-  # mongo_express:
-  #   image: mongo-express
-  #   restart: always
-  #   environment:
-  #     ME_CONFIG_BASICAUTH_USERNAME: ${ME_CONFIG_BASICAUTH_USERNAME}
-  #     ME_CONFIG_BASICAUTH_PASSWORD: ${ME_CONFIG_BASICAUTH_PASSWORD}
-  #     ME_CONFIG_MONGODB_URL: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/
-  #     ME_CONFIG_SITE_BASEURL: /api/mongolia/ # this is the base url for the mongo-express for working with nginx
-  #   networks:
-  #     - db_admin_mongo
-  #   ports:
-  #     - "8081:8081"
-  #   expose:
-  #     - "8081" # documentation purposes
-  #   depends_on:
-  #     - mongo
+  pgadmin:
+    build:
+      context: .
+      dockerfile: ./pgadmin/dockerfile_for_pgadmin
+    networks:
+      - db_admin_sql
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL_PART_BEFORE_AT}@${PGADMIN_DEFAULT_EMAIL_PART_AFTER_AT}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+      PGADMIN_LISTEN_PORT: 5050
+    ports:
+      - "5050:5050"
+    # process to find this was pain
+    entrypoint: >
+      /bin/sh -c "
+      mkdir -p /var/lib/pgadmin/storage/${PGADMIN_DEFAULT_EMAIL_PART_BEFORE_AT}_${PGADMIN_DEFAULT_EMAIL_PART_AFTER_AT}/;
+      cp /tmp/mountpoint.pgpass /var/lib/pgadmin/storage/${PGADMIN_DEFAULT_EMAIL_PART_BEFORE_AT}_${PGADMIN_DEFAULT_EMAIL_PART_AFTER_AT}/.pgpass;
+      chown pgadmin:root /var/lib/pgadmin/storage/${PGADMIN_DEFAULT_EMAIL_PART_BEFORE_AT}_${PGADMIN_DEFAULT_EMAIL_PART_AFTER_AT}/.pgpass;
+      chmod 600 /var/lib/pgadmin/storage/${PGADMIN_DEFAULT_EMAIL_PART_BEFORE_AT}_${PGADMIN_DEFAULT_EMAIL_PART_AFTER_AT}/.pgpass;
+      /entrypoint.sh
+      "
+    configs:
+      - source: pgadmin-servers.json
+        target: /pgadmin4/servers.json
+      - source: pgadmin-pgpass
+        target: /tmp/mountpoint.pgpass
+    depends_on:
+      - db-psql
 
   mongo_express:
     image: mongo-express
@@ -134,57 +117,57 @@ services:
     depends_on:
       - mongo
 
-  # auth_and_permissions:
-  #   build:
-  #     context: ./auth_and_permissions
-  #     dockerfile: Dockerfile
-  #   networks:
-  #     - backend
-  #   environment:
-  #     - DB_PSQL_SERVICE_NAME=${DB_PSQL_SERVICE_NAME}
-  #     - DB_NAME=${AUTH_SERVICE_DB_NAME}
-  #     - DB_USERNAME=${AUTH_SERVICE_DB_USER}
-  #     - DB_PASSWORD=${AUTH_SERVICE_DB_PASSWORD}
-  #     - AUTH_GOOGLE_CLIENT_ID=${AUTH_GOOGLE_CLIENT_ID}
-  #     - AUTH_GOOGLE_CLIENT_SECRET=${AUTH_GOOGLE_CLIENT_SECRET}
-  #     - AUTH_GOOGLE_ORGANIZATION_DOMAIN=${AUTH_GOOGLE_ORGANIZATION_DOMAIN}
-  #     - AUTH_RSA_PRIVATE_KEY_FOR_JWT=${AUTH_RSA_PRIVATE_KEY_FOR_JWT}
-  #     - RSA_PUBLIC_KEY_FOR_JWT=${RSA_PUBLIC_KEY_FOR_JWT}
-  #     - AUTH_NO_REPLY_EMAIL=${AUTH_NO_REPLY_EMAIL}
-  #     - AUTH_NO_REPLY_EMAIL_PASSWORD=${AUTH_NO_REPLY_EMAIL_PASSWORD}
-  #   expose:
-  #     - "3000" # documentation purposes
-  #   depends_on:
-  #     - db-psql
+  auth_and_permissions:
+    build:
+      context: ./auth_and_permissions
+      dockerfile: Dockerfile
+    networks:
+      - backend
+    environment:
+      - DB_PSQL_SERVICE_NAME=${DB_PSQL_SERVICE_NAME}
+      - DB_NAME=${AUTH_SERVICE_DB_NAME}
+      - DB_USERNAME=${AUTH_SERVICE_DB_USER}
+      - DB_PASSWORD=${AUTH_SERVICE_DB_PASSWORD}
+      - AUTH_GOOGLE_CLIENT_ID=${AUTH_GOOGLE_CLIENT_ID}
+      - AUTH_GOOGLE_CLIENT_SECRET=${AUTH_GOOGLE_CLIENT_SECRET}
+      - AUTH_GOOGLE_ORGANIZATION_DOMAIN=${AUTH_GOOGLE_ORGANIZATION_DOMAIN}
+      - AUTH_RSA_PRIVATE_KEY_FOR_JWT=${AUTH_RSA_PRIVATE_KEY_FOR_JWT}
+      - RSA_PUBLIC_KEY_FOR_JWT=${RSA_PUBLIC_KEY_FOR_JWT}
+      - AUTH_NO_REPLY_EMAIL=${AUTH_NO_REPLY_EMAIL}
+      - AUTH_NO_REPLY_EMAIL_PASSWORD=${AUTH_NO_REPLY_EMAIL_PASSWORD}
+    expose:
+      - "3000" # documentation purposes
+    depends_on:
+      - db-psql
 
-  # recruitment_survey_phase:
-  #   build:
-  #     context: ./recruitment_survey_phase
-  #     dockerfile: Dockerfile
-  #   networks:
-  #     - backend
-  #   environment:
-  #     - DB_PSQL_SERVICE_NAME=${DB_PSQL_SERVICE_NAME}
-  #     - DB_NAME=${SURVEY_SERVICE_DB_NAME}
-  #     - DB_USERNAME=${SURVEY_SERVICE_DB_USER}
-  #     - DB_PASSWORD=${SURVEY_SERVICE_DB_PASSWORD}
-  #     - RSA_PUBLIC_KEY_FOR_JWT=${RSA_PUBLIC_KEY_FOR_JWT}
-  #     - SURVEY_SERVICE_MONGO_USER=${SURVEY_SERVICE_MONGO_USER}
-  #     - SURVEY_SERVICE_MONGO_PASSWORD=${SURVEY_SERVICE_MONGO_PASSWORD}
-  #   expose:
-  #     - "3000" # documentation purposes
-  #   depends_on:
-  #     - db-psql
-  #     - mongo
+  recruitment_survey_phase:
+    build:
+      context: ./recruitment_survey_phase
+      dockerfile: Dockerfile
+    networks:
+      - backend
+    environment:
+      - DB_PSQL_SERVICE_NAME=${DB_PSQL_SERVICE_NAME}
+      - DB_NAME=${SURVEY_SERVICE_DB_NAME}
+      - DB_USERNAME=${SURVEY_SERVICE_DB_USER}
+      - DB_PASSWORD=${SURVEY_SERVICE_DB_PASSWORD}
+      - RSA_PUBLIC_KEY_FOR_JWT=${RSA_PUBLIC_KEY_FOR_JWT}
+      - SURVEY_SERVICE_MONGO_USER=${SURVEY_SERVICE_MONGO_USER}
+      - SURVEY_SERVICE_MONGO_PASSWORD=${SURVEY_SERVICE_MONGO_PASSWORD}
+    expose:
+      - "3000" # documentation purposes
+    depends_on:
+      - db-psql
+      - mongo
 
-  # frontend:
-  #   build:
-  #     context: ./frontend # Specify the build context (directory where the Dockerfile is located)
-  #     dockerfile: Dockerfile # Specify the Dockerfile name (if it's named differently)
-  #   networks:
-  #     - frontend
-  #   expose:
-  #     - "8080" # documentation purposes
+  frontend:
+    build:
+      context: ./frontend # Specify the build context (directory where the Dockerfile is located)
+      dockerfile: Dockerfile # Specify the Dockerfile name (if it's named differently)
+    networks:
+      - frontend
+    expose:
+      - "8080" # documentation purposes
 
   nginx:
     build:
@@ -198,9 +181,9 @@ services:
     ports:
       - "10016:80" # Exposes port 80 on the host and forwards it to port 80 in the container.
     depends_on:
-      # - auth_and_permissions
-      # - recruitment_survey_phase
-      # - frontend
+      - auth_and_permissions
+      - recruitment_survey_phase
+      - frontend
       - mongo_express
       # maybe putting pgadmin here can make it cooperate with nginx...
 

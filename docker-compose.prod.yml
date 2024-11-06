@@ -6,15 +6,15 @@
 # docker-compose -f docker-compose.yml -f docker-compose.prod.yml build
 # and if you want then to just run it:
 # docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --no-build
-# services:
-#   auth_and_permissions:
-#     build:
-#       target: production # in Dockerfile
+services:
+  auth_and_permissions:
+    build:
+      target: production # in Dockerfile
 
-#   recruitment_survey_phase:
-#     build:
-#       target: production # in Dockerfile
+  recruitment_survey_phase:
+    build:
+      target: production # in Dockerfile
 
-#   frontend:
-#     build:
-#       target: production # in Dockerfile
+  frontend:
+    build:
+      target: production # in Dockerfile
