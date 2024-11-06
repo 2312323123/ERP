@@ -1,38 +1,48 @@
-// [survey script] adsf
-function myFunc() {
-  // Open a form by ID and log the responses to each question.
-  var form = FormApp.openById("1hIh-1Lzyh8TBkRZcGseHEfib5LVdq10-0hcuiQclo9M");
-  var formResponses = form.getResponses();
-  for (var i = 0; i < formResponses.length; i++) {
-    // this I can work on
-    var formResponse = formResponses[i];
+const surveySendingToken = "ZAMIEŃ_NA_SWÓJ_TOKEN"; // Replace with your token
+const endpointURL = "https://erp.best.krakow.pl/api/surveys/new-survey";
 
-    const form = FormApp.getActiveForm(); // Get the active form
-    const items = form.getItems(); // Get all items in the form
-    const itemResponses = formResponse.getItemResponses(); // Get the item responses
+// function that given a FormResponse returns user answers
+function getAnswers(formResponse) {
+  const form = FormApp.getActiveForm(); // Get the active form
+  const items = form.getItems(); // Get all items in the form
+  const itemResponses = formResponse.getItemResponses(); // Get the item responses
 
-    const responseArray = items.map((item) => {
-      const itemResponse = itemResponses.find(
-        (response) => response.getItem().getId() === item.getId()
-      );
-      return {
-        question: item.getTitle(),
-        type: item.getType(),
-        answer: itemResponse ? itemResponse.getResponse() : null, // Handle case where there's no response
-      };
-    });
+  const responseArray = items.map((item) => {
+    const itemResponse = itemResponses.find(
+      (response) => response.getItem().getId() === item.getId()
+    );
+    return {
+      question: item.getTitle(),
+      type: item.getType(),
+      answer: itemResponse ? itemResponse.getResponse() : null, // Handle case where there's no response
+    };
+  });
 
-    Logger.log(JSON.stringify(responseArray));
+  return responseArray;
+}
 
-    // const form = FormApp.getActiveForm();
-    // const items = form.getItems();
-    // const formData = items.map((item) => ({
-    //   question: item.getTitle(),
-    //   type: item.getType(),
-    // }));
+// function that takes something and logs it nicely
+function logSomething(something) {
+  Logger.log(JSON.stringify(something));
+}
 
-    // Logger.log(JSON.stringify(formData));
+// function that given something sends it to the url defined at the top
+function sendSomething(something) {
+  const options = {
+    method: "post",
+    contentType: "application/json",
+    headers: {
+      Authorization: `Bearer ${surveySendingToken}`,
+    },
+    payload: JSON.stringify(something),
+  };
+  UrlFetchApp.fetch(endpointURL, options);
+}
 
-    // end
-  }
+// function that combines the above
+function onFormSubmit(e) {
+  const formResponse = e.response;
+  const answers = getAnswers(formResponse);
+  logSomething(answers);
+  sendSomething(answers);
 }
