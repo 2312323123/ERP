@@ -50,8 +50,6 @@ services:
     # UNCOMMENT THIS TO PERSIST DATA
     # volumes:
     #   - mongo_data:/data/db # Persist data # One day could be checked for performance vs when named volume
-    # ports:
-    #   - "27017:27017"
     expose:
       - "27017" # documentation purposes
     networks:
@@ -60,16 +58,6 @@ services:
     configs:
       - source: mongo-init-script
         target: /docker-entrypoint-initdb.d/mongo-init.js
-    stdin_open: true
-    tty: true
-
-  # mongo-client:
-  #   image: mongo
-  #   command: mongosh -u root -p 34ipfh98_hehe_ho9hfhof4uhof4ohf4hf4hfh9u98f --authenticationDatabase admin --host mongo
-  #   depends_on:
-  #     - mongo
-  #   stdin_open: true
-  #   tty: true
 
   pgadmin:
     build:
