@@ -419,6 +419,13 @@ and you still need to replace newlines in private key with \n, and then store bo
 - const [something, { isLoading, isSuccess, isError }] = useSomethingMutation()
 - const { data: something, error, isLoading } = useSomeQuery()
 
+### Running on server:
+
+- alternative to git switch:
+  `git fetch origin making-mongo-express-work:making-mongo-express-work`
+  `git checkout making-mongo-express-work`
+- when you move to server, you have to change apiPathBase in `frontend\src\config\constants.ts` from http://localhost:10016 to i.e. https://erp.best.krakow.pl (it is like that because I was too dumb to be able to use env variables in React)
+
 ### Nest cheat sheet:
 
 - check if some data entry exists:
