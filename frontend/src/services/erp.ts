@@ -224,6 +224,10 @@ export const erpApi = createApi({
         }
       },
     }),
+
+    getSurveyGradingInstruction: builder.query<{ grading_instruction: string }, void>({
+      query: () => 'api/surveys/active-recruitemnt-grading-instruction',
+    }),
   }),
   tagTypes: ['SurveyRecruitment'], // Keep the tag type for survey recruitments
 })
@@ -244,4 +248,5 @@ export const {
   useSetEvaluatorsCanEvaluateMutation,
   useSaveRecruitmentSettingsMutation,
   useDeleteRecruitmentMutation,
+  useGetSurveyGradingInstructionQuery,
 } = erpApi

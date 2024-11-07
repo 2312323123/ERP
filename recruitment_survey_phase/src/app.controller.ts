@@ -121,4 +121,10 @@ export class AppController {
   ) {
     return this.appService.newSurvey(authHeader, responses);
   }
+
+  @Roles('USER')
+  @Get('/api/surveys/active-recruitemnt-grading-instruction')
+  async getActiveRecruitmentGradingInstruction(): Promise<{ grading_instruction: string }> {
+    return this.appService.getActiveRecruitmentGradingInstruction();
+  }
 }

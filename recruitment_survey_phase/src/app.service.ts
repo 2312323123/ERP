@@ -1,4 +1,10 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ActiveRecruitmentService } from './active_recruitment/active_recruitment.service';
 import { RecruitmentsService } from './recruitments/recruitments.service';
 import { CanPeopleSeeRecruitmentService } from './can_people_see_recruitment/can_people_see_recruitment.service';
@@ -168,5 +174,21 @@ export class AppService {
 
     // save the responses
     await this.surveysService.create({ uuid: surveyMetadata.uuid, responses });
+  }
+
+  async getActiveRecruitmentGradingInstruction(): Promise<{ grading_instruction: string }> {
+    const activeRecruitmentNameUuid = await this.getActiveRecruitmentNameUuid();
+
+    if (!activeRecruitmentNameUuid) {
+      throw new NotFoundException('No active recruitment found');
+    }
+
+    const gradingInstruction = await this.recruitmentsService.getActiveRecruitmentDataForFrontend();
+
+    if (!gradingInstruction) {
+      throw new InternalServerErrorException('No grading instruction found');
+    }
+
+    return { grading_instruction: gradingInstruction.gradingInstruction };
   }
 }
