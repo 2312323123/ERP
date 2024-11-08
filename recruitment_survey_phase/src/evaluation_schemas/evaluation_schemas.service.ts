@@ -34,8 +34,8 @@ export class EvaluationSchemasService {
   // }
 
   async updateRecruitmentEvaluationSchemas(uuid: string, updateEvaluationSchemaDtos: Array<CreateEvaluationSchemaDto>) {
-    this.deleteAllRecruitmentEvaluationSchemas(uuid);
-    this.createRecruitmentEvaluationSchemas(uuid, updateEvaluationSchemaDtos);
+    await this.deleteAllRecruitmentEvaluationSchemas(uuid);
+    await this.createRecruitmentEvaluationSchemas(uuid, updateEvaluationSchemaDtos);
   }
 
   async getRecruitmentEvaluationSchemasCount(uuid: string) {
