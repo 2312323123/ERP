@@ -14,14 +14,32 @@ import { Comment } from 'src/comments/entities/comment.entity';
 import { CanEvaluateSurvey } from 'src/can_evaluate_surveys/entities/can_evaluate_survey.entity';
 import { EvaluationSchema } from 'src/evaluation_schemas/entities/evaluation_schema.entity';
 import { EvaluationSchemasService } from 'src/evaluation_schemas/evaluation_schemas.service';
+import { ActiveRecruitmentService } from 'src/active_recruitment/active_recruitment.service';
+import { Recruitment } from 'src/recruitments/entities/recruitment.entity';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Survey.name, schema: SurveySchema }]),
-    TypeOrmModule.forFeature([SurveyMetadata, ActiveRecruitment, Mark, Comment, CanEvaluateSurvey, EvaluationSchema]),
+    TypeOrmModule.forFeature([
+      SurveyMetadata,
+      ActiveRecruitment,
+      Mark,
+      Comment,
+      CanEvaluateSurvey,
+      EvaluationSchema,
+      Mark,
+      Recruitment,
+    ]),
   ],
   controllers: [SurveysController],
-  providers: [SurveysService, MarksService, CommentsService, CanEvaluateSurveysService, EvaluationSchemasService],
+  providers: [
+    SurveysService,
+    MarksService,
+    CommentsService,
+    CanEvaluateSurveysService,
+    EvaluationSchemasService,
+    ActiveRecruitmentService,
+  ],
   exports: [SurveysService],
 })
 export class SurveysModule {}

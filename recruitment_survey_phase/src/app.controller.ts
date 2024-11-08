@@ -156,9 +156,10 @@ export class AppController {
     return this.appService.getSurvey(uuid);
   }
 
+  @Roles('SUPERADMIN') // for now, then obviously change to evaluator or something
   @Get('/api/surveys/evaluation/not-evaluated-one')
-  async getNotEvaluatedOne(): Promise<string | null> {
-    return this.appService.getNotEvaluatedOne();
+  async getNotEvaluatedOne(@UserId() userId: string): Promise<Survey | null> {
+    return this.appService.getNotEvaluatedOne(userId);
   }
 
   @Roles('SUPERADMIN') // for now, then obviously change to evaluator or something

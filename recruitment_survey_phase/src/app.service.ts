@@ -211,9 +211,8 @@ export class AppService {
     return this.surveysService.getSurvey(uuid);
   }
 
-  async getNotEvaluatedOne(): Promise<string | null> {
-    // return this.surveysService.getNotEvaluatedOne();
-    return null;
+  async getNotEvaluatedOne(userId: string): Promise<Survey | null> {
+    return this.surveysService.getNotEvaluatedOne(userId);
   }
 
   async evaluateSurvey(userId: string, survey_uuid: string, marks: number[], comment: string) {

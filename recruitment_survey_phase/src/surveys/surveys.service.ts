@@ -11,6 +11,20 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ActiveRecruitment } from 'src/active_recruitment/entities/active_recruitment.entity';
 import { EvaluationSchemasService } from 'src/evaluation_schemas/evaluation_schemas.service';
+import { ActiveRecruitmentService } from 'src/active_recruitment/active_recruitment.service';
+import { Mark } from 'src/marks/entities/mark.entity';
+
+const weightedRandom = <T>(arr: T[]): T | undefined => {
+  const weights = arr.map((_, i) => 1 / (i + 1)); // Higher weights for earlier elements
+  const totalWeight = weights.reduce((a, b) => a + b, 0);
+  const random = Math.random() * totalWeight;
+
+  let cumulativeWeight = 0;
+  for (let i = 0; i < arr.length; i++) {
+    cumulativeWeight += weights[i];
+    if (random < cumulativeWeight) return arr[i];
+  }
+};
 
 @Injectable()
 export class SurveysService {
@@ -22,6 +36,8 @@ export class SurveysService {
     @InjectRepository(SurveyMetadata) private surveyMetadataRepository: Repository<SurveyMetadata>,
     @InjectRepository(ActiveRecruitment) private activeRecruitmentRepository: Repository<ActiveRecruitment>,
     private readonly evaluationSchemasService: EvaluationSchemasService,
+    private readonly activeRecruitmentService: ActiveRecruitmentService,
+    @InjectRepository(Mark) private markRepository: Repository<Mark>,
   ) {}
 
   async create(createSurveyDto: CreateSurveyDto): Promise<Survey> {
@@ -105,8 +121,67 @@ export class SurveysService {
       throw new BadRequestException('Amount of marks does not match the amount of criteria');
     }
 
-    await this.marksService.storeMarks(userId, survey_uuid, marks);
+    // get survey_metadata for relation of mark
+    const surveyMetadata = await this.surveyMetadataRepository.findOneBy({ uuid: survey_uuid });
+
+    if (!surveyMetadata) {
+      throw new NotFoundException('Survey metadata not found');
+    }
+
+    await this.marksService.storeMarks(userId, survey_uuid, marks, surveyMetadata);
     await this.commentsService.storeComment(userId, survey_uuid, comment);
+  }
+
+  async getSurveyUuidsByUserAndRecruitment(userUuid: string, recruitmentUuid: string): Promise<string[]> {
+    const results = await this.markRepository
+      .createQueryBuilder('mark')
+      .select('mark.survey_uuid')
+      .innerJoin('mark.survey_metadata', 'survey_metadata') // Join Mark to SurveyMetadata via survey_uuid
+      .innerJoin('survey_metadata.recruitment', 'recruitment') // Join SurveyMetadata to EvaluationSchema via recruitment_uuid
+      .where('mark.evaluator_id = :userUuid', { userUuid })
+      .andWhere('recruitment.uuid = :recruitmentUuid', { recruitmentUuid })
+      .getMany();
+
+    return results.map((result) => result.survey_uuid);
+  }
+
+  async getAllSurveyUuidsFromRecruitment(recruitmentUuid: string): Promise<string[]> {
+    const results = await this.surveyMetadataRepository
+      .createQueryBuilder('survey_metadata')
+      .select('survey_metadata.uuid')
+      .innerJoin('survey_metadata.recruitment', 'recruitment') // Join SurveyMetadata to Recruitment via recruitment_uuid
+      .where('recruitment.uuid = :recruitmentUuid', { recruitmentUuid })
+      .getMany();
+
+    return results.map((result) => result.uuid);
+  }
+
+  async getNotEvaluatedOne(userId: string): Promise<Survey | null> {
+    // get uuids of evaluated surveys by given user from active recruitment
+    const activeRecruitmentUuid = (await this.activeRecruitmentService.getActiveRecruitmentNameUuid())?.uuid;
+    if (!activeRecruitmentUuid) {
+      throw new NotFoundException('No active recruitment found');
+    }
+    const evaluatedSurveyUuids = await this.getSurveyUuidsByUserAndRecruitment(userId, activeRecruitmentUuid);
+
+    // get uuids of all surveys from active recruitment
+    const allSurveyUuids = await this.getAllSurveyUuidsFromRecruitment(activeRecruitmentUuid);
+
+    // get the difference
+    const difference = allSurveyUuids.filter((uuid) => !evaluatedSurveyUuids.includes(uuid));
+
+    // get random (weithtedRandom) uuid from the difference
+    const randomUuid = weightedRandom(difference);
+
+    if (!randomUuid) {
+      return null;
+    }
+
+    // get the survey by uuid
+    const theSurvey = await this.getSurvey(randomUuid);
+
+    // return the survey
+    return theSurvey;
   }
 
   // async findAll(): Promise<Survey[]> {

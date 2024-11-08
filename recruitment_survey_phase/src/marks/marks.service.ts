@@ -4,6 +4,7 @@ import { UpdateMarkDto } from './dto/update-mark.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Mark } from './entities/mark.entity';
 import { Repository } from 'typeorm';
+import { SurveyMetadata } from 'src/survey_metadatas/entities/survey_metadata.entity';
 
 @Injectable()
 export class MarksService {
@@ -13,7 +14,12 @@ export class MarksService {
     return this.markRepository.findOne({ where: { evaluator_id: userId, survey_uuid } }).then((mark) => !!mark);
   }
 
-  async storeMarks(userId: string, survey_uuid: string, marks: number[]): Promise<void> {
+  async storeMarks(
+    userId: string,
+    survey_uuid: string,
+    marks: number[],
+    surveyMetadata: SurveyMetadata,
+  ): Promise<void> {
     if (marks.length > 100) {
       throw new BadRequestException('Marks array is too long');
     }
@@ -27,6 +33,7 @@ export class MarksService {
       mark.survey_uuid = survey_uuid;
       mark.order = i;
       mark.number_value = marks[i];
+      mark.survey_metadata = surveyMetadata;
       await this.markRepository.save(mark);
     }
   }
