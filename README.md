@@ -4,6 +4,9 @@
   - error: `Nest can't resolve dependencies of the RecruitmentsService (RecruitmentRepository, ActiveRecruitmentRepository, ?). Please make sure that the argument "MarkGradeNameRepository" at index [2] is available in the RecruitmentsModule context.`
   - if you do this:
     `@InjectRepository(MarkGradeName) private markGradeNameRepository: Repository<MarkGradeName>,` in `recruitments.service.ts`, you have to go to `recruitments.module.ts` and add `MarkGradeName` to the array here: `imports: [TypeOrmModule.forFeature([Recruitment, ActiveRecruitment])],` (MarkGradeName is an the Entity)
+- importing other service:
+  - error: `ERROR [ExceptionHandler] Nest can't resolve dependencies of the SurveysService (SurveyModel, ?). Please make sure that the argument MarksService at index [1] is available in the SurveysModule context.`
+  - solution: add said service i.e. MarksService to providers[] of module for service in which you use it, i.e. SurveysModule
 - fetching related tables by some i.e. OneToOne relation:
   - error: Cannot read properties of undefined (reading '<\some_field_name>\')
   - you need to add this in find to load related tables fields, example in getActiveRecruitmentNameUuid:
@@ -172,6 +175,8 @@ and if there is no role required, then chances are some token is being sent as p
   - then copy init roles contents from some other service, i.e. auth_and_permissions one
   - if it doesn't see nest/axios in here `import { HttpService } from '@nestjs/axios';`, then for me restarting IDE after trying everything else has helped
   - and also you have to put `HttpModule` from @nestjs/axios among app.module.ts imports array
+- also important: using the guard injects a the new parameter `user_id` into the body of the request. It's already in auth folder you were recommended to copy, and you it in controller like `async getSmth(@UserId() userId: string) {}`
+- to skip authorization: `@Roles('skip')`
 
 ---
 
@@ -358,6 +363,7 @@ CMD [ "npm", "run", "dev" ]
 
 - Mui https://mui.com/material-ui/getting-started/installation/
 - Mui icons https://fonts.google.com/icons?icon.set=Material+Icons
+- normalize.css https://www.npmjs.com/package/normalize.css
 
 ---
 
