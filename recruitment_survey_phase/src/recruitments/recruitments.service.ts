@@ -252,49 +252,25 @@ export class RecruitmentsService {
       return null;
     }
 
-    const fieldsHiddenForSurveyEvaluator = await this.fieldsHiddenForSurveyEvaluatorRepository.find({
-      where: { recruitment_uuid: uuid },
-    });
+    const recruitmentRelatedDataForFrontend = new CreateRecruitmentRelatedDataForFrontendDto();
 
-    const markGradeName = await this.markGradeNameRepository.findOne({
-      where: { recruitment_uuid: uuid },
-    });
+    const recruitmentRelatedData = await this.getEvaluationCriteria();
+    recruitmentRelatedDataForFrontend.gradingInstruction = recruitmentRelatedData.gradingInstruction;
+    recruitmentRelatedDataForFrontend.fieldsNotToShow = recruitmentRelatedData.fieldsNotToShow;
+    recruitmentRelatedDataForFrontend.fieldToDistinctTheSurvey = recruitmentRelatedData.fieldToDistinctTheSurvey;
+    recruitmentRelatedDataForFrontend.evaluationCriteria = recruitmentRelatedData.evaluationCriteria;
+    recruitmentRelatedDataForFrontend.markTags = recruitmentRelatedData.markTags;
 
-    const evaluationSchemas = await this.evaluationSchemaRepository.find({
-      where: { recruitment_uuid: uuid },
-      order: { order: 'ASC' },
-    });
-
-    const recruitmentRelatedData = new CreateRecruitmentRelatedDataForFrontendDto();
-    recruitmentRelatedData.gradingInstruction = recruitment.grading_instruction;
-    recruitmentRelatedData.token = recruitment.survey_sending_secret;
-    recruitmentRelatedData.fieldToDistinctTheSurvey = recruitment.field_to_distinct_the_survey;
-
-    recruitmentRelatedData.fieldsNotToShow = fieldsHiddenForSurveyEvaluator.map((field) => field.field);
-
-    if (markGradeName) {
-      recruitmentRelatedData.markTags = {
-        mark1Tag: markGradeName.grade_1_of_5,
-        mark2Tag: markGradeName.grade_2_of_5,
-        mark3Tag: markGradeName.grade_3_of_5,
-        mark4Tag: markGradeName.grade_4_of_5,
-        mark5Tag: markGradeName.grade_5_of_5,
-      };
-    }
-
-    recruitmentRelatedData.evaluationCriteria = evaluationSchemas.map((schema) => ({
-      name: schema.name,
-      description: schema.description,
-      weight: schema.weight,
-    }));
+    // token
+    recruitmentRelatedDataForFrontend.token = recruitment.survey_sending_secret;
 
     // isThereAnyMark
-    recruitmentRelatedData.isThereAnyMark = await this.checkIfMarkExistsForRecruitment(uuid);
+    recruitmentRelatedDataForFrontend.isThereAnyMark = await this.checkIfMarkExistsForRecruitment(uuid);
 
     // isThereAnySurvey
-    recruitmentRelatedData.isThereAnySurvey = await this.checkIfAnySurveyExistsForRecruitment(uuid);
+    recruitmentRelatedDataForFrontend.isThereAnySurvey = await this.checkIfAnySurveyExistsForRecruitment(uuid);
 
-    return recruitmentRelatedData;
+    return recruitmentRelatedDataForFrontend;
   }
 
   async delete(uuid: string): Promise<void> {
@@ -335,5 +311,59 @@ export class RecruitmentsService {
     });
 
     return !!surveyMetadata; // Return true if found, otherwise false
+  }
+
+  async getEvaluationCriteria(): Promise<RecruitmentRelatedData> {
+    // kind of opposite of createRecruitmentRelatedEntitiesFromObject
+
+    const { recruitment_uuid: uuid } = (await this.activeRecruitmentRepository.find())[0];
+
+    if (!uuid) {
+      throw new NotFoundException('No active recruitment found');
+    }
+
+    const recruitment = await this.recruitmentRepository.findOne({
+      where: { uuid },
+    });
+
+    if (!recruitment) {
+      throw new NotFoundException('No recruitment found');
+    }
+
+    const fieldsHiddenForSurveyEvaluator = await this.fieldsHiddenForSurveyEvaluatorRepository.find({
+      where: { recruitment_uuid: uuid },
+    });
+
+    const evaluationSchemas = await this.evaluationSchemaRepository.find({
+      where: { recruitment_uuid: uuid },
+      order: { order: 'ASC' },
+    });
+
+    const markGradeName = await this.markGradeNameRepository.findOne({
+      where: { recruitment_uuid: uuid },
+    });
+
+    const recruitmentRelatedData = new RecruitmentRelatedData();
+    recruitmentRelatedData.gradingInstruction = recruitment.grading_instruction;
+    recruitmentRelatedData.fieldsNotToShow = fieldsHiddenForSurveyEvaluator.map((field) => field.field);
+    recruitmentRelatedData.fieldToDistinctTheSurvey = recruitment.field_to_distinct_the_survey;
+
+    recruitmentRelatedData.evaluationCriteria = evaluationSchemas.map((schema) => ({
+      name: schema.name,
+      description: schema.description,
+      weight: schema.weight,
+    }));
+
+    if (markGradeName) {
+      recruitmentRelatedData.markTags = {
+        mark1Tag: markGradeName.grade_1_of_5,
+        mark2Tag: markGradeName.grade_2_of_5,
+        mark3Tag: markGradeName.grade_3_of_5,
+        mark4Tag: markGradeName.grade_4_of_5,
+        mark5Tag: markGradeName.grade_5_of_5,
+      };
+    }
+
+    return recruitmentRelatedData;
   }
 }

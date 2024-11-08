@@ -23,6 +23,7 @@ import { MarkGradeNamesService } from './mark_grade_names/mark_grade_names.servi
 import { CreateMarkGradeNameDto } from './mark_grade_names/dto/create-mark_grade_name.dto';
 import { SurveysService } from './surveys/surveys.service';
 import { SurveyMetadatasService } from './survey_metadatas/survey_metadatas.service';
+import { Survey } from './surveys/schemas/survey.schema';
 
 function extractBearerToken(authHeader: string) {
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -190,5 +191,37 @@ export class AppService {
     }
 
     return { grading_instruction: gradingInstruction.gradingInstruction };
+  }
+
+  async getPreviousSurveyUuid(current_survey_uuid: string): Promise<string | null> {
+    // return this.surveysService.getPreviousSurveyUuid(current_survey_uuid);
+    return null;
+  }
+
+  async getNextSurveyUuid(current_survey_uuid: string): Promise<string | null> {
+    // return this.surveysService.getNextSurveyUuid(current_survey_uuid);
+    return null;
+  }
+
+  async getEvaluationCriteria(): Promise<RecruitmentRelatedData> {
+    return this.recruitmentsService.getEvaluationCriteria();
+  }
+
+  async getSurvey(uuid: string): Promise<Survey> {
+    return this.surveysService.getSurvey(uuid);
+  }
+
+  async getNotEvaluatedOne(): Promise<string | null> {
+    // return this.surveysService.getNotEvaluatedOne();
+    return null;
+  }
+
+  async evaluateSurvey(userId: string, survey_uuid: string, marks: number[], comment: string) {
+    return this.surveysService.evaluateSurvey(userId, survey_uuid, marks, comment);
+  }
+
+  async reEvaluateSurvey(survey_uuid: string, marks: number[], comment: string) {
+    // return this.surveysService.reEvaluateSurvey(survey_uuid, marks, comment);
+    return;
   }
 }

@@ -15,9 +15,6 @@ export class RolesGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
-    if (!requiredRoles) {
-      return true; // No roles required, so allow access
-    }
 
     const request = context.switchToHttp().getRequest();
     const authHeader = request.headers['authorization'];
@@ -29,11 +26,22 @@ export class RolesGuard implements CanActivate {
     const token = authHeader.split(' ')[1];
     let payload: any;
 
+    if (requiredRoles?.length === 1 && requiredRoles?.[0] === 'skip') {
+      return true; // Skip authentication altogether
+    }
+
     try {
       // Simply verify the token
       payload = this.jwtService.verify(token);
+
+      // Attach user ID to the request object
+      request.user_id = payload.id;
     } catch {
       throw new UnauthorizedException('Invalid JWT token');
+    }
+
+    if (requiredRoles.length === 0) {
+      return true; // No roles required, so allow access to anyone with a valid JWT token
     }
 
     const userRoles = payload.roles || [];

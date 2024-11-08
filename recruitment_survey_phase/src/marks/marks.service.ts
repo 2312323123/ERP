@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateMarkDto } from './dto/create-mark.dto';
 import { UpdateMarkDto } from './dto/update-mark.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -7,25 +7,47 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class MarksService {
-  constructor(@InjectRepository(Mark) markRepository: Repository<Mark>) {}
+  constructor(@InjectRepository(Mark) private markRepository: Repository<Mark>) {}
 
-  create(createMarkDto: CreateMarkDto) {
-    return 'This action adds a new mark';
+  async suchMarksExist(userId: string, survey_uuid: string): Promise<boolean> {
+    return this.markRepository.findOne({ where: { evaluator_id: userId, survey_uuid } }).then((mark) => !!mark);
   }
 
-  findAll() {
-    return `This action returns all marks`;
+  async storeMarks(userId: string, survey_uuid: string, marks: number[]): Promise<void> {
+    if (marks.length > 100) {
+      throw new BadRequestException('Marks array is too long');
+    }
+    const marksValid = marks.every((mark) => [1, 2, 3, 4, 5].includes(mark));
+    if (!marksValid) {
+      throw new BadRequestException('All marks have to be one of 1, 2, 3, 4, 5');
+    }
+    for (let i = 0; i < marks.length; i++) {
+      const mark = new Mark();
+      mark.evaluator_id = userId;
+      mark.survey_uuid = survey_uuid;
+      mark.order = i;
+      mark.number_value = marks[i];
+      await this.markRepository.save(mark);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} mark`;
-  }
+  // create(createMarkDto: CreateMarkDto) {
+  //   return 'This action adds a new mark';
+  // }
 
-  update(id: number, updateMarkDto: UpdateMarkDto) {
-    return `This action updates a #${id} mark`;
-  }
+  // findAll() {
+  //   return `This action returns all marks`;
+  // }
 
-  remove(id: number) {
-    return `This action removes a #${id} mark`;
-  }
+  // findOne(id: number) {
+  //   return `This action returns a #${id} mark`;
+  // }
+
+  // update(id: number, updateMarkDto: UpdateMarkDto) {
+  //   return `This action updates a #${id} mark`;
+  // }
+
+  // remove(id: number) {
+  //   return `This action removes a #${id} mark`;
+  // }
 }

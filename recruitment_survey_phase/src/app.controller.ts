@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, Headers, HttpCode, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Headers, HttpCode, Post, Put } from '@nestjs/common';
 import { AppService } from './app.service';
 import { CreateCanPeopleSeeRecruitmentDto } from './can_people_see_recruitment/dto/create-can_people_see_recruitment.dto';
 import { CreateCanEvaluateSurveyDto } from './can_evaluate_surveys/dto/create-can_evaluate_survey.dto';
@@ -7,6 +7,8 @@ import { CreateRecruitmentDto } from './recruitments/dto/create-recruitment.dto'
 import { RecruitmentRelatedData } from './recruitments/dto/create-recruitment-related-data-for-frontend.dto';
 import { UndefinedCheckPipe } from './pipes/undefined-check.pipe';
 import { Roles } from './auth/roles.decorator';
+import { Survey } from './surveys/schemas/survey.schema';
+import { UserId } from './auth/user-id.decorator';
 
 @Controller()
 export class AppController {
@@ -114,6 +116,7 @@ export class AppController {
     await this.appService.deleteRecruitment(uuid);
   }
 
+  @Roles('skip')
   @Post('/api/surveys/new-survey')
   async createSurvey(
     @Headers('authorization') authHeader: string,
@@ -126,5 +129,55 @@ export class AppController {
   @Get('/api/surveys/active-recruitemnt-grading-instruction')
   async getActiveRecruitmentGradingInstruction(): Promise<{ grading_instruction: string }> {
     return this.appService.getActiveRecruitmentGradingInstruction();
+  }
+
+  @Get('/api/surveys/evaluation/previous-survey-id')
+  async getPreviousSurveyUuid(
+    @Body('current_survey_uuid', UndefinedCheckPipe) current_survey_uuid: string,
+  ): Promise<string | null> {
+    return this.appService.getPreviousSurveyUuid(current_survey_uuid);
+  }
+
+  @Get('/api/surveys/evaluation/next-survey-id')
+  async getNextSurveyUuid(
+    @Body('current_survey_uuid', UndefinedCheckPipe) current_survey_uuid: string,
+  ): Promise<string | null> {
+    return this.appService.getNextSurveyUuid(current_survey_uuid);
+  }
+
+  @Get('/api/surveys/evaluation/criteria')
+  async getCriteria(): Promise<RecruitmentRelatedData> {
+    return this.appService.getEvaluationCriteria();
+  }
+
+  @Roles('USER')
+  @Get('/api/surveys/survey')
+  async getSurvey(@Body('uuid', UndefinedCheckPipe) uuid: string): Promise<Survey> {
+    return this.appService.getSurvey(uuid);
+  }
+
+  @Get('/api/surveys/evaluation/not-evaluated-one')
+  async getNotEvaluatedOne(): Promise<string | null> {
+    return this.appService.getNotEvaluatedOne();
+  }
+
+  @Roles('SUPERADMIN') // for now, then obviously change to evaluator or something
+  @Post('/api/surveys/evaluation/evaluate')
+  async evaluateSurvey(
+    @UserId() userId: string,
+    @Body('survey_uuid', UndefinedCheckPipe) survey_uuid: string,
+    @Body('marks', UndefinedCheckPipe) marks: number[],
+    @Body('comment', UndefinedCheckPipe) comment: string,
+  ) {
+    return this.appService.evaluateSurvey(userId, survey_uuid, marks, comment);
+  }
+
+  @Put('/api/surveys/evaluation/evaluate')
+  async reEvaluateSurvey(
+    @Body('survey_uuid', UndefinedCheckPipe) survey_uuid: string,
+    @Body('marks', UndefinedCheckPipe) marks: number[],
+    @Body('comment', UndefinedCheckPipe) comment: string,
+  ) {
+    return this.appService.reEvaluateSurvey(survey_uuid, marks, comment);
   }
 }

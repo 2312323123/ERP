@@ -38,6 +38,10 @@ export class EvaluationSchemasService {
     this.createRecruitmentEvaluationSchemas(uuid, updateEvaluationSchemaDtos);
   }
 
+  async getRecruitmentEvaluationSchemasCount(uuid: string) {
+    return this.evaluationSchemaRepository.count({ where: { recruitment_uuid: uuid } });
+  }
+
   // remove(id: number) {
   //   return `This action removes a #${id} evaluationSchema`;
   // }
