@@ -193,14 +193,12 @@ export class AppService {
     return { grading_instruction: gradingInstruction.gradingInstruction };
   }
 
-  async getPreviousSurveyUuid(current_survey_uuid: string): Promise<string | null> {
-    // return this.surveysService.getPreviousSurveyUuid(current_survey_uuid);
-    return null;
+  async getPreviousSurveyUuid(userId: string, current_survey_uuid: string): Promise<string | null> {
+    return this.surveysService.getPreviousSurveyUuid(userId, current_survey_uuid);
   }
 
-  async getNextSurveyUuid(current_survey_uuid: string): Promise<string | null> {
-    // return this.surveysService.getNextSurveyUuid(current_survey_uuid);
-    return null;
+  async getNextSurveyUuid(userId: string, current_survey_uuid: string): Promise<string | null> {
+    return this.surveysService.getNextSurveyUuid(userId, current_survey_uuid);
   }
 
   async getEvaluationCriteria(): Promise<RecruitmentRelatedData> {
@@ -219,8 +217,7 @@ export class AppService {
     return this.surveysService.evaluateSurvey(userId, survey_uuid, marks, comment);
   }
 
-  async reEvaluateSurvey(survey_uuid: string, marks: number[], comment: string) {
-    // return this.surveysService.reEvaluateSurvey(survey_uuid, marks, comment);
-    return;
+  async reEvaluateSurvey(userId: string, survey_uuid: string, marks: number[], comment: string) {
+    return this.surveysService.reEvaluateSurvey(userId, survey_uuid, marks, comment);
   }
 }

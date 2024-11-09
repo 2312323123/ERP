@@ -1,9 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateMarkDto } from './dto/create-mark.dto';
 import { UpdateMarkDto } from './dto/update-mark.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Mark } from './entities/mark.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { SurveyMetadata } from 'src/survey_metadatas/entities/survey_metadata.entity';
 
 @Injectable()
@@ -27,15 +27,56 @@ export class MarksService {
     if (!marksValid) {
       throw new BadRequestException('All marks have to be one of 1, 2, 3, 4, 5');
     }
-    for (let i = 0; i < marks.length; i++) {
+
+    const markEntities = marks.map((markValue, index) => {
       const mark = new Mark();
       mark.evaluator_id = userId;
       mark.survey_uuid = survey_uuid;
-      mark.order = i;
-      mark.number_value = marks[i];
+      mark.order = index;
+      mark.number_value = markValue;
       mark.survey_metadata = surveyMetadata;
-      await this.markRepository.save(mark);
+      return mark;
+    });
+
+    await this.markRepository.save(markEntities);
+  }
+
+  async updateMarks(userId: string, survey_uuid: string, marks: number[]): Promise<void> {
+    if (marks.length > 100) {
+      throw new BadRequestException('Marks array is too long');
     }
+    const marksValid = marks.every((mark) => [1, 2, 3, 4, 5].includes(mark));
+    if (!marksValid) {
+      throw new BadRequestException('All marks have to be one of 1, 2, 3, 4, 5');
+    }
+
+    // retrieve all required marks at once
+    const existingMarks = await this.markRepository.find({
+      where: {
+        evaluator_id: userId,
+        survey_uuid: survey_uuid,
+        order: In(marks.map((_, index) => index)), // Fetch marks with specific orders
+      },
+    });
+
+    // check if any mark is missing
+    const existingOrders = new Set(existingMarks.map((mark) => mark.order));
+    const missingOrders = marks.map((_, index) => index).filter((order) => !existingOrders.has(order));
+
+    if (missingOrders.length > 0) {
+      throw new NotFoundException(`Marks missing for orders: ${missingOrders.join(', ')}`);
+    }
+
+    // update marks as all required entries are present
+    for (let i = 0; i < marks.length; i++) {
+      const mark = existingMarks.find((m) => m.order === i);
+      if (mark) {
+        mark.number_value = marks[i];
+      }
+    }
+
+    // save all updated marks at once
+    await this.markRepository.save(existingMarks);
   }
 
   // create(createMarkDto: CreateMarkDto) {

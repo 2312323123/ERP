@@ -13,6 +13,7 @@ import { ActiveRecruitment } from 'src/active_recruitment/entities/active_recrui
 import { EvaluationSchemasService } from 'src/evaluation_schemas/evaluation_schemas.service';
 import { ActiveRecruitmentService } from 'src/active_recruitment/active_recruitment.service';
 import { Mark } from 'src/marks/entities/mark.entity';
+import { Comment } from 'src/comments/entities/comment.entity';
 
 const weightedRandom = <T>(arr: T[]): T | undefined => {
   const weights = arr.map((_, i) => 1 / (i + 1)); // Higher weights for earlier elements
@@ -38,6 +39,7 @@ export class SurveysService {
     private readonly evaluationSchemasService: EvaluationSchemasService,
     private readonly activeRecruitmentService: ActiveRecruitmentService,
     @InjectRepository(Mark) private markRepository: Repository<Mark>,
+    @InjectRepository(Comment) private commentRepository: Repository<Comment>,
   ) {}
 
   async create(createSurveyDto: CreateSurveyDto): Promise<Survey> {
@@ -129,7 +131,86 @@ export class SurveysService {
     }
 
     await this.marksService.storeMarks(userId, survey_uuid, marks, surveyMetadata);
-    await this.commentsService.storeComment(userId, survey_uuid, comment);
+    await this.commentsService.storeComment(userId, survey_uuid, comment, surveyMetadata);
+  }
+
+  async reEvaluateSurvey(userId: string, survey_uuid: string, marks: number[], comment: string) {
+    // filter out some extreme cases
+    if (comment.length > 10000) {
+      throw new BadRequestException('Comment is too long');
+    }
+    const evaluationExists = await this.marksService.suchMarksExist(userId, survey_uuid);
+
+    if (!evaluationExists) {
+      throw new BadRequestException('Evaluation does not exist. Use evaluate endpoint if you want to create it');
+    }
+
+    // also here to avoid setting marks and not setting the comment
+    const marksValid = marks.every((mark) => [1, 2, 3, 4, 5].includes(mark));
+    if (!marksValid) {
+      throw new BadRequestException('Each mark has to be one of 1, 2, 3, 4, 5');
+    }
+
+    const commentExists = await this.commentsService.suchCommentExist(userId, survey_uuid);
+
+    if (!commentExists) {
+      throw new BadRequestException('Comment does not exist. Use evaluate endpoint if you want to create it');
+    }
+
+    const surveyExists = await this.surveyModel.exists({ uuid: survey_uuid });
+
+    if (!surveyExists) {
+      throw new NotFoundException('Survey not found');
+    }
+
+    // is evaluation enabled? if not, we should not allow evaluation
+    const canEvaluateSurveys = await this.canEvaluateSurveysService.getCanEvaluateSurveys();
+
+    if (!canEvaluateSurveys) {
+      throw new BadRequestException('Evaluation is disabled');
+    }
+
+    // is survey a part of active recruitment? if not, we should not allow evaluation
+    const surveyRecruitment = (
+      await this.surveyMetadataRepository.find({
+        where: { uuid: survey_uuid },
+        relations: ['recruitment'], // Load the 'recruitment' relationship
+      })
+    )[0];
+    const surveyRecruitmentUuid = surveyRecruitment?.recruitment?.uuid;
+    if (!surveyRecruitmentUuid) {
+      throw new NotFoundException('Recruitment of the survey not found');
+    }
+    const { recruitment_uuid: activeRecruitmentUuid } = (await this.activeRecruitmentRepository.find({ take: 1 }))[0];
+
+    if (surveyRecruitmentUuid !== activeRecruitmentUuid) {
+      throw new BadRequestException('Survey is not a part of active recruitment');
+    }
+
+    // amount of marks should match the amount of criteria in the settings
+    const evaluationSchemasCount =
+      await this.evaluationSchemasService.getRecruitmentEvaluationSchemasCount(activeRecruitmentUuid);
+    if (evaluationSchemasCount === 0) {
+      throw new InternalServerErrorException('There are no evaluation criteria for the recruitment');
+    }
+
+    if (marks.length !== evaluationSchemasCount) {
+      console.log('marks.length:');
+      console.log(marks.length);
+      console.log('evaluationSchemasCount:');
+      console.log(evaluationSchemasCount);
+      throw new BadRequestException('Amount of marks does not match the amount of criteria');
+    }
+
+    // get survey_metadata for relation of mark
+    const surveyMetadata = await this.surveyMetadataRepository.findOneBy({ uuid: survey_uuid });
+
+    if (!surveyMetadata) {
+      throw new NotFoundException('Survey metadata not found');
+    }
+
+    await this.marksService.updateMarks(userId, survey_uuid, marks);
+    await this.commentsService.updateComment(userId, survey_uuid, comment);
   }
 
   async getSurveyUuidsByUserAndRecruitment(userUuid: string, recruitmentUuid: string): Promise<string[]> {
@@ -184,7 +265,87 @@ export class SurveysService {
     return theSurvey;
   }
 
-  // async findAll(): Promise<Survey[]> {
-  //   return this.surveyModel.find().exec();
-  // }
+  async getEvaluatedSurveyUuidsInChronologicalOrder(userId: string, recruitmentUuid: string): Promise<string[]> {
+    const results = await this.commentRepository
+      .createQueryBuilder('comment')
+      .select('comment.survey_uuid')
+      .innerJoin('comment.survey_metadata', 'survey_metadata')
+      .innerJoin('survey_metadata.recruitment', 'recruitment')
+      .where('comment.evaluator_id = :userId', { userId })
+      .andWhere('recruitment.uuid = :recruitmentUuid', { recruitmentUuid })
+      .orderBy('comment.createdAt', 'DESC')
+      .getMany();
+
+    return results.map((result) => result.survey_uuid);
+  }
+
+  async getPreviousSurveyUuid(userId: string, current_survey_uuid: string): Promise<string | null> {
+    // get Array<survey_uuid> from current recruitment in chronological order by creation of their evaluation
+    const activeRecruitmentNameUuid = await this.activeRecruitmentService.getActiveRecruitmentNameUuid();
+
+    if (!activeRecruitmentNameUuid || !activeRecruitmentNameUuid.uuid) {
+      throw new NotFoundException('Active recruitment UUID not found.');
+    }
+
+    const { uuid: recruitmentUuid } = activeRecruitmentNameUuid;
+
+    // get Array<survey_uuid> from current recruitment in chronological order by creation of their evaluation
+    const evaluatedSurveysDescending = await this.getEvaluatedSurveyUuidsInChronologicalOrder(userId, recruitmentUuid);
+
+    // find the index of the current survey in array
+    const currentSurveyIndex = evaluatedSurveysDescending.indexOf(current_survey_uuid);
+
+    // if current_survey_uuid not in array
+    if (currentSurveyIndex === -1) {
+      // if such survey exists, return the latest evaluated one's id
+      // and if it doesn't exist, 404
+      try {
+        await this.getSurvey(current_survey_uuid);
+      } catch {
+        throw new NotFoundException('Survey with provided id not found');
+      }
+
+      if (evaluatedSurveysDescending.length === 0) {
+        return null;
+      } else {
+        return evaluatedSurveysDescending[0];
+      }
+    }
+
+    // return the previous survey_uuid, or null if there is no previous survey
+    return evaluatedSurveysDescending[currentSurveyIndex + 1] || null;
+  }
+
+  async getNextSurveyUuid(userId: string, current_survey_uuid: string): Promise<string | null> {
+    // get Array<survey_uuid> from current recruitment in chronological order by creation of their evaluation
+    const activeRecruitmentNameUuid = await this.activeRecruitmentService.getActiveRecruitmentNameUuid();
+
+    if (!activeRecruitmentNameUuid || !activeRecruitmentNameUuid.uuid) {
+      throw new NotFoundException('Active recruitment UUID not found.');
+    }
+
+    const { uuid: recruitmentUuid } = activeRecruitmentNameUuid;
+
+    // get Array<survey_uuid> from current recruitment in chronological order by creation of their evaluation
+    const evaluatedSurveysDescending = await this.getEvaluatedSurveyUuidsInChronologicalOrder(userId, recruitmentUuid);
+
+    // find the index of the current survey in array
+    const currentSurveyIndex = evaluatedSurveysDescending.indexOf(current_survey_uuid);
+
+    // if current_survey_uuid not in array
+    if (currentSurveyIndex === -1) {
+      // if such survey exists, return null
+      // and if it doesn't exist, 404
+      try {
+        await this.getSurvey(current_survey_uuid);
+      } catch {
+        throw new NotFoundException('Survey with provided id not found');
+      }
+
+      return null;
+    }
+
+    // if there's later one, return it, else getNotEvaluatedOne.uuid, and if it gets null, return null
+    return evaluatedSurveysDescending[currentSurveyIndex - 1] || (await this.getNotEvaluatedOne(userId))?.uuid || null;
+  }
 }

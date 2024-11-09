@@ -131,18 +131,22 @@ export class AppController {
     return this.appService.getActiveRecruitmentGradingInstruction();
   }
 
+  @Roles('SUPERADMIN') // for now, then obviously change to evaluator or something
   @Get('/api/surveys/evaluation/previous-survey-id')
   async getPreviousSurveyUuid(
+    @UserId() userId: string,
     @Body('current_survey_uuid', UndefinedCheckPipe) current_survey_uuid: string,
   ): Promise<string | null> {
-    return this.appService.getPreviousSurveyUuid(current_survey_uuid);
+    return this.appService.getPreviousSurveyUuid(userId, current_survey_uuid);
   }
 
+  @Roles('SUPERADMIN') // for now, then obviously change to evaluator or something
   @Get('/api/surveys/evaluation/next-survey-id')
   async getNextSurveyUuid(
+    @UserId() userId: string,
     @Body('current_survey_uuid', UndefinedCheckPipe) current_survey_uuid: string,
   ): Promise<string | null> {
-    return this.appService.getNextSurveyUuid(current_survey_uuid);
+    return this.appService.getNextSurveyUuid(userId, current_survey_uuid);
   }
 
   @Get('/api/surveys/evaluation/criteria')
@@ -173,12 +177,14 @@ export class AppController {
     return this.appService.evaluateSurvey(userId, survey_uuid, marks, comment);
   }
 
+  @Roles('SUPERADMIN') // for now, then obviously change to evaluator or something
   @Put('/api/surveys/evaluation/evaluate')
   async reEvaluateSurvey(
+    @UserId() userId: string,
     @Body('survey_uuid', UndefinedCheckPipe) survey_uuid: string,
     @Body('marks', UndefinedCheckPipe) marks: number[],
     @Body('comment', UndefinedCheckPipe) comment: string,
   ) {
-    return this.appService.reEvaluateSurvey(survey_uuid, marks, comment);
+    return this.appService.reEvaluateSurvey(userId, survey_uuid, marks, comment);
   }
 }

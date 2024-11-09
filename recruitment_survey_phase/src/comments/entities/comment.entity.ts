@@ -1,5 +1,5 @@
 import { SurveyMetadata } from 'src/survey_metadatas/entities/survey_metadata.entity';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()
 export class Comment {
@@ -11,8 +11,16 @@ export class Comment {
   survey_metadata: SurveyMetadata;
 
   @PrimaryColumn()
-  evaluator_uuid: string;
+  evaluator_id: string;
 
   @Column({ nullable: true })
   text_value: string;
+
+  // to get previous/next evaluation done by the user
+  @CreateDateColumn({ type: 'timestamptz' })
+  createdAt: Date;
+
+  // the column to get when the evaluation was done
+  @UpdateDateColumn({ type: 'timestamptz' })
+  updatedAt: Date;
 }
