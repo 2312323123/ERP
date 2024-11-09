@@ -1,32 +1,19 @@
-import {
-  AppBar,
-  Box,
-  CssBaseline,
-  Divider,
-  Drawer,
-  IconButton,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Toolbar,
-  Typography,
-} from '@mui/material'
+import { AppBar, Box, CssBaseline, Divider, Drawer, IconButton, List, Toolbar, Typography } from '@mui/material'
 import { useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import MenuIcon from '@mui/icons-material/Menu' // Import MenuIcon
-import bestLogoWhite from '../assets/best-logo-white.svg'
-import LogoutButton from './auth/Logout'
+import bestLogoWhite from '../../assets/best-logo-white.svg'
 import { Home, Logout } from '@mui/icons-material'
-import { Link } from 'react-router-dom'
 import DashboardIcon from '@mui/icons-material/Dashboard'
 import AssignmentIcon from '@mui/icons-material/Assignment'
-import StarsIcon from '@mui/icons-material/Stars'
 import HelpIcon from '@mui/icons-material/Help'
 import FeedbackIcon from '@mui/icons-material/Feedback'
 import SettingsIcon from '@mui/icons-material/Settings'
-import { useGetActiveRecruitmentQuery } from '../services/erp'
+import { useGetActiveRecruitmentQuery } from '../../services/erp'
+import FactCheckIcon from '@mui/icons-material/FactCheck'
+import SurveysNavbarButton from './SurveysNavbarButton'
+import useLogout from '../../hooks/auth/useLogout'
+import { useSurveyEvaluationEntryPoint } from '../../hooks/surveys/useSurveyEvaluationEntryPoint'
 
 const drawerWidth = 240
 
@@ -61,6 +48,8 @@ const SurveysNavbar = (props: Props) => {
   }
 
   const { data: activeRecruitment } = useGetActiveRecruitmentQuery()
+  const logout = useLogout()
+  const evaluateClick = useSurveyEvaluationEntryPoint()
 
   const drawer = (
     <div>
@@ -72,89 +61,37 @@ const SurveysNavbar = (props: Props) => {
       <Divider />
       {/* TODO: User icon + role shall go here */}
       <List>
-        <Link to="/recrutiment-survey-stage/app/dashboard" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <DashboardIcon />
-              </ListItemIcon>
-              <ListItemText primary={'Panel'} />
-            </ListItemButton>
-          </ListItem>
-        </Link>
-        <Link to="/recrutiment-survey-stage/app/surveys" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <AssignmentIcon />
-              </ListItemIcon>
-              <ListItemText primary={'Ankiety'} />
-            </ListItemButton>
-          </ListItem>
-        </Link>
-        <Link to="/recrutiment-survey-stage/app/ranks" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <StarsIcon />
-              </ListItemIcon>
-              <ListItemText primary={'Ranking'} />
-            </ListItemButton>
-          </ListItem>
-        </Link>
-        <Link to="/recrutiment-survey-stage/app/help" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <HelpIcon />
-              </ListItemIcon>
-              <ListItemText primary={'Jak oceniać'} />
-            </ListItemButton>
-          </ListItem>
-        </Link>
-        <Link to="/recrutiment-survey-stage/app/feedback" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <FeedbackIcon />
-              </ListItemIcon>
-              <ListItemText primary={'Feedback'} />
-            </ListItemButton>
-          </ListItem>
-        </Link>
-        <Link to="/recrutiment-survey-stage/app/settings" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <SettingsIcon />
-              </ListItemIcon>
-              <ListItemText primary={'Ustawienia'} />
-            </ListItemButton>
-          </ListItem>
-        </Link>
+        <SurveysNavbarButton
+          action={() => evaluateClick({ clickedIEvaluateButton: true })}
+          text="Oceniam"
+          iconElement={<FactCheckIcon />}
+        />
+        <SurveysNavbarButton path="/recrutiment-survey-stage/app/help" text="Jak oceniać" iconElement={<HelpIcon />} />
+        <SurveysNavbarButton
+          path="/recrutiment-survey-stage/app/surveys"
+          text="Ankiety"
+          iconElement={<AssignmentIcon />}
+        />
+        <SurveysNavbarButton
+          path="/recrutiment-survey-stage/app/dashboard"
+          text="Statystyki"
+          iconElement={<DashboardIcon />}
+        />
+        <SurveysNavbarButton
+          path="/recrutiment-survey-stage/app/feedback"
+          text="Feedback"
+          iconElement={<FeedbackIcon />}
+        />
+        <SurveysNavbarButton
+          path="/recrutiment-survey-stage/app/settings"
+          text="Ustawienia"
+          iconElement={<SettingsIcon />}
+        />
       </List>
       <Divider />
       <List>
-        <Link to="/home" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <Home />
-              </ListItemIcon>
-              <ListItemText primary={'Wróć do panelu głównego'} />
-            </ListItemButton>
-          </ListItem>
-        </Link>
-        <LogoutButton>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <Logout />
-              </ListItemIcon>
-              <ListItemText primary={'Wyloguj'} />
-            </ListItemButton>
-          </ListItem>
-        </LogoutButton>
+        <SurveysNavbarButton path="/home" text="Wróć do panelu głównego" iconElement={<Home />} />
+        <SurveysNavbarButton action={logout} text="Wyloguj" iconElement={<Logout />} />
       </List>
     </div>
   )
@@ -217,7 +154,7 @@ const SurveysNavbar = (props: Props) => {
             {drawer}
           </Drawer>
         </Box>
-        <Box component="main" sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}>
+        <Box component="main" sx={{ flexGrow: 1, width: { sm: `calc(100% - ${drawerWidth}px)` } }}>
           <Toolbar />
           <Outlet />
         </Box>

@@ -1,6 +1,6 @@
 import { Button, ListItem, Stack } from '@mui/material'
 import { router } from '../router'
-import { takeMeToSurveyPhase } from '../utils/takeMeToSurveyPhase'
+import { TakeMeToSurveyPhase } from '../utils/TakeMeToSurveyPhase'
 import { logNetworkError, NetworkError } from '../utils/logNetworkError'
 import { logNetworkSuccess } from '../utils/logNetworkSuccess'
 import axios from 'axios'
@@ -52,9 +52,7 @@ const Home = () => {
       </Button>
       <Stack spacing={2}>
         <ListItem>
-          <Button variant="contained" color="primary" onClick={takeMeToSurveyPhase}>
-            Oceniaczka
-          </Button>
+          <TakeMeToSurveyPhase />
         </ListItem>
         <ListItem>
           <Button variant="contained" color="primary">

@@ -4,7 +4,7 @@ import NewRecruitmentPanel from './NewRecruitmentPanel/NewRecruitmentPanel'
 import SaveSettingsButtonPanel from './SaveSettingsButtonPanel/SaveSettingsButtonPanel'
 import RecruitmentSettingsPanel from './RecruitmentSettingsPanel/RecruitmentSettingsPanel'
 import DeleteRecruitmentPanel from './DeleteRecruitmentPanel/DeleteRecruitmentPanel'
-import { Divider } from '@mui/material'
+import { Box, Divider } from '@mui/material'
 import BigSpinner from './components/BigSpinner'
 import { useGetActiveRecruitmentQuery, useGetAllRecruitmentsQuery } from '../../../services/erp'
 
@@ -31,7 +31,7 @@ const SurveysSettings = () => {
 
   if (recruitments?.length === 0) {
     return (
-      <>
+      <Box sx={{ paddingTop: '1.5rem', paddingBottom: '1.5rem' }}>
         {/* Rekrutacja <nazwa> */}
         <TitlePanel />
         <Divider sx={{ my: 4 }} />
@@ -39,12 +39,12 @@ const SurveysSettings = () => {
         {/* Create New Recruitment section */}
         <NewRecruitmentPanel isFirstRecruitment />
         <Divider sx={{ my: 3 }} />
-      </>
+      </Box>
     )
   }
 
   return (
-    <>
+    <Box sx={{ paddingTop: '1.5rem', paddingBottom: '1.5rem' }}>
       {/* Rekrutacja <nazwa> */}
       <TitlePanel />
       <Divider sx={{ my: 4 }} />
@@ -69,7 +69,7 @@ const SurveysSettings = () => {
           <DeleteRecruitmentPanel />
         </>
       )}
-    </>
+    </Box>
   )
 }
 
