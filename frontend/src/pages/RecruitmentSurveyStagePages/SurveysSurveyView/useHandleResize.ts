@@ -10,8 +10,15 @@ const useHandleResize = ({ outerDivRef, setShowEvaluateButton }: Props) => {
   // Initialize debounce once
   const debouncedResize = useRef(
     debounce((size: number) => {
-      if (size && outerDivRef?.current?.offsetHeight) {
-        setShowEvaluateButton(size > outerDivRef.current.offsetHeight * 0.6)
+      const isDesktopFromLocalCheck = window.innerWidth > 1024
+      if (!isDesktopFromLocalCheck) {
+        if (size && outerDivRef?.current?.offsetHeight) {
+          setShowEvaluateButton(size > outerDivRef.current.offsetHeight * 0.6)
+        }
+      } else {
+        if (size && outerDivRef?.current?.offsetWidth) {
+          setShowEvaluateButton(size > outerDivRef.current.offsetWidth * 0.6)
+        }
       }
     }, 50),
   )

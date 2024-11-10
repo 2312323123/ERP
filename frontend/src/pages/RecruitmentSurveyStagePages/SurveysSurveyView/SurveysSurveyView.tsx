@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import OpenEvaluationButton from './OpenEvaluationButton'
 import Survey from './Survey'
 import SurveyTopPart from './SurveyTopPart'
@@ -10,26 +10,36 @@ import styles from './SurveysSurveyView.module.css'
 import SurveyEvaluation from './SurveyEvaluation'
 import FloatingCloseButton from './FloatingCloseButton'
 import VerticalSliderButton from './VerticalButtonSlider'
+import useIsDesktop from '../../../utils/useIsDesktop'
+import HorizontalButtonSlider from './HorizontalButtonSlider'
 
 const SurveysSurveyView = () => {
+  const isDesktop = useIsDesktop()
   const outerDivRef = useRef<HTMLDivElement>(null)
   const innerDivRef = useRef<HTMLDivElement>(null)
   const [showEvaluateButton, setShowEvaluateButton] = useState(true)
+  const [outerDivHeight, setOuterDivHeight] = useState(0)
 
   // block pull-to-refresh on mobile
   useBlockPullToRefreshMobile()
 
   // init action, also used to close the evaluation pane
-  const init = () => {
+  const init = useCallback(() => {
     if (outerDivRef.current && innerDivRef.current) {
-      const element = document.querySelector('.Pane.horizontal.Pane1') as HTMLElement
-      element.style.height = `${outerDivRef?.current?.offsetHeight}px`
+      if (!isDesktop) {
+        const element = document.querySelector('.Pane.horizontal.Pane1') as HTMLElement
+        element.style.height = `${outerDivRef?.current?.offsetHeight}px`
+      } else {
+        const element = document.querySelector('.Pane.vertical.Pane1') as HTMLElement
+        element.style.width = `${outerDivRef?.current?.offsetWidth}px`
+        setOuterDivHeight(outerDivRef.current.offsetHeight)
+      }
     }
     setShowEvaluateButton(true)
-  }
+  }, [isDesktop])
   useLayoutEffect(() => {
     init()
-  }, [])
+  }, [init])
 
   // resize action
   const handleResize = useHandleResize({ outerDivRef, setShowEvaluateButton })
@@ -37,8 +47,13 @@ const SurveysSurveyView = () => {
   // button click action
   const handleEvaluateButtonClick = () => {
     if (innerDivRef.current && outerDivRef.current) {
-      const element = document.querySelector('.Pane.horizontal.Pane1') as HTMLElement
-      element.style.height = `${outerDivRef?.current?.offsetHeight * 0.6}px`
+      if (!isDesktop) {
+        const element = document.querySelector('.Pane.horizontal.Pane1') as HTMLElement
+        element.style.height = `${outerDivRef?.current?.offsetHeight * 0.6}px`
+      } else {
+        const element = document.querySelector('.Pane.vertical.Pane1') as HTMLElement
+        element.style.width = `${outerDivRef?.current?.offsetWidth * 0.6}px`
+      }
     }
     setShowEvaluateButton(false)
   }
@@ -46,15 +61,27 @@ const SurveysSurveyView = () => {
   return (
     <>
       <div ref={outerDivRef} className={styles.outerDiv}>
-        <SplitPane onChange={handleResize} split="horizontal" minSize={50} pane2Style={{ background: 'green' }}>
-          <div ref={innerDivRef} style={{ position: 'relative', width: '100%' }}>
+        <SplitPane onChange={handleResize} split={isDesktop ? 'vertical' : 'horizontal'} minSize={50}>
+          <div
+            ref={innerDivRef}
+            style={{
+              position: 'relative',
+              width: '100%',
+              overflow: 'hidden',
+            }}
+          >
             <SurveyTopPart />
             <Survey />
-            <VerticalSliderButton />
           </div>
-          <div>
+          <div
+            style={{
+              position: 'relative',
+              ...(isDesktop && { height: outerDivHeight }),
+            }}
+          >
             <SurveyEvaluation />
             <FloatingCloseButton onClick={init} />
+            {isDesktop ? <HorizontalButtonSlider /> : <VerticalSliderButton />}
           </div>
         </SplitPane>
       </div>
