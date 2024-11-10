@@ -1,0 +1,6 @@
+.outerDiv {
+  position: relative;
+  height: calc(100vh - 4rem);
+  overflow: hidden;
+  background: red;
+}

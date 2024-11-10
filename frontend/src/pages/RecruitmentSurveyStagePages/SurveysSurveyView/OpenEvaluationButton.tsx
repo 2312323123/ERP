@@ -1,9 +1,14 @@
 import { Button } from '@mui/material'
 import RateReviewIcon from '@mui/icons-material/RateReview'
 
-const FloatingEvaluationButton = () => {
+interface Props {
+  onClick: () => void
+}
+
+const OpenEvaluationButton = ({ onClick }: Props) => {
   return (
     <Button
+      onClick={onClick}
       variant="contained"
       color="primary"
       sx={{
@@ -21,6 +26,7 @@ const FloatingEvaluationButton = () => {
         '&:hover': {
           backgroundColor: 'primary.dark',
         },
+        zIndex: 1,
       }}
     >
       <RateReviewIcon sx={{ fontSize: '1.5rem', mr: 1 }} />
@@ -29,4 +35,4 @@ const FloatingEvaluationButton = () => {
   )
 }
 
-export default FloatingEvaluationButton
+export default OpenEvaluationButton

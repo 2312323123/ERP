@@ -1,58 +1,80 @@
-import { useRef, useState } from 'react'
-import SplitPane, { Pane } from 'split-pane-react'
-import 'split-pane-react/esm/themes/default.css'
-import VerticalButtonSlider from './VerticalButtonSlider'
-import FloatingEvaluationButton from './FloatingButton'
+import { useLayoutEffect, useRef, useState } from 'react'
+import OpenEvaluationButton from './OpenEvaluationButton'
+import Survey from './Survey'
+import SurveyTopPart from './SurveyTopPart'
+import SplitPane from 'react-split-pane'
+import './ReactSplitPaneStyles.css'
+import useBlockPullToRefreshMobile from './useBlockPullToRefreshMobile'
+import useHandleResize from './useHandleResize'
+import styles from './SurveysSurveyView.module.css'
+import SurveyEvaluation from './SurveyEvaluation'
+import FloatingCloseButton from './FloatingCloseButton'
+import VerticalSliderButton from './VerticalButtonSlider'
 
 const SurveysSurveyView = () => {
-  const containerRef = useRef(null) // Create a ref to reference the container
-  // const { uuid } = useParams() // Get the 'id' parameter from the route
-  // const { data: evaluationCriteria, error: error1, isLoading: isLoading1 } = useGetCriteriaQuery(uuid ?? '')
-  // const { data: survey, error: error2, isLoading: isLoading2 } = useGetSurveyQuery(uuid ?? '')
-  // return (
-  //   <>
-  //     <h3>uuid:</h3>
-  //     <pre>{JSON.stringify(uuid, null, 2)}</pre>
-  //     <h3>evaluationCriteria:</h3>
-  //     <pre>{JSON.stringify(evaluationCriteria, null, 2)}</pre>
-  //     <h3>survey:</h3>
-  //     <pre>{JSON.stringify(survey, null, 2)}</pre>
-  //   </>
-  // )
-  const [sizes, setSizes] = useState([90])
+  const outerDivRef = useRef<HTMLDivElement>(null)
+  const innerDivRef = useRef<HTMLDivElement>(null)
+  const [showEvaluateButton, setShowEvaluateButton] = useState(true)
 
-  const layoutCSS = {
-    height: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+  // block pull-to-refresh on mobile
+  useBlockPullToRefreshMobile()
+
+  // init action, also used to close the evaluation pane
+  const init = () => {
+    if (outerDivRef.current && innerDivRef.current) {
+      const element = document.querySelector('.Pane.horizontal.Pane1') as HTMLElement
+      element.style.height = `${outerDivRef?.current?.offsetHeight}px`
+    }
+    setShowEvaluateButton(true)
   }
+  useLayoutEffect(() => {
+    init()
+  }, [])
 
-  const sashRender = () => {
-    // Customize the sash rendering here
-    return <VerticalButtonSlider />
+  // resize action
+  const handleResize = useHandleResize({ outerDivRef, setShowEvaluateButton })
+
+  // button click action
+  const handleEvaluateButtonClick = () => {
+    if (innerDivRef.current && outerDivRef.current) {
+      const element = document.querySelector('.Pane.horizontal.Pane1') as HTMLElement
+      element.style.height = `${outerDivRef?.current?.offsetHeight * 0.6}px`
+    }
+    setShowEvaluateButton(false)
   }
 
   return (
-    <div style={{ height: 'calc(100vh - 4rem)', overflow: 'hidden' }}>
-      <SplitPane split="horizontal" sizes={sizes} onChange={setSizes} sashRender={sashRender} touchSupport={true}>
-        <Pane>
-          <div style={{ ...layoutCSS, background: '#ddd' }}>pane1 {JSON.stringify(sizes)}</div>
-        </Pane>
-        <div style={{ ...layoutCSS, background: '#d5d7d9' }}>pane2</div>
-      </SplitPane>
-      <FloatingEvaluationButton />
-    </div>
-    // <div style={{ background: 'red', height: 'calc(100vh-4rem)' }}>
-    //   <SplitPane split="vertical" sizes={sizes} onChange={setSizes} sashRender={sashRender}>
-    //     <Pane minSize={50} maxSize="50%">
-    //       <div style={{ ...layoutCSS, background: '#ddd' }}>pane1</div>
-    //     </Pane>
-    //     <div style={{ ...layoutCSS, background: '#d5d7d9' }}>pane2</div>
-    //     <div style={{ ...layoutCSS, background: '#a1a5a9' }}>pane3</div>
-    //   </SplitPane>
-    // </div>
+    <>
+      <div ref={outerDivRef} className={styles.outerDiv}>
+        <SplitPane onChange={handleResize} split="horizontal" minSize={50} pane2Style={{ background: 'green' }}>
+          <div ref={innerDivRef} style={{ position: 'relative', width: '100%' }}>
+            <SurveyTopPart />
+            <Survey />
+            <VerticalSliderButton />
+          </div>
+          <div>
+            <SurveyEvaluation />
+            <FloatingCloseButton onClick={init} />
+          </div>
+        </SplitPane>
+      </div>
+      {showEvaluateButton && <OpenEvaluationButton onClick={handleEvaluateButtonClick} />}
+    </>
   )
 }
 
 export default SurveysSurveyView
+
+// const { uuid } = useParams() // Get the 'id' parameter from the route
+// const { data: evaluationCriteria, error: error1, isLoading: isLoading1 } = useGetCriteriaQuery(uuid ?? '')
+// const { data: survey, error: error2, isLoading: isLoading2 } = useGetSurveyQuery(uuid ?? '')
+// return (
+//   <>
+//     <h3>uuid:</h3>
+//     <pre>{JSON.stringify(uuid, null, 2)}</pre>
+//     <h3>evaluationCriteria:</h3>
+//     <pre>{JSON.stringify(evaluationCriteria, null, 2)}</pre>
+//     <h3>survey:</h3>
+//     <pre>{JSON.stringify(survey, null, 2)}</pre>
+//   </>
+// )

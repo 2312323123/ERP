@@ -8,12 +8,13 @@ const VerticalSliderButton = () => {
       <IconButton
         sx={{
           cursor: 'row-resize',
+          backgroundColor: 'transparent',
           '&:hover': {
-            backgroundColor: 'secondary.main',
+            backgroundColor: 'transparent',
           },
         }}
       >
-        <DragHandleIcon />
+        <DragHandleIcon sx={{ fontSize: '2rem' }} />
       </IconButton>
     </div>
   )
