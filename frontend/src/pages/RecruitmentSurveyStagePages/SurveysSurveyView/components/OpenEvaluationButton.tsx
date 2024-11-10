@@ -14,7 +14,7 @@ const OpenEvaluationButton = ({ onClick }: Props) => {
       sx={{
         position: 'fixed',
         bottom: 20,
-        right: 20,
+        right: 30,
         borderRadius: '8px', // Rounded corners
         padding: '8px 16px', // Padding to make it wider and more button-like
         boxShadow: 3,

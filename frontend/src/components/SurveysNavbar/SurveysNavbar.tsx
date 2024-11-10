@@ -49,7 +49,7 @@ const SurveysNavbar = (props: Props) => {
 
   const { data: activeRecruitment } = useGetActiveRecruitmentQuery()
   const logout = useLogout()
-  const evaluateClick = useSurveyEvaluationEntryPoint()
+  const evaluateClick = useSurveyEvaluationEntryPoint({ clickedIEvaluateButton: true })
 
   const drawer = (
     <div>
@@ -62,7 +62,7 @@ const SurveysNavbar = (props: Props) => {
       {/* TODO: User icon + role shall go here */}
       <List>
         <SurveysNavbarButton
-          action={() => evaluateClick({ clickedIEvaluateButton: true })}
+          action={() => evaluateClick()}
           text="Oceniam"
           iconElement={<FactCheckIcon />}
         />

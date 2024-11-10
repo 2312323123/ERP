@@ -15,9 +15,8 @@ export class JwtIssuerService {
     @InjectRepository(Token) private tokenRepository: Repository<Token>,
   ) {}
 
-  // issue jwt token with id, roles (and exp)
-  // return jwt token and refresh token in response body
-  async login(id: string) {
+  // used by login() and refresh()
+  async issueNewAccessToken(id: string) {
     const userRoles = await this.usersService.getUserRolesById(id);
     const userRolesWithoutDescriptions = userRoles.map((role) => role.role);
 
@@ -26,7 +25,13 @@ export class JwtIssuerService {
       roles: userRolesWithoutDescriptions,
     };
 
-    const accessToken = this.jwtService.sign(payload, { expiresIn: '1h' });
+    return this.jwtService.sign(payload, { expiresIn: '1h' });
+  }
+
+  // issue jwt token with id, roles (and exp)
+  // return jwt token and refresh token in response body
+  async login(id: string) {
+    const accessToken = await this.issueNewAccessToken(id);
     // wonder if its expiration could be not checked when refreshing, what would it result in?
     const refreshToken = this.jwtService.sign({ id }, { expiresIn: '3d' }); // Refresh token with longer expiration
 
@@ -126,8 +131,10 @@ export class JwtIssuerService {
     }
 
     // Issue new access token
+    const accessToken = await this.issueNewAccessToken(id);
+
     return {
-      access_token: this.jwtService.sign({ id }, { expiresIn: '1h' }),
+      access_token: accessToken,
     };
   }
 }

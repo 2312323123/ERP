@@ -1,28 +1,34 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Button, TextField, MenuItem, Typography, Tooltip, IconButton } from '@mui/material'
 import InfoIcon from '@mui/icons-material/Info'
+import { SurveyEvaluationToSend } from '../services/surveyStage'
 
 export interface Criterion {
   name: string
   description: string
   weight: number
 }
-export interface SurveyEvaluationResult {
-  marks: number[]
-  comment: string
-}
 
 interface Props {
+  surveyUuid: string
   criteria: Criterion[]
   markTags: string[]
-  onSubmit: (data: SurveyEvaluationResult) => void
+  onSubmit: (data: SurveyEvaluationToSend) => void
   demoMode?: boolean // fires onSubmit on every change
   initialMarks?: number[]
   initialComment?: string
 }
 
-const EvaluationForm = ({ criteria, markTags, onSubmit, demoMode, initialMarks, initialComment }: Props) => {
-  const [marks, setMarks] = useState<number[]>(initialMarks ?? Array(criteria.length).fill(0))
+const EvaluationForm = ({
+  surveyUuid,
+  criteria,
+  markTags,
+  onSubmit,
+  demoMode,
+  initialMarks,
+  initialComment,
+}: Props) => {
+  const [marks, setMarks] = useState<(number | string)[]>(initialMarks ?? Array(criteria.length).fill(''))
   const [comment, setComment] = useState<string>(initialComment ?? '')
 
   const handleMarkChange = (index: number, value: number) => {
@@ -35,9 +41,10 @@ const EvaluationForm = ({ criteria, markTags, onSubmit, demoMode, initialMarks, 
   useEffect(() => {
     if (demoMode) {
       const structuredData = {
+        surveyUuid: '',
         marks,
         comment,
-      }
+      } as SurveyEvaluationToSend
       onSubmit(structuredData)
     }
   }, [marks, comment, demoMode, onSubmit])
@@ -56,11 +63,14 @@ const EvaluationForm = ({ criteria, markTags, onSubmit, demoMode, initialMarks, 
       }
     }
 
-    const structuredData = {
-      marks: criteria.map((_, index) => marks[index]),
-      comment,
+    if (!demoMode) {
+      const structuredData = {
+        surveyUuid: surveyUuid,
+        marks: criteria.map((_, index) => marks[index]),
+        comment,
+      } as SurveyEvaluationToSend
+      onSubmit(structuredData)
     }
-    onSubmit(structuredData)
   }
 
   return (

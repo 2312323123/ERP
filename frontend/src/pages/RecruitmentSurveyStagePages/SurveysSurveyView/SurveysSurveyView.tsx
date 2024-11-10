@@ -1,6 +1,5 @@
 import { useCallback, useLayoutEffect, useRef, useState } from 'react'
 import OpenEvaluationButton from './components/OpenEvaluationButton'
-import Survey from './components/Survey'
 import SurveyTopPart from './components/SurveyTopPart'
 import SplitPane from 'react-split-pane'
 import './components/ReactSplitPaneStyles.css'
@@ -12,6 +11,12 @@ import FloatingCloseButton from './components/FloatingCloseButton'
 import VerticalSliderButton from './components/VerticalButtonSlider'
 import useIsDesktop from '../../../utils/useIsDesktop'
 import HorizontalButtonSlider from './components/HorizontalButtonSlider'
+import SurveyDisplay from './components/SurveyDisplay'
+import { useGetCriteriaQuery, useGetSurveyQuery, useSaveEvaluationMutation } from '../../../services/surveyStage'
+import { useParams } from 'react-router-dom'
+import EvaluationForm from '../../../components/EvaluationForm'
+import { Box } from '@mui/material'
+import useEvaluateSurvey from '../../../hooks/surveys/useEvaluateSurvey'
 
 const SurveysSurveyView = () => {
   const isDesktop = useIsDesktop()
@@ -19,6 +24,12 @@ const SurveysSurveyView = () => {
   const innerDivRef = useRef<HTMLDivElement>(null)
   const [showEvaluateButton, setShowEvaluateButton] = useState(true)
   const [outerDivHeight, setOuterDivHeight] = useState(0)
+  const { uuid } = useParams() // Get the 'id' parameter from the route
+  const { data: survey, error: error2, isLoading: isLoading2 } = useGetSurveyQuery(uuid ?? '')
+  const { data: evaluationCriteria, error: error1, isLoading: isLoading1 } = useGetCriteriaQuery(uuid ?? '')
+  // evaluationCriteria: gradingInstruction, fieldsNotToShow, fieldToDistinctTheSurvey, evaluationCriteria, markTags
+
+  const evaluateSurvey = useEvaluateSurvey()
 
   // block pull-to-refresh on mobile
   useBlockPullToRefreshMobile()
@@ -61,25 +72,47 @@ const SurveysSurveyView = () => {
   return (
     <>
       <div ref={outerDivRef} className={styles.outerDiv}>
-        <SplitPane onChange={handleResize} split={isDesktop ? 'vertical' : 'horizontal'} minSize={50}>
+        {/* known error, not sure how to fix it */}
+        <SplitPane
+          pane1Style={{ overflowY: 'auto', marginRight: '5px' }}
+          onChange={handleResize}
+          split={isDesktop ? 'vertical' : 'horizontal'}
+          minSize={50}
+        >
           <div
             ref={innerDivRef}
             style={{
               position: 'relative',
               width: '100%',
-              overflow: 'hidden',
+              overflowY: 'auto',
             }}
           >
             <SurveyTopPart />
-            <Survey />
+            {!error2 && !isLoading2 && survey && survey.responses && <SurveyDisplay responses={survey.responses} />}
           </div>
           <div
             style={{
               position: 'relative',
               ...(isDesktop && { height: outerDivHeight }),
+              overflowY: 'auto',
             }}
           >
-            <SurveyEvaluation />
+            {evaluationCriteria?.evaluationCriteria && evaluationCriteria?.markTags && (
+              <Box mx={2}>
+                <EvaluationForm
+                  surveyUuid={uuid ?? ''}
+                  criteria={evaluationCriteria.evaluationCriteria}
+                  markTags={[
+                    evaluationCriteria.markTags.mark1Tag,
+                    evaluationCriteria.markTags.mark2Tag,
+                    evaluationCriteria.markTags.mark3Tag,
+                    evaluationCriteria.markTags.mark4Tag,
+                    evaluationCriteria.markTags.mark5Tag,
+                  ]}
+                  onSubmit={(evaluation) => evaluateSurvey(evaluation)}
+                />
+              </Box>
+            )}
             <FloatingCloseButton onClick={init} />
             {isDesktop ? <HorizontalButtonSlider /> : <VerticalSliderButton />}
           </div>
