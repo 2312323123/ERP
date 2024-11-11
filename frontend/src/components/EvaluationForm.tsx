@@ -17,6 +17,7 @@ interface Props {
   demoMode?: boolean // fires onSubmit on every change
   initialMarks?: number[]
   initialComment?: string
+  reEvaluating?: boolean
 }
 
 const EvaluationForm = ({
@@ -27,6 +28,7 @@ const EvaluationForm = ({
   demoMode,
   initialMarks,
   initialComment,
+  reEvaluating, // used just to not clear on submit, but probably could be used in the other place reevaluation is considered in this file
 }: Props) => {
   const [marks, setMarks] = useState<(number | string)[]>(initialMarks ?? Array(criteria.length).fill(''))
   const [comment, setComment] = useState<string>(initialComment ?? '')
@@ -86,8 +88,10 @@ const EvaluationForm = ({
         comment,
       } as SurveyEvaluationToSend
       onSubmit(structuredData)
-      setMarks([])
-      setComment('')
+      if (!reEvaluating) {
+        setMarks([])
+        setComment('')
+      }
     }
   }
 

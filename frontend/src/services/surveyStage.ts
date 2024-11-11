@@ -56,6 +56,21 @@ export const surveyStageApi = createApi({
         { type: 'SurveyRecruitment', id: 'ALL_EVALUATIONS' },
       ],
     }),
+    // same as above, but PUT and different invalidation
+    saveReEvaluation: builder.mutation<void, SurveyEvaluationToSend>({
+      query: ({ surveyUuid, marks, comment }) => ({
+        url: 'api/surveys/evaluation/evaluate',
+        method: 'PUT',
+        body: {
+          survey_uuid: surveyUuid,
+          marks,
+          comment,
+        },
+      }),
+      invalidatesTags: [
+        { type: 'SurveyRecruitment', id: 'ALL_EVALUATIONS' },
+      ],
+    }),
     getAllEvaluations: builder.query<UserEvaluation[] | null, string>({
       query: (surveyUuid) => `api/surveys/evaluation/all-evaluations?survey_uuid=${surveyUuid}`,
       providesTags: [{ type: 'SurveyRecruitment', id: 'ALL_EVALUATIONS' }],
@@ -77,6 +92,7 @@ export const {
   useGetSurveyQuery,
   useGetCriteriaQuery,
   useSaveEvaluationMutation,
+  useSaveReEvaluationMutation,
   useGetAllEvaluationsQuery,
   useGetPreviousSurveyUuidQuery,
   useGetNextSurveyUuidQuery,

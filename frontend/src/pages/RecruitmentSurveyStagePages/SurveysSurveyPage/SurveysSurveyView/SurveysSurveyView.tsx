@@ -35,8 +35,9 @@ const SurveysSurveyView = () => {
   const accessToken = useSelector(getAccessToken)
   const id = (jwtDecode(accessToken) as { id: string }).id
   const myEvaluation = evaluations?.find((evaluation) => evaluation.id === id)
+  const reEvaluating = Boolean(myEvaluation)
 
-  const evaluateSurvey = useEvaluateSurvey()
+  const evaluateSurvey = useEvaluateSurvey({ reEvaluating })
 
   // block pull-to-refresh on mobile
   useBlockPullToRefreshMobile()
@@ -118,10 +119,13 @@ const SurveysSurveyView = () => {
                   ]}
                   onSubmit={(evaluation) => {
                     evaluateSurvey(evaluation)
-                    init()
+                    if (!reEvaluating) {
+                      init()
+                    }
                   }}
                   initialMarks={myEvaluation?.marks}
                   initialComment={myEvaluation?.comment}
+                  reEvaluating={reEvaluating}
                 />
               </Box>
             )}
