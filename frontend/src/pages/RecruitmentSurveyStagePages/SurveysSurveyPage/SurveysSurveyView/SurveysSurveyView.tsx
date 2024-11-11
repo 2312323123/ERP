@@ -1,8 +1,7 @@
-import { useCallback, useLayoutEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import OpenEvaluationButton from './components/OpenEvaluationButton'
 import SplitPane from 'react-split-pane'
 import './components/ReactSplitPaneStyles.css'
-import useBlockPullToRefreshMobile from './components/useBlockPullToRefreshMobile'
 import useHandleResize from './components/useHandleResize'
 import styles from './SurveysSurveyView.module.css'
 import FloatingCloseButton from './components/FloatingCloseButton'
@@ -39,8 +38,16 @@ const SurveysSurveyView = () => {
 
   const evaluateSurvey = useEvaluateSurvey({ reEvaluating })
 
-  // block pull-to-refresh on mobile
-  useBlockPullToRefreshMobile()
+  /* adding this conditionally on mount and removing on onmount of survey view to make using split pane easier*/
+  useEffect(() => {
+    // Add CSS module class to body on component mount
+    document.body.classList.add(styles.disableSwipeRefresh)
+
+    // Clean up by removing class on component unmount
+    return () => {
+      document.body.classList.remove(styles.disableSwipeRefresh)
+    }
+  }, [])
 
   // init action, also used to close the evaluation pane
   const init = useCallback(() => {

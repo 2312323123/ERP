@@ -3,3 +3,8 @@
   height: calc(100vh - 7rem);
   overflow: hidden;
 }
+
+/* adding this to <body> on mount and removing on unonmount of survey view to make split pane easier to resize */
+.disableSwipeRefresh {
+  overscroll-behavior-y: contain;
+}
