@@ -41,7 +41,7 @@ export const surveyStageApi = createApi({
           comment,
         },
       }),
-      // made it not invalidate NOT_EVALUATED_ONE, it caused a loop
+      invalidatesTags: [{ type: 'SurveyRecruitment', id: 'NOT_EVALUATED_ONE' }],
     }),
   }),
   tagTypes: ['SurveyRecruitment'], // Keep the tag type for survey recruitments
