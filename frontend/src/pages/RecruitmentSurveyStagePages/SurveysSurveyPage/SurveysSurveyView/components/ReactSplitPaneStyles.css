@@ -16,30 +16,30 @@
 }
 
 .Resizer.horizontal {
-  height: 21px;
-  margin: -10px 0;
-  border-top: 10px solid rgba(255, 255, 255, 0);
-  border-bottom: 10px solid rgba(255, 255, 255, 0);
+  height: 15px;
+  margin: -7px 0;
+  border-top: 7px solid rgba(255, 255, 255, 0);
+  border-bottom: 7px solid rgba(255, 255, 255, 0);
   cursor: row-resize;
   width: 100%;
 }
 
 .Resizer.horizontal:hover {
-  border-top: 10px solid rgba(0, 0, 0, 0.5);
-  border-bottom: 10px solid rgba(0, 0, 0, 0.5);
+  border-top: 7px solid rgba(0, 0, 0, 0.5);
+  border-bottom: 7px solid rgba(0, 0, 0, 0.5);
 }
 
 .Resizer.vertical {
-  width: 21px;
-  margin: 0 -10px;
-  border-left: 10px solid rgba(255, 255, 255, 0);
-  border-right: 10px solid rgba(255, 255, 255, 0);
+  width: 15px;
+  margin: 0 -7px;
+  border-left: 7px solid rgba(255, 255, 255, 0);
+  border-right: 7px solid rgba(255, 255, 255, 0);
   cursor: col-resize;
 }
 
 .Resizer.vertical:hover {
-  border-left: 10px solid rgba(0, 0, 0, 0.5);
-  border-right: 10px solid rgba(0, 0, 0, 0.5);
+  border-left: 7px solid rgba(0, 0, 0, 0.5);
+  border-right: 7px solid rgba(0, 0, 0, 0.5);
 }
 .Resizer.disabled {
   cursor: not-allowed;

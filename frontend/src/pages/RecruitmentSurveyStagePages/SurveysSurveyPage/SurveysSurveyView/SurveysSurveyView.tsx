@@ -73,7 +73,8 @@ const SurveysSurveyView = () => {
       <div ref={outerDivRef} className={styles.outerDiv}>
         {/* known error, not sure how to fix it */}
         <SplitPane
-          pane1Style={{ overflowY: 'auto', marginRight: '5px' }}
+          pane1Style={{ overflowY: 'auto' }}
+          pane2Style={{ overflowY: 'auto' }}
           onChange={handleResize}
           split={isDesktop ? 'vertical' : 'horizontal'}
           minSize={50}

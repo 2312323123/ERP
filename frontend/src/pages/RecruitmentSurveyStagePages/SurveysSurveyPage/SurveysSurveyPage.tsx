@@ -77,7 +77,9 @@ const SurveysSurveyPage = () => {
           <Button disabled={!objectWithPreviousSurveyUuid} onClick={previousClick}>
             Poprzednia
           </Button>
-          <Button onClick={nextClick}>Następna</Button>
+          <Button disabled={!objectWithNextSurveyUuid} onClick={nextClick}>
+            Następna
+          </Button>
         </ButtonGroup>
       </div>
       <CustomTabPanel value={value} index={0}>
