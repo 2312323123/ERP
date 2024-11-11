@@ -4,13 +4,17 @@ import { useGetAllEvaluationsQuery, useGetCriteriaQuery } from '../../../../serv
 import { useParams } from 'react-router-dom'
 import EvaluationsSummary from './components/EvaluationsSummary'
 import SurveyDisplayIdentitification from '../SurveysSurveyView/components/SurveyDisplayIdentitification'
+import { setTabIndex } from '../../../../store/slices/surveyStage/surveyTabsSlice'
+import { useDispatch } from 'react-redux'
 
 const AllEvaluationsView = () => {
   const { uuid } = useParams()
   const { data: evaluations } = useGetAllEvaluationsQuery(uuid ?? '')
   const { data: criteria } = useGetCriteriaQuery()
+  const dispatch = useDispatch()
 
   if (!evaluations || !criteria) {
+    dispatch(setTabIndex(0))
     return <div>Loading...</div>
   }
 

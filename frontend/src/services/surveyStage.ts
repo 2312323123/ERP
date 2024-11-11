@@ -60,6 +60,12 @@ export const surveyStageApi = createApi({
       query: (surveyUuid) => `api/surveys/evaluation/all-evaluations?survey_uuid=${surveyUuid}`,
       providesTags: [{ type: 'SurveyRecruitment', id: 'ALL_EVALUATIONS' }],
     }),
+    getPreviousSurveyUuid: builder.query<{ uuid: string } | null, string>({
+      query: (uuid) => `api/surveys/evaluation/previous-survey-uuid?current_survey_uuid=${uuid}`,
+    }),
+    getNextSurveyUuid: builder.query<{ uuid: string } | null, string>({
+      query: (uuid) => `api/surveys/evaluation/next-survey-uuid?current_survey_uuid=${uuid}`,
+    }),
   }),
   tagTypes: ['SurveyRecruitment'], // Keep the tag type for survey recruitments
 })
@@ -72,4 +78,6 @@ export const {
   useGetCriteriaQuery,
   useSaveEvaluationMutation,
   useGetAllEvaluationsQuery,
+  useGetPreviousSurveyUuidQuery,
+  useGetNextSurveyUuidQuery,
 } = surveyStageApi

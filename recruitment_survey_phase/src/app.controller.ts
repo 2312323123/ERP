@@ -133,21 +133,23 @@ export class AppController {
   }
 
   @Roles('SUPERADMIN') // for now, then obviously change to evaluator or something
-  @Get('/api/surveys/evaluation/previous-survey-id')
+  @Get('/api/surveys/evaluation/previous-survey-uuid')
   async getPreviousSurveyUuid(
     @UserId() userId: string,
-    @Body('current_survey_uuid', UndefinedCheckPipe) current_survey_uuid: string,
-  ): Promise<string | null> {
-    return this.appService.getPreviousSurveyUuid(userId, current_survey_uuid);
+    @Query('current_survey_uuid', UndefinedCheckPipe) current_survey_uuid: string,
+  ): Promise<{ uuid: string } | null> {
+    const result = await this.appService.getPreviousSurveyUuid(userId, current_survey_uuid);
+    return result ? { uuid: result } : null;
   }
 
   @Roles('SUPERADMIN') // for now, then obviously change to evaluator or something
-  @Get('/api/surveys/evaluation/next-survey-id')
+  @Get('/api/surveys/evaluation/next-survey-uuid')
   async getNextSurveyUuid(
     @UserId() userId: string,
-    @Body('current_survey_uuid', UndefinedCheckPipe) current_survey_uuid: string,
-  ): Promise<string | null> {
-    return this.appService.getNextSurveyUuid(userId, current_survey_uuid);
+    @Query('current_survey_uuid', UndefinedCheckPipe) current_survey_uuid: string,
+  ): Promise<{ uuid: string } | null> {
+    const result = await this.appService.getNextSurveyUuid(userId, current_survey_uuid);
+    return result ? { uuid: result } : null;
   }
 
   @Roles('USER')
