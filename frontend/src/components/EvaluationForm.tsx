@@ -70,6 +70,8 @@ const EvaluationForm = ({
         comment,
       } as SurveyEvaluationToSend
       onSubmit(structuredData)
+      setMarks([])
+      setComment('')
     }
   }
 

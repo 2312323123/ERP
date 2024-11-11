@@ -109,7 +109,10 @@ const SurveysSurveyView = () => {
                     evaluationCriteria.markTags.mark4Tag,
                     evaluationCriteria.markTags.mark5Tag,
                   ]}
-                  onSubmit={(evaluation) => evaluateSurvey(evaluation)}
+                  onSubmit={(evaluation) => {
+                    evaluateSurvey(evaluation)
+                    init()
+                  }}
                 />
               </Box>
             )}
