@@ -73,6 +73,9 @@ export class MarksService {
         survey_uuid: survey_uuid,
         order: In(marks.map((_, index) => index)), // Fetch marks with specific orders
       },
+      order: {
+        order: 'ASC',
+      },
     });
 
     // check if any mark is missing
