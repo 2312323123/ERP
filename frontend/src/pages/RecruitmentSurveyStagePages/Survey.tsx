@@ -22,7 +22,7 @@ const Survey = () => {
           textAlign: 'center',
         }}
       >
-        <Typography variant="h4" style={{ fontWeight: '600' }}>
+        <Typography variant="h5" style={{ fontWeight: '600' }}>
           Brawo! Wszystkie ankiety ocenione
         </Typography>
       </Paper>

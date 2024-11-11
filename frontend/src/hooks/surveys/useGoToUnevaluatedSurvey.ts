@@ -24,6 +24,7 @@ const useGoToUnevaluatedSurvey = ({ dashboardIfNoneLeft }: Props = { dashboardIf
         if (dashboardIfNoneLeft) {
           router.navigate('/recrutiment-survey-stage/app/dashboard')
         } else {
+          setDoFetch(false)
           router.navigate('/recrutiment-survey-stage/app/survey/')
         }
       }
