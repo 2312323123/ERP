@@ -136,17 +136,3 @@ const SurveysSurveyView = () => {
 }
 
 export default SurveysSurveyView
-
-// const { uuid } = useParams() // Get the 'id' parameter from the route
-// const { data: evaluationCriteria, error: error1, isLoading: isLoading1 } = useGetCriteriaQuery(uuid ?? '')
-// const { data: survey, error: error2, isLoading: isLoading2 } = useGetSurveyQuery(uuid ?? '')
-// return (
-//   <>
-//     <h3>uuid:</h3>
-//     <pre>{JSON.stringify(uuid, null, 2)}</pre>
-//     <h3>evaluationCriteria:</h3>
-//     <pre>{JSON.stringify(evaluationCriteria, null, 2)}</pre>
-//     <h3>survey:</h3>
-//     <pre>{JSON.stringify(survey, null, 2)}</pre>
-//   </>
-// )
