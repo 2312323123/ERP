@@ -14,6 +14,16 @@ export interface SurveyEvaluationToSend {
   comment: string
 }
 
+interface UserIdNamePicture {
+  id: string
+  name: string
+  picture: string
+}
+export interface UserEvaluation extends UserIdNamePicture {
+  marks: number[]
+  comment: string
+}
+
 // Define a service using a base URL and expected endpoints
 export const surveyStageApi = createApi({
   reducerPath: 'surveyStageApi',
@@ -27,7 +37,7 @@ export const surveyStageApi = createApi({
       query: (uuid) => `api/surveys/survey?uuid=${uuid}`,
       providesTags: [{ type: 'SurveyRecruitment', id: 'SURVEY' }],
     }),
-    getCriteria: builder.query<SurveySettingsImported, string>({
+    getCriteria: builder.query<SurveySettingsImported, void>({
       query: () => 'api/surveys/evaluation/criteria',
       providesTags: [{ type: 'SurveyRecruitment', id: 'CRITERIA' }], // TODO: make changing survey settings refresh it
     }),
@@ -41,7 +51,14 @@ export const surveyStageApi = createApi({
           comment,
         },
       }),
-      invalidatesTags: [{ type: 'SurveyRecruitment', id: 'NOT_EVALUATED_ONE' }],
+      invalidatesTags: [
+        { type: 'SurveyRecruitment', id: 'NOT_EVALUATED_ONE' },
+        { type: 'SurveyRecruitment', id: 'ALL_EVALUATIONS' },
+      ],
+    }),
+    getAllEvaluations: builder.query<UserEvaluation[] | null, string>({
+      query: (surveyUuid) => `api/surveys/evaluation/all-evaluations?survey_uuid=${surveyUuid}`,
+      providesTags: [{ type: 'SurveyRecruitment', id: 'ALL_EVALUATIONS' }],
     }),
   }),
   tagTypes: ['SurveyRecruitment'], // Keep the tag type for survey recruitments
@@ -49,5 +66,10 @@ export const surveyStageApi = createApi({
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetNotEvaluatedOneQuery, useGetSurveyQuery, useGetCriteriaQuery, useSaveEvaluationMutation } =
-  surveyStageApi
+export const {
+  useGetNotEvaluatedOneQuery,
+  useGetSurveyQuery,
+  useGetCriteriaQuery,
+  useSaveEvaluationMutation,
+  useGetAllEvaluationsQuery,
+} = surveyStageApi

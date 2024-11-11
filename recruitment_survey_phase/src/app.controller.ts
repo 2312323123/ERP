@@ -195,7 +195,7 @@ export class AppController {
   async getAllEvaluations(
     @UserId() userId: string,
     @Headers('authorization') authorization: string,
-    @Body('survey_uuid', UndefinedCheckPipe) surveyUuid: string,
+    @Query('survey_uuid', UndefinedCheckPipe) surveyUuid: string,
   ): Promise<UserEvaluation[] | null> {
     return this.appService.getAllEvaluations(userId, authorization, surveyUuid);
   }

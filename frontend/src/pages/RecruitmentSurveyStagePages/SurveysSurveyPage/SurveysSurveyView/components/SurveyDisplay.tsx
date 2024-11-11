@@ -1,4 +1,5 @@
 import { Typography, Card, CardContent, Divider, Box } from '@mui/material'
+import SurveyDisplayIdentitification from './SurveyDisplayIdentitification'
 
 interface Response {
   question: string
@@ -12,7 +13,8 @@ interface SurveyProps {
 
 const SurveyDisplay: React.FC<SurveyProps> = ({ responses }) => {
   return (
-    <Box sx={{ maxWidth: 600, margin: 'auto', padding: 2 }}>
+    <Box sx={{ padding: 2, maxWidth: '800px', margin: '0 auto' }}>
+      <SurveyDisplayIdentitification />
       {responses.map((response, index) => (
         <Box key={index} sx={{ mb: 2 }}>
           {response.type === 'PAGE_BREAK' ? (
@@ -90,11 +92,12 @@ const AnswerDisplay: React.FC<{ response: Response }> = ({ response }) => {
             <div key={rowIdx}>
               <Typography variant="body2">Row {rowIdx + 1}:</Typography>
               <ul>
-                {row.map((selected, colIdx) => (
-                  <li key={colIdx}>
-                    <Typography variant="body1">{selected}</Typography>
-                  </li>
-                ))}
+                {Array.isArray(row) &&
+                  row.map((selected, colIdx) => (
+                    <li key={colIdx}>
+                      <Typography variant="body1">{selected}</Typography>
+                    </li>
+                  ))}
               </ul>
             </div>
           ))

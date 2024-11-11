@@ -3,6 +3,9 @@ import SurveysSurveyView from './SurveysSurveyView/SurveysSurveyView'
 import { Box, Tabs, Tab, Button, ButtonGroup } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { getSurveyTabIndex, setTabIndex } from '../../../store/slices/surveyStage/surveyTabsSlice'
+import AllEvaluationsView from './AllEvaluationsView/AllEvaluationsView'
+import { useGetAllEvaluationsQuery } from '../../../services/surveyStage'
+import { useParams } from 'react-router-dom'
 
 interface CustomTabPanelProps {
   children: React.ReactNode
@@ -26,6 +29,9 @@ const SurveysSurveyPage = () => {
     dispatch(setTabIndex(newValue))
   }
 
+  const { uuid } = useParams()
+  const { data: evaluations } = useGetAllEvaluationsQuery(uuid ?? '', { refetchOnMountOrArgChange: true })
+
   return (
     <>
       <div
@@ -39,7 +45,7 @@ const SurveysSurveyPage = () => {
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs value={value} onChange={handleChange}>
             <Tab label="Ankieta" />
-            <Tab label="Wszystkie oceny" />
+            <Tab disabled={!evaluations} label="Wszystkie oceny" />
           </Tabs>
         </Box>
         <ButtonGroup variant="contained">
@@ -51,7 +57,7 @@ const SurveysSurveyPage = () => {
         <SurveysSurveyView />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        Item Two
+        <AllEvaluationsView />
       </CustomTabPanel>
     </>
   )

@@ -1,10 +1,13 @@
 import { Box, Typography, Avatar, Divider } from '@mui/material'
-import { Criterion, SurveyEvaluationResult } from './EvaluationForm'
+import { Criterion } from './EvaluationForm'
 
 interface EvaluationDisplayProps {
   userName: string
   userPicture: string
-  surveyEvaluationResult: SurveyEvaluationResult
+  surveyEvaluationResult: {
+    marks: number[]
+    comment: string
+  }
   criteria: Criterion[]
 }
 
