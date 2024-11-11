@@ -116,10 +116,6 @@ export class SurveysService {
     }
 
     if (marks.length !== evaluationSchemasCount) {
-      console.log('marks.length:');
-      console.log(marks.length);
-      console.log('evaluationSchemasCount:');
-      console.log(evaluationSchemasCount);
       throw new BadRequestException('Amount of marks does not match the amount of criteria');
     }
 
@@ -195,10 +191,6 @@ export class SurveysService {
     }
 
     if (marks.length !== evaluationSchemasCount) {
-      console.log('marks.length:');
-      console.log(marks.length);
-      console.log('evaluationSchemasCount:');
-      console.log(evaluationSchemasCount);
       throw new BadRequestException('Amount of marks does not match the amount of criteria');
     }
 
