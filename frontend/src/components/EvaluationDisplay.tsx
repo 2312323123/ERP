@@ -52,7 +52,9 @@ const EvaluationDisplay = ({
           <Typography variant="body1">
             <strong>Comment:</strong>
           </Typography>
-          <Typography variant="body2">{comment}</Typography>
+          <Typography variant="body2" sx={{ whiteSpace: 'pre' }}>
+            {comment}
+          </Typography>
         </Box>
       </Box>
     </Box>
