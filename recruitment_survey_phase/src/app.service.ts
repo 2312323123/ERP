@@ -24,6 +24,7 @@ import { CreateMarkGradeNameDto } from './mark_grade_names/dto/create-mark_grade
 import { SurveysService } from './surveys/surveys.service';
 import { SurveyMetadatasService } from './survey_metadatas/survey_metadatas.service';
 import { Survey } from './surveys/schemas/survey.schema';
+import { MarksService } from './marks/marks.service';
 
 function extractBearerToken(authHeader: string) {
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -47,6 +48,7 @@ export class AppService {
     private readonly markGradeNamesService: MarkGradeNamesService,
     private readonly surveysService: SurveysService,
     private readonly surveyMetadatasService: SurveyMetadatasService,
+    private readonly marksService: MarksService,
   ) {}
 
   getHello(): string {
@@ -219,5 +221,9 @@ export class AppService {
 
   async reEvaluateSurvey(userId: string, survey_uuid: string, marks: number[], comment: string) {
     return this.surveysService.reEvaluateSurvey(userId, survey_uuid, marks, comment);
+  }
+
+  async getAllEvaluations(userId: string, authorization: string, surveyUuid: string) {
+    return this.marksService.getAllEvaluations(userId, authorization, surveyUuid);
   }
 }

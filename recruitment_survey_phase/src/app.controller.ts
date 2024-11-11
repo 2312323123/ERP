@@ -9,6 +9,7 @@ import { UndefinedCheckPipe } from './pipes/undefined-check.pipe';
 import { Roles } from './auth/roles.decorator';
 import { Survey } from './surveys/schemas/survey.schema';
 import { UserId } from './auth/user-id.decorator';
+import { UserEvaluation } from './marks/marks.service';
 
 @Controller()
 export class AppController {
@@ -187,5 +188,15 @@ export class AppController {
     @Body('comment', UndefinedCheckPipe) comment: string,
   ) {
     return this.appService.reEvaluateSurvey(userId, survey_uuid, marks, comment);
+  }
+
+  @Roles('USER')
+  @Get('/api/surveys/evaluation/all-evaluations')
+  async getAllEvaluations(
+    @UserId() userId: string,
+    @Headers('authorization') authorization: string,
+    @Body('survey_uuid', UndefinedCheckPipe) surveyUuid: string,
+  ): Promise<UserEvaluation[] | null> {
+    return this.appService.getAllEvaluations(userId, authorization, surveyUuid);
   }
 }

@@ -182,4 +182,9 @@ export class UsersService {
   async getUsersWithTheirRoles(): Promise<User[]> {
     return this.userRepository.find({ relations: ['roles'] });
   }
+
+  // surveys purposes
+  async getUsersIdNamePicture(): Promise<User[]> {
+    return this.userRepository.find({ select: ['id', 'name', 'picture'] });
+  }
 }

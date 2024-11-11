@@ -331,4 +331,9 @@ export class AppService {
   async getAccountCreationRequests() {
     return this.accountCreationRequestsService.findAll();
   }
+
+  // suveys purposes
+  async getUsersIdNamePicture() {
+    return this.usersService.getUsersIdNamePicture();
+  }
 }

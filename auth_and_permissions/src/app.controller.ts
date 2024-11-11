@@ -129,4 +129,11 @@ export class AppController {
   async getAccountCreationRequests() {
     return await this.appService.getAccountCreationRequests();
   }
+
+  // surveys purposes
+  @Roles('USER')
+  @Get('api/auth/get-users-id-name-picture')
+  async getUsersIdNamePicture() {
+    return await this.appService.getUsersIdNamePicture();
+  }
 }

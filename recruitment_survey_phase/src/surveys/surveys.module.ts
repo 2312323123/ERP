@@ -16,6 +16,7 @@ import { EvaluationSchema } from 'src/evaluation_schemas/entities/evaluation_sch
 import { EvaluationSchemasService } from 'src/evaluation_schemas/evaluation_schemas.service';
 import { ActiveRecruitmentService } from 'src/active_recruitment/active_recruitment.service';
 import { Recruitment } from 'src/recruitments/entities/recruitment.entity';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { Recruitment } from 'src/recruitments/entities/recruitment.entity';
       Mark,
       Recruitment,
     ]),
+    HttpModule,
   ],
   controllers: [SurveysController],
   providers: [
