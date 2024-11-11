@@ -52,16 +52,12 @@ const EvaluationForm = ({
   // for initial values, this worked for the real evaluation
   useEffect(() => {
     if (initialMarks) {
-      console.log('initialMarks:')
-      console.log(initialMarks)
       setMarks(initialMarks)
     } else {
       setMarks(Array(criteria.length).fill(''))
     }
 
     if (initialComment) {
-      console.log('initialComment:')
-      console.log(initialComment)
       setComment(initialComment)
     } else {
       setComment('')
