@@ -5,17 +5,19 @@ import './components/ReactSplitPaneStyles.css'
 import useBlockPullToRefreshMobile from './components/useBlockPullToRefreshMobile'
 import useHandleResize from './components/useHandleResize'
 import styles from './SurveysSurveyView.module.css'
-import SurveyEvaluation from './components/SurveyEvaluation'
 import FloatingCloseButton from './components/FloatingCloseButton'
 import VerticalSliderButton from './components/VerticalButtonSlider'
 import useIsDesktop from '../../../../utils/useIsDesktop'
 import HorizontalButtonSlider from './components/HorizontalButtonSlider'
 import SurveyDisplay from './components/SurveyDisplay'
-import { useGetCriteriaQuery, useGetSurveyQuery, useSaveEvaluationMutation } from '../../../../services/surveyStage'
+import { useGetAllEvaluationsQuery, useGetCriteriaQuery, useGetSurveyQuery } from '../../../../services/surveyStage'
 import { useParams } from 'react-router-dom'
 import EvaluationForm from '../../../../components/EvaluationForm'
 import { Box } from '@mui/material'
 import useEvaluateSurvey from '../../../../hooks/surveys/useEvaluateSurvey'
+import { useSelector } from 'react-redux'
+import { getAccessToken } from '../../../../store/slices/authSlice'
+import { jwtDecode } from 'jwt-decode'
 
 const SurveysSurveyView = () => {
   const isDesktop = useIsDesktop()
@@ -27,6 +29,12 @@ const SurveysSurveyView = () => {
   const { data: survey, error: error2, isLoading: isLoading2 } = useGetSurveyQuery(uuid ?? '')
   const { data: evaluationCriteria, error: error1, isLoading: isLoading1 } = useGetCriteriaQuery(uuid ?? '')
   // evaluationCriteria: gradingInstruction, fieldsNotToShow, fieldToDistinctTheSurvey, evaluationCriteria, markTags
+
+  // to load one's own evaluation into the form
+  const { data: evaluations } = useGetAllEvaluationsQuery(uuid ?? '')
+  const accessToken = useSelector(getAccessToken)
+  const id = (jwtDecode(accessToken) as { id: string }).id
+  const myEvaluation = evaluations?.find((evaluation) => evaluation.id === id)
 
   const evaluateSurvey = useEvaluateSurvey()
 
@@ -112,6 +120,8 @@ const SurveysSurveyView = () => {
                     evaluateSurvey(evaluation)
                     init()
                   }}
+                  initialMarks={myEvaluation?.marks}
+                  initialComment={myEvaluation?.comment}
                 />
               </Box>
             )}
