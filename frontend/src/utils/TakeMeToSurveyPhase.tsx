@@ -4,7 +4,7 @@ import { Button } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { getAccessToken } from '../store/slices/authSlice'
 import { useGetActiveRecruitmentQuery } from '../services/erp'
-import { useSurveyEvaluationEntryPoint } from '../hooks/surveys/useSurveyEvaluationEntryPoint'
+import useGoToUnevaluatedSurvey from '../hooks/surveys/useGoToUnevaluatedSurvey'
 
 async function hashValue(value: string) {
   const encoder = new TextEncoder()
@@ -25,7 +25,7 @@ export const TakeMeToSurveyPhase = () => {
   const accessToken = useSelector(getAccessToken)
   const { data, error, isLoading } = useGetActiveRecruitmentQuery()
   const id = jwtDecode<{ id: string }>(accessToken).id
-  const actionIfNotFirstVisit = useSurveyEvaluationEntryPoint()
+  const actionIfNotFirstVisit = useGoToUnevaluatedSurvey({ dashboardIfNoneLeft: true })
 
   const takeMeToSurveyPhase = async () => {
     const item = `'erp_recruitment_survey_instruction_seen_${await hashValue(`${id}${data?.uuid}`)}'`

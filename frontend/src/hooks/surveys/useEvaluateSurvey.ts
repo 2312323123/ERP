@@ -1,21 +1,21 @@
 import { SurveyEvaluationToSend, useSaveEvaluationMutation } from '../../services/surveyStage'
 import { useSnackbar } from '../useSnackbar'
 import { useEffect } from 'react'
-import { useSurveyEvaluationEntryPoint } from './useSurveyEvaluationEntryPoint'
+import useGoToUnevaluatedSurvey from './useGoToUnevaluatedSurvey'
 
 const useEvaluateSurvey = () => {
   const [saveEvaluation, { isSuccess, isError }] = useSaveEvaluationMutation()
-  const evaluateClick = useSurveyEvaluationEntryPoint({ clickedIEvaluateButton: true })
+  const goToUnevaluatedSurvey = useGoToUnevaluatedSurvey()
   const showSnackbar = useSnackbar()
   useEffect(() => {
     if (isSuccess) {
       showSnackbar('Ankieta oceniona!', 'success')
-      evaluateClick()
+      goToUnevaluatedSurvey()
     }
     if (isError) {
       showSnackbar('Wystąpił błąd przy zapisywaniu oceny!', 'error', 5000)
     }
-  }, [isSuccess, isError, showSnackbar, evaluateClick])
+  }, [isSuccess, isError, showSnackbar, goToUnevaluatedSurvey])
 
   return (obj: SurveyEvaluationToSend) => saveEvaluation(obj)
 }

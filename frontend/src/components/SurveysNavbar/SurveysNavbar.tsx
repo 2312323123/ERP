@@ -13,7 +13,7 @@ import { useGetActiveRecruitmentQuery } from '../../services/erp'
 import FactCheckIcon from '@mui/icons-material/FactCheck'
 import SurveysNavbarButton from './SurveysNavbarButton'
 import useLogout from '../../hooks/auth/useLogout'
-import { useSurveyEvaluationEntryPoint } from '../../hooks/surveys/useSurveyEvaluationEntryPoint'
+import useGoToUnevaluatedSurvey from '../../hooks/surveys/useGoToUnevaluatedSurvey'
 
 const drawerWidth = 240
 
@@ -49,7 +49,7 @@ const SurveysNavbar = (props: Props) => {
 
   const { data: activeRecruitment } = useGetActiveRecruitmentQuery()
   const logout = useLogout()
-  const evaluateClick = useSurveyEvaluationEntryPoint({ clickedIEvaluateButton: true })
+  const evaluateClick = useGoToUnevaluatedSurvey()
 
   const drawer = (
     <div>
@@ -61,11 +61,7 @@ const SurveysNavbar = (props: Props) => {
       <Divider />
       {/* TODO: User icon + role shall go here */}
       <List>
-        <SurveysNavbarButton
-          action={() => evaluateClick()}
-          text="Oceniam"
-          iconElement={<FactCheckIcon />}
-        />
+        <SurveysNavbarButton action={() => evaluateClick()} text="Oceniam" iconElement={<FactCheckIcon />} />
         <SurveysNavbarButton path="/recrutiment-survey-stage/app/help" text="Jak oceniać" iconElement={<HelpIcon />} />
         <SurveysNavbarButton
           path="/recrutiment-survey-stage/app/surveys"
