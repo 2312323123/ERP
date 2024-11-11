@@ -16,7 +16,7 @@ import { Mark } from 'src/marks/entities/mark.entity';
 import { Comment } from 'src/comments/entities/comment.entity';
 
 const weightedRandom = <T>(arr: T[]): T | undefined => {
-  const weights = arr.map((_, i) => 1 / (i + 1)); // Higher weights for earlier elements
+  const weights = arr.map((_, i) => i + 1); // Higher weights for earlier elements
   const totalWeight = weights.reduce((a, b) => a + b, 0);
   const random = Math.random() * totalWeight;
 
