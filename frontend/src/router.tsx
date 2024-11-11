@@ -13,7 +13,7 @@ import SurveysSettings from './pages/RecruitmentSurveyStagePages/SurveysSettings
 import PathChangeListener from './utils/PathChangeListener'
 import AppRoles from './pages/AppRoles/AppRoles'
 import Survey from './pages/RecruitmentSurveyStagePages/Survey'
-import SurveysSurveyView from './pages/RecruitmentSurveyStagePages/SurveysSurveyView/SurveysSurveyView'
+import SurveysSurveyPage from './pages/RecruitmentSurveyStagePages/SurveysSurveyPage/SurveysSurveyPage'
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -28,7 +28,7 @@ export const router = createBrowserRouter(
       <Route path="/recrutiment-survey-stage">
         <Route path="/recrutiment-survey-stage/app" element={<SurveysNavbar />}>
           <Route path="/recrutiment-survey-stage/app/survey" element={<Survey />}>
-            <Route path="/recrutiment-survey-stage/app/survey/:uuid" element={<SurveysSurveyView />} />
+            <Route path="/recrutiment-survey-stage/app/survey/:uuid" element={<SurveysSurveyPage />} />
           </Route>
           <Route index path="/recrutiment-survey-stage/app/dashboard" element={<SurveysDashboard />} />
           <Route path="/recrutiment-survey-stage/app/surveys" element={<SurveysSurveys />} />

@@ -1,6 +1,5 @@
 import { useCallback, useLayoutEffect, useRef, useState } from 'react'
 import OpenEvaluationButton from './components/OpenEvaluationButton'
-import SurveyTopPart from './components/SurveyTopPart'
 import SplitPane from 'react-split-pane'
 import './components/ReactSplitPaneStyles.css'
 import useBlockPullToRefreshMobile from './components/useBlockPullToRefreshMobile'
@@ -9,14 +8,14 @@ import styles from './SurveysSurveyView.module.css'
 import SurveyEvaluation from './components/SurveyEvaluation'
 import FloatingCloseButton from './components/FloatingCloseButton'
 import VerticalSliderButton from './components/VerticalButtonSlider'
-import useIsDesktop from '../../../utils/useIsDesktop'
+import useIsDesktop from '../../../../utils/useIsDesktop'
 import HorizontalButtonSlider from './components/HorizontalButtonSlider'
 import SurveyDisplay from './components/SurveyDisplay'
-import { useGetCriteriaQuery, useGetSurveyQuery, useSaveEvaluationMutation } from '../../../services/surveyStage'
+import { useGetCriteriaQuery, useGetSurveyQuery, useSaveEvaluationMutation } from '../../../../services/surveyStage'
 import { useParams } from 'react-router-dom'
-import EvaluationForm from '../../../components/EvaluationForm'
+import EvaluationForm from '../../../../components/EvaluationForm'
 import { Box } from '@mui/material'
-import useEvaluateSurvey from '../../../hooks/surveys/useEvaluateSurvey'
+import useEvaluateSurvey from '../../../../hooks/surveys/useEvaluateSurvey'
 
 const SurveysSurveyView = () => {
   const isDesktop = useIsDesktop()
@@ -87,7 +86,6 @@ const SurveysSurveyView = () => {
               overflowY: 'auto',
             }}
           >
-            <SurveyTopPart />
             {!error2 && !isLoading2 && survey && survey.responses && <SurveyDisplay responses={survey.responses} />}
           </div>
           <div
