@@ -50,7 +50,7 @@ export class AppController {
   @Roles('USER', 'RECRUITMENT_ADMIN')
   @Get('/api/surveys/can-evaluate-surveys')
   async getCanEvaluateSurveys(): Promise<{ can_evaluate_surveys: boolean }> {
-    return this.appService.getCanEvaluateSurveys();
+    return { can_evaluate_surveys: await this.appService.getCanEvaluateSurveys() };
   }
   @Roles('RECRUITMENT_ADMIN')
   @Post('/api/surveys/can-evaluate-surveys')
@@ -62,7 +62,7 @@ export class AppController {
   @Roles('USER', 'RECRUITMENT_ADMIN')
   @Get('/api/surveys/accepts-surveys')
   async getAcceptsSurveys(): Promise<{ accepts_surveys: boolean }> {
-    return this.appService.getAcceptsSurveys();
+    return { accepts_surveys: await this.appService.getAcceptsSurveys() };
   }
   @Roles('RECRUITMENT_ADMIN')
   @Post('/api/surveys/accepts-surveys')

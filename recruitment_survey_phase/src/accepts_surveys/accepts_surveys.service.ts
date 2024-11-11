@@ -27,7 +27,7 @@ export class AcceptsSurveysService {
     if (res === null) {
       throw new BadRequestException('No records in accepts_survey table 45re3');
     }
-    return res[0];
+    return res[0].accepts_surveys;
   }
 
   findAll() {

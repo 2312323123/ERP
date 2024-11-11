@@ -72,7 +72,7 @@ export class AppService {
   }
 
   // one switch in survey settings - can_evaluate_surveys
-  async getCanEvaluateSurveys(): Promise<CreateCanEvaluateSurveyDto> {
+  async getCanEvaluateSurveys(): Promise<boolean> {
     return await this.canEvaluateSurveysService.getCanEvaluateSurveys();
   }
   async setCanEvaluateSurveys(createCanEvaluateSurveyDto: CreateCanEvaluateSurveyDto) {
@@ -80,7 +80,7 @@ export class AppService {
   }
 
   // one switch in survey settings - accepts_surveys
-  async getAcceptsSurveys(): Promise<CreateAcceptsSurveyDto> {
+  async getAcceptsSurveys(): Promise<boolean> {
     return await this.acceptsSurveysService.getAcceptsSurveys();
   }
   async setAcceptsSurveys(createAcceptsSurveyDto: CreateAcceptsSurveyDto) {
@@ -167,7 +167,7 @@ export class AppService {
     // check if accepts_surveys is true
     const acceptsSurveys = await this.acceptsSurveysService.getAcceptsSurveys();
 
-    if (!acceptsSurveys.accepts_surveys) {
+    if (!acceptsSurveys) {
       throw new BadRequestException('Surveys accepting is turned off');
     }
 

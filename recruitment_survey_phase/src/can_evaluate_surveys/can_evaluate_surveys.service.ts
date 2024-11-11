@@ -25,14 +25,14 @@ export class CanEvaluateSurveysService {
     }
   }
 
-  async getCanEvaluateSurveys() {
+  async getCanEvaluateSurveys(): Promise<boolean> {
     const res = await this.canEvaluateSurveyRepository.find({
       take: 1,
     });
     if (res === null) {
       throw new BadRequestException('No records in can_evaluate_survey table it845');
     }
-    return res[0];
+    return res[0].can_evaluate_surveys;
   }
 
   findAll() {
