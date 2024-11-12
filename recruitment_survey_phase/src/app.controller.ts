@@ -167,13 +167,14 @@ export class AppController {
     return this.appService.getSurvey(uuid);
   }
 
-  @Roles('SUPERADMIN') // for now, then obviously change to evaluator or something
+  @Roles('USER') // for now, then obviously change to evaluator or something,
+  // and give USER next / previous based purely on the chronological order of surveys
   @Get('/api/surveys/evaluation/not-evaluated-one')
   async getNotEvaluatedOne(@UserId() userId: string): Promise<Survey | null> {
     return this.appService.getNotEvaluatedOne(userId);
   }
 
-  @Roles('SUPERADMIN') // for now, then obviously change to evaluator or something
+  @Roles('USER') // for now, then obviously change to evaluator or something
   @Post('/api/surveys/evaluation/evaluate')
   async evaluateSurvey(
     @UserId() userId: string,
@@ -184,7 +185,7 @@ export class AppController {
     return this.appService.evaluateSurvey(userId, survey_uuid, marks, comment);
   }
 
-  @Roles('SUPERADMIN') // for now, then obviously change to evaluator or something
+  @Roles('USER') // for now, then obviously change to evaluator or something
   @Put('/api/surveys/evaluation/evaluate')
   async reEvaluateSurvey(
     @UserId() userId: string,
