@@ -14,7 +14,10 @@ import { CreateAcceptsSurveyDto } from './accepts_surveys/dto/create-accepts_sur
 import { CreateCanEvaluateSurveyDto } from './can_evaluate_surveys/dto/create-can_evaluate_survey.dto';
 import { CreateCanPeopleSeeRecruitmentDto } from './can_people_see_recruitment/dto/create-can_people_see_recruitment.dto';
 import { CreateRecruitmentDto } from './recruitments/dto/create-recruitment.dto';
-import { RecruitmentRelatedData } from './recruitments/dto/create-recruitment-related-data-for-frontend.dto';
+import {
+  RecruitmentRelatedData,
+  RecruitmentRelatedDataForEvaluation,
+} from './recruitments/dto/create-recruitment-related-data-for-frontend.dto';
 import { UpdateRecruitmentDto } from './recruitments/dto/update-recruitment.dto';
 import { UpdateFieldsHiddenForSurveyEvaluatorDto } from './fields_hidden_for_survey_evaluators/dto/update-fields_hidden_for_survey_evaluator.dto';
 import { FieldsHiddenForSurveyEvaluatorsService } from './fields_hidden_for_survey_evaluators/fields_hidden_for_survey_evaluators.service';
@@ -64,7 +67,7 @@ export class AppService {
   }
 
   // one switch in survey settings - can_people_see_recruitment
-  async getCanPeopleSeeRecruitment(): Promise<CreateCanPeopleSeeRecruitmentDto> {
+  async getCanPeopleSeeRecruitment(): Promise<boolean> {
     return await this.canPeopleSeeRecruitmentService.getCanPeopleSeeRecruitment();
   }
   async setCanPeopleSeeRecruitment(createCanPeopleSeeRecruitmentDto: CreateCanPeopleSeeRecruitmentDto) {
@@ -203,7 +206,7 @@ export class AppService {
     return this.surveysService.getNextSurveyUuid(userId, current_survey_uuid);
   }
 
-  async getEvaluationCriteria(): Promise<RecruitmentRelatedData> {
+  async getEvaluationCriteria(): Promise<RecruitmentRelatedDataForEvaluation> {
     return this.recruitmentsService.getEvaluationCriteria();
   }
 

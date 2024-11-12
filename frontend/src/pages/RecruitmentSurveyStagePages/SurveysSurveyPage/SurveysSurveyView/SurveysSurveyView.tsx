@@ -17,6 +17,7 @@ import useEvaluateSurvey from '../../../../hooks/surveys/useEvaluateSurvey'
 import { useSelector } from 'react-redux'
 import { getAccessToken } from '../../../../store/slices/authSlice'
 import { jwtDecode } from 'jwt-decode'
+import { surveyEvaluatingTurnedOffAlert } from '../../../../utils/surveyEvaluatingTurnedOffAlert'
 
 const SurveysSurveyView = () => {
   const isDesktop = useIsDesktop()
@@ -26,7 +27,7 @@ const SurveysSurveyView = () => {
   const [outerDivHeight, setOuterDivHeight] = useState(0)
   const { uuid } = useParams() // Get the 'id' parameter from the route
   const { data: survey, error: error2, isLoading: isLoading2 } = useGetSurveyQuery(uuid ?? '')
-  const { data: evaluationCriteria, error: error1, isLoading: isLoading1 } = useGetCriteriaQuery(uuid ?? '')
+  const { data: evaluationCriteria, error: error1, isLoading: isLoading1 } = useGetCriteriaQuery()
   // evaluationCriteria: gradingInstruction, fieldsNotToShow, fieldToDistinctTheSurvey, evaluationCriteria, markTags
 
   // to load one's own evaluation into the form
@@ -72,6 +73,14 @@ const SurveysSurveyView = () => {
 
   // button click action
   const handleEvaluateButtonClick = () => {
+    if (
+      evaluationCriteria &&
+      typeof evaluationCriteria.canEvaluateSurveys === 'boolean' &&
+      !evaluationCriteria.canEvaluateSurveys
+    ) {
+      surveyEvaluatingTurnedOffAlert()
+      return
+    }
     if (innerDivRef.current && outerDivRef.current) {
       if (!isDesktop) {
         const element = document.querySelector('.Pane.horizontal.Pane1') as HTMLElement
@@ -133,6 +142,7 @@ const SurveysSurveyView = () => {
                   initialMarks={myEvaluation?.marks}
                   initialComment={myEvaluation?.comment}
                   reEvaluating={reEvaluating}
+                  isEvaluationTurnedOff={evaluationCriteria.canEvaluateSurveys === false}
                 />
               </Box>
             )}

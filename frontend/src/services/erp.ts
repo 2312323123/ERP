@@ -31,6 +31,11 @@ export interface SurveySettingsExported {
   }
 }
 
+export interface SurveySettingsImportedForEvaluation extends SurveySettingsExported {
+  canEvaluateSurveys: boolean
+  canPeopleSeeRecruitment: boolean
+}
+
 export interface SurveySettingsImported extends SurveySettingsExported {
   token: string
   isThereAnySurvey: boolean

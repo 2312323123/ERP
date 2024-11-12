@@ -4,7 +4,10 @@ import { CreateCanPeopleSeeRecruitmentDto } from './can_people_see_recruitment/d
 import { CreateCanEvaluateSurveyDto } from './can_evaluate_surveys/dto/create-can_evaluate_survey.dto';
 import { CreateAcceptsSurveyDto } from './accepts_surveys/dto/create-accepts_survey.dto';
 import { CreateRecruitmentDto } from './recruitments/dto/create-recruitment.dto';
-import { RecruitmentRelatedData } from './recruitments/dto/create-recruitment-related-data-for-frontend.dto';
+import {
+  RecruitmentRelatedData,
+  RecruitmentRelatedDataForEvaluation,
+} from './recruitments/dto/create-recruitment-related-data-for-frontend.dto';
 import { UndefinedCheckPipe } from './pipes/undefined-check.pipe';
 import { Roles } from './auth/roles.decorator';
 import { Survey } from './surveys/schemas/survey.schema';
@@ -36,7 +39,7 @@ export class AppController {
   @Roles('USER', 'RECRUITMENT_ADMIN')
   @Get('/api/surveys/can-people-see-recruitment')
   async getCanPeopleSeeRecruitment(): Promise<{ can_people_see_recruitment: boolean }> {
-    return this.appService.getCanPeopleSeeRecruitment();
+    return { can_people_see_recruitment: await this.appService.getCanPeopleSeeRecruitment() };
   }
   @Roles('RECRUITMENT_ADMIN')
   @Post('/api/surveys/can-people-see-recruitment')
@@ -154,7 +157,7 @@ export class AppController {
 
   @Roles('USER')
   @Get('/api/surveys/evaluation/criteria')
-  async getCriteria(): Promise<RecruitmentRelatedData> {
+  async getCriteria(): Promise<RecruitmentRelatedDataForEvaluation> {
     return this.appService.getEvaluationCriteria();
   }
 

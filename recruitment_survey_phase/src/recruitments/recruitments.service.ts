@@ -12,12 +12,15 @@ import { EvaluationSchema } from 'src/evaluation_schemas/entities/evaluation_sch
 import {
   CreateRecruitmentRelatedDataForFrontendDto,
   RecruitmentRelatedData,
+  RecruitmentRelatedDataForEvaluation,
 } from './dto/create-recruitment-related-data-for-frontend.dto';
 import { Mark } from 'src/marks/entities/mark.entity';
 import { SurveyMetadata } from 'src/survey_metadatas/entities/survey_metadata.entity';
 import { CreateEvaluationSchemaDto } from 'src/evaluation_schemas/dto/create-evaluation_schema.dto';
 import { EvaluationSchemasService } from 'src/evaluation_schemas/evaluation_schemas.service';
 import { MarkGradeNamesService } from 'src/mark_grade_names/mark_grade_names.service';
+import { CanEvaluateSurveysService } from 'src/can_evaluate_surveys/can_evaluate_surveys.service';
+import { CanPeopleSeeRecruitmentService } from 'src/can_people_see_recruitment/can_people_see_recruitment.service';
 
 const recruitmentCreateDefaults: RecruitmentRelatedData = {
   gradingInstruction: `# Hi, *Pluto*!
@@ -53,6 +56,8 @@ export class RecruitmentsService {
     @InjectRepository(SurveyMetadata) private surveyMetadataRepository: Repository<SurveyMetadata>,
     private readonly evaluationSchemasService: EvaluationSchemasService,
     private readonly markGradeNamesService: MarkGradeNamesService,
+    private readonly canEvaluateSurveysService: CanEvaluateSurveysService,
+    private readonly canPeopleSeeRecruitmentService: CanPeopleSeeRecruitmentService,
   ) {}
 
   async create(createRecruitmentDto: CreateRecruitmentDto): Promise<Recruitment> {
@@ -313,7 +318,7 @@ export class RecruitmentsService {
     return !!surveyMetadata; // Return true if found, otherwise false
   }
 
-  async getEvaluationCriteria(): Promise<RecruitmentRelatedData> {
+  async getEvaluationCriteria(): Promise<RecruitmentRelatedDataForEvaluation> {
     // kind of opposite of createRecruitmentRelatedEntitiesFromObject
 
     const { recruitment_uuid: uuid } = (await this.activeRecruitmentRepository.find())[0];
@@ -364,6 +369,17 @@ export class RecruitmentsService {
       };
     }
 
-    return recruitmentRelatedData;
+    // add the boolean fields
+    const recruitmentRelatedDataForEvaluation = new RecruitmentRelatedDataForEvaluation();
+    for (const key in recruitmentRelatedData) {
+      // @ts-expect-error - we know that the key exists as type of recruitmentRelatedDataForEvaluation extends RecruitmentRelatedData
+      recruitmentRelatedDataForEvaluation[key] = recruitmentRelatedData[key];
+    }
+    recruitmentRelatedDataForEvaluation.canEvaluateSurveys =
+      await this.canEvaluateSurveysService.getCanEvaluateSurveys();
+    recruitmentRelatedDataForEvaluation.canPeopleSeeRecruitment =
+      await this.canPeopleSeeRecruitmentService.getCanPeopleSeeRecruitment();
+
+    return recruitmentRelatedDataForEvaluation;
   }
 }

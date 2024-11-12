@@ -16,6 +16,11 @@ export class RecruitmentRelatedData {
   };
 }
 
+export class RecruitmentRelatedDataForEvaluation extends RecruitmentRelatedData {
+  canEvaluateSurveys: boolean;
+  canPeopleSeeRecruitment: boolean;
+}
+
 export class CreateRecruitmentRelatedDataForFrontendDto extends RecruitmentRelatedData {
   isThereAnyMark: boolean;
   isThereAnySurvey: boolean;

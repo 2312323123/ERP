@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQueryWithReauth } from './baseQueryWithReauth'
-import { SurveySettingsImported } from './erp'
+import { SurveySettingsImportedForEvaluation } from './erp'
 
 interface Survey {
   uuid: string
@@ -37,7 +37,7 @@ export const surveyStageApi = createApi({
       query: (uuid) => `api/surveys/survey?uuid=${uuid}`,
       providesTags: [{ type: 'SurveyRecruitment', id: 'SURVEY' }],
     }),
-    getCriteria: builder.query<SurveySettingsImported, void>({
+    getCriteria: builder.query<SurveySettingsImportedForEvaluation, void>({
       query: () => 'api/surveys/evaluation/criteria',
       providesTags: [{ type: 'SurveyRecruitment', id: 'CRITERIA' }], // TODO: make changing survey settings refresh it
     }),
@@ -67,9 +67,7 @@ export const surveyStageApi = createApi({
           comment,
         },
       }),
-      invalidatesTags: [
-        { type: 'SurveyRecruitment', id: 'ALL_EVALUATIONS' },
-      ],
+      invalidatesTags: [{ type: 'SurveyRecruitment', id: 'ALL_EVALUATIONS' }],
     }),
     getAllEvaluations: builder.query<UserEvaluation[] | null, string>({
       query: (surveyUuid) => `api/surveys/evaluation/all-evaluations?survey_uuid=${surveyUuid}`,

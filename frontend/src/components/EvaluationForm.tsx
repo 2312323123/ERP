@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Box, Button, TextField, MenuItem, Typography, Tooltip, IconButton } from '@mui/material'
 import InfoIcon from '@mui/icons-material/Info'
 import { SurveyEvaluationToSend } from '../services/surveyStage'
+import { surveyEvaluatingTurnedOffAlert } from '../utils/surveyEvaluatingTurnedOffAlert'
 
 export interface Criterion {
   name: string
@@ -18,6 +19,7 @@ interface Props {
   initialMarks?: number[]
   initialComment?: string
   reEvaluating?: boolean
+  isEvaluationTurnedOff?: boolean
 }
 
 const EvaluationForm = ({
@@ -29,6 +31,7 @@ const EvaluationForm = ({
   initialMarks,
   initialComment,
   reEvaluating, // used just to not clear on submit, but probably could be used in the other place reevaluation is considered in this file
+  isEvaluationTurnedOff,
 }: Props) => {
   const [marks, setMarks] = useState<(number | string)[]>(initialMarks ?? Array(criteria.length).fill(''))
   const [comment, setComment] = useState<string>(initialComment ?? '')
@@ -82,6 +85,10 @@ const EvaluationForm = ({
     }
 
     if (!demoMode) {
+      if (isEvaluationTurnedOff) {
+        surveyEvaluatingTurnedOffAlert()
+        return
+      }
       const structuredData = {
         surveyUuid: surveyUuid,
         marks: criteria.map((_, index) => marks[index]),

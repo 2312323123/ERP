@@ -32,7 +32,7 @@ export class CanPeopleSeeRecruitmentService {
     if (res === null) {
       throw new BadRequestException('No records in can_people_see_recruitment table t54r1');
     }
-    return res[0];
+    return res[0].can_people_see_recruitment;
   }
 
   // findOne(id: number) {
