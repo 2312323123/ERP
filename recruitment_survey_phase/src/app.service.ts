@@ -28,6 +28,17 @@ import { SurveysService } from './surveys/surveys.service';
 import { SurveyMetadatasService } from './survey_metadatas/survey_metadatas.service';
 import { Survey } from './surveys/schemas/survey.schema';
 import { MarksService } from './marks/marks.service';
+import { CommentsService } from './comments/comments.service';
+
+interface SurveysStats {
+  uuid: string;
+  short_fields_combined: string;
+  evaluated: boolean;
+  identification_field_value: string;
+  average_marks: number[];
+}
+
+export type SurveysStatsList = SurveysStats[];
 
 function extractBearerToken(authHeader: string) {
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -52,6 +63,7 @@ export class AppService {
     private readonly surveysService: SurveysService,
     private readonly surveyMetadatasService: SurveyMetadatasService,
     private readonly marksService: MarksService,
+    private readonly commentsService: CommentsService,
   ) {}
 
   getHello(): string {
@@ -228,5 +240,47 @@ export class AppService {
 
   async getAllEvaluations(userId: string, authorization: string, surveyUuid: string) {
     return this.marksService.getAllEvaluations(userId, authorization, surveyUuid);
+  }
+  async getSurveysStatsList(userId: string): Promise<SurveysStatsList> {
+    // all survey uuids for the active recruitment
+    const activeRecruitmentNameUuid = await this.getActiveRecruitmentNameUuid();
+    if (!activeRecruitmentNameUuid) {
+      throw new NotFoundException('No active recruitment found');
+    }
+    const { uuid: recruitmentUuid } = activeRecruitmentNameUuid;
+    const surveyIds = await this.surveyMetadatasService.getSurveyIdsForRecruitment(recruitmentUuid);
+    // like [ 'uuid1', 'uuid2', ... ]
+
+    // get whether the survey is evaluated
+    const evaluated = await this.commentsService.getSurveysUuidsFromRecruitmentEvaluatedByUser(userId, recruitmentUuid);
+    // like [ 'uuid1', 'uuid2', ... ]
+
+    // get short fields combined using spaces per survey id
+    const shortFieldsCombined = await this.surveysService.getShortFieldsCombined(surveyIds);
+    // like { 'uuid1': 'short_fields_combined1', 'uuid2': 'short_fields_combined2', ... }
+
+    // get identification field value per survey id
+    const identificationFieldValues = await this.surveysService.getIdentificationFieldValues(surveyIds);
+    // like { 'uuid1': 'identification_field_value1', 'uuid2': 'identification_field_value2', ... }
+
+    // merge
+    const myObj: { [key: string]: Partial<SurveysStats> } = {};
+    surveyIds.forEach((uuid) => (myObj[uuid] = { uuid, evaluated: false }));
+    evaluated.forEach((uuid) => (myObj[uuid].evaluated = true));
+    surveyIds.forEach((uuid) => (myObj[uuid].short_fields_combined = shortFieldsCombined[uuid]));
+    surveyIds.forEach((uuid) => (myObj[uuid].identification_field_value = identificationFieldValues[uuid]));
+
+    console.log('myObj:');
+    console.log(myObj);
+
+    return [
+      {
+        uuid: 'uuid1',
+        short_fields_combined: 'short_fields_combined1',
+        evaluated: true,
+        identification_field_value: 'identification_field_value1',
+        average_marks: [1, 2, 3],
+      },
+    ];
   }
 }

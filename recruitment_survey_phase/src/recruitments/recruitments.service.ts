@@ -382,4 +382,17 @@ export class RecruitmentsService {
 
     return recruitmentRelatedDataForEvaluation;
   }
+
+  // for surveys survey view panel
+  async getActiveRecruitmentObject(): Promise<Recruitment | null> {
+    const { recruitment_uuid: uuid } = (await this.activeRecruitmentRepository.find())[0];
+
+    if (!uuid) {
+      return null;
+    }
+
+    return this.recruitmentRepository.findOne({
+      where: { uuid },
+    });
+  }
 }

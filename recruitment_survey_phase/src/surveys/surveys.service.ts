@@ -14,6 +14,7 @@ import { EvaluationSchemasService } from 'src/evaluation_schemas/evaluation_sche
 import { ActiveRecruitmentService } from 'src/active_recruitment/active_recruitment.service';
 import { Mark } from 'src/marks/entities/mark.entity';
 import { Comment } from 'src/comments/entities/comment.entity';
+import { RecruitmentsService } from 'src/recruitments/recruitments.service';
 
 const weightedRandom = <T>(arr: T[]): T | undefined => {
   const weights = arr.map((_, i) => i + 1); // Higher weights for earlier elements
@@ -40,6 +41,7 @@ export class SurveysService {
     private readonly activeRecruitmentService: ActiveRecruitmentService,
     @InjectRepository(Mark) private markRepository: Repository<Mark>,
     @InjectRepository(Comment) private commentRepository: Repository<Comment>,
+    private readonly recruitmentsService: RecruitmentsService,
   ) {}
 
   async create(createSurveyDto: CreateSurveyDto): Promise<Survey> {
@@ -339,5 +341,63 @@ export class SurveysService {
 
     // if there's later one, return it, else getNotEvaluatedOne.uuid, and if it gets null, return null
     return evaluatedSurveysDescending[currentSurveyIndex - 1] || (await this.getNotEvaluatedOne(userId))?.uuid || null;
+  }
+
+  // for surveys survey view panel
+  async getShortFieldsCombined(surveyUuids: string[]): Promise<{ [surveyUuid: string]: string }> {
+    const surveys = await this.surveyModel.find({ uuid: { $in: surveyUuids } }).exec();
+
+    const result: { [surveyUuid: string]: string } = {};
+
+    surveys.forEach((survey) => {
+      const concatenatedAnswers = survey.responses
+        .filter(
+          (response) =>
+            ['TEXT', 'MULTIPLE_CHOICE', 'CHECKBOX', 'LIST'].includes(response.type) &&
+            response.answer && // exclude null or empty answers
+            (typeof response.answer === 'string' || (Array.isArray(response.answer) && response.answer.length > 0)),
+        )
+        .map((response) => (Array.isArray(response.answer) ? response.answer.join(' ') : response.answer))
+        .join(' ');
+
+      result[survey.uuid] = concatenatedAnswers;
+    });
+
+    return result;
+  }
+
+  // for surveys survey view panel
+  async getIdentificationFieldValues(surveyUuids: string[]): Promise<{ [surveyUuid: string]: string }> {
+    const activeRecruitmentObject = await this.recruitmentsService.getActiveRecruitmentObject();
+
+    if (!activeRecruitmentObject) {
+      throw new NotFoundException('Active recruitment not found');
+    }
+
+    let fieldToDistinctTheSurvey = activeRecruitmentObject.field_to_distinct_the_survey;
+
+    if (fieldToDistinctTheSurvey === '') {
+      fieldToDistinctTheSurvey = '[brak nazwy]';
+    } else if (!fieldToDistinctTheSurvey) {
+      fieldToDistinctTheSurvey =
+        'Nie ustawiono pola "Pole z ankiety, którego zawartość widać w liście ankiet, np. imię:" w ustawieniach rekrutacji. Poproś kogoś uprawnionego, żeby to zmienił';
+    }
+
+    const surveys = await this.surveyModel.find({ uuid: { $in: surveyUuids } }).exec();
+
+    const result: { [surveyUuid: string]: string } = {};
+
+    surveys.forEach((survey) => {
+      const field = survey.responses.find((response) => response.question === fieldToDistinctTheSurvey);
+
+      result[survey.uuid] =
+        field && field.answer !== null
+          ? Array.isArray(field.answer)
+            ? field.answer.join(' ')
+            : field.answer
+          : 'Pole którego wartość ma tu być pokazywana, skonfigurowana w ustawieniach oceniaczki, nie zgadza się z nazwą żadnego pola w ankiecie';
+    });
+
+    return result;
   }
 }

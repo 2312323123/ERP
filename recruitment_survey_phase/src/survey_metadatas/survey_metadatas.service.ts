@@ -47,4 +47,15 @@ export class SurveyMetadatasService {
     surveyMetadata.recruitment = recruitment;
     return this.surveyMetadataRepository.save(surveyMetadata);
   }
+
+  // for surveys survey view panel
+  async getSurveyIdsForRecruitment(recruitmentUuid: string) {
+    const recruitment = await this.recruitmentRepository.findOneOrFail({
+      where: { uuid: recruitmentUuid },
+    });
+    const surveyMetadatas = await this.surveyMetadataRepository.find({
+      where: { recruitment },
+    });
+    return surveyMetadatas.map(({ uuid }) => uuid);
+  }
 }

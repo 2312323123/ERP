@@ -57,23 +57,16 @@ export class CommentsService {
     await this.commentRepository.save(existingComment);
   }
 
-  // create(createCommentDto: CreateCommentDto) {
-  //   return 'This action adds a new comment';
-  // }
-
-  // findAll() {
-  //   return `This action returns all comments`;
-  // }
-
-  // findOne(id: number) {
-  //   return `This action returns a #${id} comment`;
-  // }
-
-  // update(id: number, updateCommentDto: UpdateCommentDto) {
-  //   return `This action updates a #${id} comment`;
-  // }
-
-  // remove(id: number) {
-  //   return `This action removes a #${id} comment`;
-  // }
+  async getSurveysUuidsFromRecruitmentEvaluatedByUser(userId: string, recruitmentUuid: string): Promise<string[]> {
+    return this.commentRepository
+      .find({
+        where: { evaluator_id: userId },
+        relations: ['survey_metadata', 'survey_metadata.recruitment'],
+      })
+      .then((comments) => {
+        return comments
+          .filter((comment) => comment.survey_metadata.recruitment.uuid === recruitmentUuid)
+          .map((comment) => comment.survey_uuid);
+      });
+  }
 }

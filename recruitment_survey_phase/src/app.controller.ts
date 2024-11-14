@@ -1,5 +1,5 @@
 import { BadRequestException, Body, Controller, Get, Headers, HttpCode, Post, Put, Query } from '@nestjs/common';
-import { AppService } from './app.service';
+import { AppService, SurveysStatsList } from './app.service';
 import { CreateCanPeopleSeeRecruitmentDto } from './can_people_see_recruitment/dto/create-can_people_see_recruitment.dto';
 import { CreateCanEvaluateSurveyDto } from './can_evaluate_surveys/dto/create-can_evaluate_survey.dto';
 import { CreateAcceptsSurveyDto } from './accepts_surveys/dto/create-accepts_survey.dto';
@@ -204,5 +204,11 @@ export class AppController {
     @Query('survey_uuid', UndefinedCheckPipe) surveyUuid: string,
   ): Promise<UserEvaluation[] | null> {
     return this.appService.getAllEvaluations(userId, authorization, surveyUuid);
+  }
+
+  @Roles('USER')
+  @Get('/api/surveys/surveys-stats-list')
+  async getSurveyStatsList(@UserId() userId: string): Promise<SurveysStatsList> {
+    return this.appService.getSurveysStatsList(userId);
   }
 }
