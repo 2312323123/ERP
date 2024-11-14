@@ -32,11 +32,41 @@ export interface SurveySettingsExported {
 }
 
 export interface SurveySettingsImportedForEvaluation extends SurveySettingsExported {
+  // gradingInstruction: string
+  // fieldsNotToShow: Array<string>
+  // fieldToDistinctTheSurvey: string
+  // evaluationCriteria: Array<{
+  //   name: string
+  //   description: string
+  //   weight: number
+  // }>
+  // markTags: {
+  //   mark1Tag: string
+  //   mark2Tag: string
+  //   mark3Tag: string
+  //   mark4Tag: string
+  //   mark5Tag: string
+  // }
   canEvaluateSurveys: boolean
   canPeopleSeeRecruitment: boolean
 }
 
 export interface SurveySettingsImported extends SurveySettingsExported {
+  // gradingInstruction: string
+  // fieldsNotToShow: Array<string>
+  // fieldToDistinctTheSurvey: string
+  // evaluationCriteria: Array<{
+  //   name: string
+  //   description: string
+  //   weight: number
+  // }>
+  // markTags: {
+  //   mark1Tag: string
+  //   mark2Tag: string
+  //   mark3Tag: string
+  //   mark4Tag: string
+  //   mark5Tag: string
+  // }
   token: string
   isThereAnySurvey: boolean
   isThereAnyMark: boolean

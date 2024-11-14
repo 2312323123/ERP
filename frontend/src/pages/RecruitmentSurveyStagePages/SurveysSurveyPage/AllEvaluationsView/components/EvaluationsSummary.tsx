@@ -1,8 +1,8 @@
 import { Box, Typography } from '@mui/material'
 import { UserEvaluation } from '../../../../../services/surveyStage'
-import { SurveySettingsImported } from '../../../../../services/erp'
+import { SurveySettingsExported } from '../../../../../services/erp'
 
-const calculateAverageMarks = (evaluations: UserEvaluation[], criteria: SurveySettingsImported) => {
+const calculateAverageMarks = (evaluations: UserEvaluation[], criteria: SurveySettingsExported) => {
   const criteriaCount = criteria.evaluationCriteria.length
 
   // initialize an array to hold the sum of marks for each criterion
@@ -25,7 +25,7 @@ const EvaluationsSummary = ({
   criteria,
 }: {
   evaluations: UserEvaluation[]
-  criteria: SurveySettingsImported
+  criteria: SurveySettingsExported
 }) => {
   // get the average marks for each criterion
   const averages = calculateAverageMarks(evaluations, criteria)

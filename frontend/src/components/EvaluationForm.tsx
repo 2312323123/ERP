@@ -11,7 +11,7 @@ export interface Criterion {
 }
 
 interface Props {
-  surveyUuid: string
+  surveyUuid?: string
   criteria: Criterion[]
   markTags: string[]
   onSubmit: (data: SurveyEvaluationToSend) => void

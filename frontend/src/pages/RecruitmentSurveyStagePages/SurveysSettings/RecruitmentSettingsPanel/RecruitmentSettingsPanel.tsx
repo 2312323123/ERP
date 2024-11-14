@@ -3,7 +3,7 @@ import FieldToDistinctTheSurveySetup from './components/FieldToDistinctTheSurvey
 import HiddenFieldsSetup from './components/HiddenFieldsSetup'
 import MarkdownEditor from './components/MarkdownEditor'
 import EvaluationDisplay from '../../../../components/EvaluationDisplay'
-import EvaluationForm, { SurveyEvaluationResult } from '../../../../components/EvaluationForm'
+import EvaluationForm from '../../../../components/EvaluationForm'
 import EvaluationPanelCreator from './components/EvaluationPanelCreator'
 import MarkTagsSetup from './components/MarkTagsSetup'
 import WeightsSum from './components/WeightsSum'
@@ -22,6 +22,7 @@ import {
 } from '../../../../store/slices/surveyStage/surveySettingsPageSlice'
 import { useGetActiveRecruitmentQuery, useGetActiveRecruitmentSettingsQuery } from '../../../../services/erp'
 import { useEffect } from 'react'
+import { SurveyEvaluationToSend } from '../../../../services/surveyStage'
 
 const RecruitmentSettingsPanel = () => {
   const { data: activeRecruitment } = useGetActiveRecruitmentQuery()
@@ -58,7 +59,7 @@ const RecruitmentSettingsPanel = () => {
   const mark5Tag = useSelector(getMark5Tag)
 
   const demoEvaluationState = useSelector(getDemoEvaluationState)
-  const setSurveyEvaluationResult = (result: SurveyEvaluationResult) => {
+  const setSurveyEvaluationResult = (result: SurveyEvaluationToSend) => {
     dispatch(setDemoEvaluationStateMarks(result.marks))
     dispatch(setDemoEvaluationStateComment(result.comment))
   }
