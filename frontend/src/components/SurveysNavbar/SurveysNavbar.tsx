@@ -68,11 +68,11 @@ const SurveysNavbar = (props: Props) => {
           text="Ankiety"
           iconElement={<AssignmentIcon />}
         />
-        <SurveysNavbarButton
+        {/* <SurveysNavbarButton
           path="/recruitment-survey-stage/app/dashboard"
           text="Statystyki"
           iconElement={<DashboardIcon />}
-        />
+        /> */}
         <SurveysNavbarButton
           path="/recruitment-survey-stage/app/feedback"
           text="Feedback"
