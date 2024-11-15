@@ -28,7 +28,11 @@ const useEvaluateSurvey = ({ reEvaluating = false }) => {
       setHasNavigated(true)
     }
     if ((isError && !hasNavigated) || (isError2 && !hasNavigated)) {
-      showSnackbar('Wystąpił błąd przy zapisywaniu oceny!', 'error', 5000)
+      showSnackbar(
+        'Wystąpił błąd przy zapisywaniu oceny! Możliwe, że ocenianie jest wyłączone przez admina rekrutacji',
+        'error',
+        10000,
+      )
       setHasNavigated(true)
     }
   }, [isSuccess, isError, showSnackbar, goToUnevaluatedSurvey, hasNavigated, isSuccess2, isError2, reEvaluating])
