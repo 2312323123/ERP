@@ -11,6 +11,10 @@
   - error: Cannot read properties of undefined (reading '<\some_field_name>\')
   - you need to add this in find to load related tables fields, example in getActiveRecruitmentNameUuid:
     relations: ['recruitment'], // Load the 'recruitment' relationship
+- in case of some weird errors forcing you to import the Repositories the service you import uses, then the better procedure is to:
+    - export service you import, and import the whole module with the service
+    - so the rule of thumb could be `export services, import modules`
+
 
 ### First thing to know
 
@@ -212,6 +216,7 @@ new dev way (run from main folder): `docker-compose -f docker-compose.yml -f doc
 hard resetting:
 `docker-compose -f docker-compose.yml -f docker-compose.dev.yml rm -svf db-psql; docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build db-psql` \
 `docker-compose -f docker-compose.yml -f docker-compose.dev.yml rm -svf frontend; docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build frontend` \
+`docker-compose -f docker-compose.yml -f docker-compose.dev.yml rm -svf recruitment_survey_phase; docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build recruitment_survey_phase` \
 
 new prod way (run from main folder): `docker-compose -f docker-compose.yml -f docker-compose.prod.yml rm -svf frontend; docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build frontend`
 
