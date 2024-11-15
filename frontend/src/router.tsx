@@ -25,17 +25,17 @@ export const router = createBrowserRouter(
         <Route path="other-page" element={<OtherPage />} />
       </Route>
       <Route path="/app-roles" element={<AppRoles />}></Route>
-      <Route path="/recrutiment-survey-stage">
-        <Route path="/recrutiment-survey-stage/app" element={<SurveysNavbar />}>
-          <Route path="/recrutiment-survey-stage/app/survey" element={<Survey />}>
-            <Route path="/recrutiment-survey-stage/app/survey/:uuid" element={<SurveysSurveyPage />} />
+      <Route path="/recruitment-survey-stage">
+        <Route path="/recruitment-survey-stage/app" element={<SurveysNavbar />}>
+          <Route path="/recruitment-survey-stage/app/survey" element={<Survey />}>
+            <Route path="/recruitment-survey-stage/app/survey/:uuid" element={<SurveysSurveyPage />} />
           </Route>
-          <Route index path="/recrutiment-survey-stage/app/dashboard" element={<SurveysDashboard />} />
-          <Route path="/recrutiment-survey-stage/app/surveys" element={<SurveysSurveys />} />
-          <Route path="/recrutiment-survey-stage/app/ranks" element={<SurveysRanks />} />
-          <Route path="/recrutiment-survey-stage/app/help" element={<SurveysHelp />} />
-          <Route path="/recrutiment-survey-stage/app/feedback" element={<SurveysFeedback />} />
-          <Route path="/recrutiment-survey-stage/app/settings" element={<SurveysSettings />} />
+          <Route index path="/recruitment-survey-stage/app/dashboard" element={<SurveysDashboard />} />
+          <Route path="/recruitment-survey-stage/app/surveys" element={<SurveysSurveys />} />
+          <Route path="/recruitment-survey-stage/app/ranks" element={<SurveysRanks />} />
+          <Route path="/recruitment-survey-stage/app/help" element={<SurveysHelp />} />
+          <Route path="/recruitment-survey-stage/app/feedback" element={<SurveysFeedback />} />
+          <Route path="/recruitment-survey-stage/app/settings" element={<SurveysSettings />} />
         </Route>
       </Route>
     </Route>,

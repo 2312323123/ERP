@@ -19,13 +19,13 @@ const useGoToUnevaluatedSurvey = ({ dashboardIfNoneLeft }: Props = { dashboardIf
     if (!isLoading && typeof notEvaluatedOne !== 'undefined') {
       if (notEvaluatedOne) {
         setDoFetch(false)
-        router.navigate('/recrutiment-survey-stage/app/survey/' + notEvaluatedOne.uuid)
+        router.navigate('/recruitment-survey-stage/app/survey/' + notEvaluatedOne.uuid)
       } else {
         if (dashboardIfNoneLeft) {
-          router.navigate('/recrutiment-survey-stage/app/dashboard')
+          router.navigate('/recruitment-survey-stage/app/dashboard')
         } else {
           setDoFetch(false)
-          router.navigate('/recrutiment-survey-stage/app/survey/')
+          router.navigate('/recruitment-survey-stage/app/survey/')
         }
       }
     }

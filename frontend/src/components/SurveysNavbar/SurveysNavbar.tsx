@@ -62,24 +62,24 @@ const SurveysNavbar = (props: Props) => {
       {/* TODO: User icon + role shall go here */}
       <List>
         <SurveysNavbarButton action={() => evaluateClick()} text="Oceniam" iconElement={<FactCheckIcon />} />
-        <SurveysNavbarButton path="/recrutiment-survey-stage/app/help" text="Jak oceniać" iconElement={<HelpIcon />} />
+        <SurveysNavbarButton path="/recruitment-survey-stage/app/help" text="Jak oceniać" iconElement={<HelpIcon />} />
         <SurveysNavbarButton
-          path="/recrutiment-survey-stage/app/surveys"
+          path="/recruitment-survey-stage/app/surveys"
           text="Ankiety"
           iconElement={<AssignmentIcon />}
         />
         <SurveysNavbarButton
-          path="/recrutiment-survey-stage/app/dashboard"
+          path="/recruitment-survey-stage/app/dashboard"
           text="Statystyki"
           iconElement={<DashboardIcon />}
         />
         <SurveysNavbarButton
-          path="/recrutiment-survey-stage/app/feedback"
+          path="/recruitment-survey-stage/app/feedback"
           text="Feedback"
           iconElement={<FeedbackIcon />}
         />
         <SurveysNavbarButton
-          path="/recrutiment-survey-stage/app/settings"
+          path="/recruitment-survey-stage/app/settings"
           text="Ustawienia"
           iconElement={<SettingsIcon />}
         />

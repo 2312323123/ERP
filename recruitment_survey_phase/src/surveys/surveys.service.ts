@@ -357,8 +357,8 @@ export class SurveysService {
             response.answer && // exclude null or empty answers
             (typeof response.answer === 'string' || (Array.isArray(response.answer) && response.answer.length > 0)),
         )
-        .map((response) => (Array.isArray(response.answer) ? response.answer.join(' ') : response.answer))
-        .join(' ');
+        .map((response) => (Array.isArray(response.answer) ? response.answer.join('__') : response.answer))
+        .join('__');
 
       result[survey.uuid] = concatenatedAnswers;
     });

@@ -43,7 +43,7 @@ const SurveysSurveyPage = () => {
   const previousClick = () => {
     if (objectWithPreviousSurveyUuid) {
       const previousSurveyUuid = objectWithPreviousSurveyUuid.uuid
-      router.navigate('/recrutiment-survey-stage/app/survey/' + previousSurveyUuid)
+      router.navigate('/recruitment-survey-stage/app/survey/' + previousSurveyUuid)
     }
   }
 
@@ -53,7 +53,7 @@ const SurveysSurveyPage = () => {
   const nextClick = () => {
     if (objectWithNextSurveyUuid) {
       const nextSurveyUuid = objectWithNextSurveyUuid.uuid
-      router.navigate('/recrutiment-survey-stage/app/survey/' + nextSurveyUuid)
+      router.navigate('/recruitment-survey-stage/app/survey/' + nextSurveyUuid)
     }
   }
 

@@ -24,6 +24,15 @@ export interface UserEvaluation extends UserIdNamePicture {
   comment: string
 }
 
+export type SurveysStatsList = Array<{
+  uuid: string
+  short_fields_combined: string
+  evaluated: boolean
+  identification_field_value: string
+  average_marks: undefined | number[]
+  amount_of_evaluations: number
+}>
+
 // Define a service using a base URL and expected endpoints
 export const surveyStageApi = createApi({
   reducerPath: 'surveyStageApi',
@@ -79,6 +88,9 @@ export const surveyStageApi = createApi({
     getNextSurveyUuid: builder.query<{ uuid: string } | null, string>({
       query: (uuid) => `api/surveys/evaluation/next-survey-uuid?current_survey_uuid=${uuid}`,
     }),
+    getSurveyStatsList: builder.query<SurveysStatsList, void>({
+      query: () => 'api/surveys/surveys-stats-list',
+    }),
   }),
   tagTypes: ['SurveyRecruitment'], // Keep the tag type for survey recruitments
 })
@@ -94,4 +106,5 @@ export const {
   useGetAllEvaluationsQuery,
   useGetPreviousSurveyUuidQuery,
   useGetNextSurveyUuidQuery,
+  useGetSurveyStatsListQuery,
 } = surveyStageApi

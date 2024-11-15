@@ -39,7 +39,7 @@ export const TakeMeToSurveyPhase = () => {
     } else {
       // if it's not, send variable, and send me to /help
       localStorage.setItem(item, 'true')
-      router.navigate('/recrutiment-survey-stage/app/help')
+      router.navigate('/recruitment-survey-stage/app/help')
     }
   }
 
