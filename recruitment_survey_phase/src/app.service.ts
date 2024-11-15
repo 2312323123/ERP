@@ -35,7 +35,8 @@ interface SurveysStats {
   short_fields_combined: string;
   evaluated: boolean;
   identification_field_value: string;
-  average_marks: number[];
+  average_marks: undefined | number[];
+  amount_of_evaluations: number;
 }
 
 export type SurveysStatsList = SurveysStats[];
@@ -241,6 +242,15 @@ export class AppService {
   async getAllEvaluations(userId: string, authorization: string, surveyUuid: string) {
     return this.marksService.getAllEvaluations(userId, authorization, surveyUuid);
   }
+
+  // export type SurveysStatsList = SurveysStats[];
+  // // Array<{
+  // //   uuid: string;
+  // //   short_fields_combined: string;
+  // //   evaluated: boolean;
+  // //   identification_field_value: string;
+  // //   average_marks: number[];
+  // // }>
   async getSurveysStatsList(userId: string): Promise<SurveysStatsList> {
     // all survey uuids for the active recruitment
     const activeRecruitmentNameUuid = await this.getActiveRecruitmentNameUuid();
@@ -263,24 +273,24 @@ export class AppService {
     const identificationFieldValues = await this.surveysService.getIdentificationFieldValues(surveyIds);
     // like { 'uuid1': 'identification_field_value1', 'uuid2': 'identification_field_value2', ... }
 
+    // get average marks per survey id
+    const averageMarks = await this.marksService.getAverageMarksForSurveys(surveyIds);
+    // like { 'uuid1': [1, 2, 3], *no uuid2 at all*, 'uuid3': [4, 5, 6], ... }
+
+    // get amount of evaluations per survey id
+    const amountOfEvaluations = await this.commentsService.getAmountOfEvaluationsForSurveys(surveyIds);
+    // like { 'uuid1': 3, 'uuid2': 0, 'uuid3': 2, ... }
+
     // merge
     const myObj: { [key: string]: Partial<SurveysStats> } = {};
     surveyIds.forEach((uuid) => (myObj[uuid] = { uuid, evaluated: false }));
     evaluated.forEach((uuid) => (myObj[uuid].evaluated = true));
     surveyIds.forEach((uuid) => (myObj[uuid].short_fields_combined = shortFieldsCombined[uuid]));
     surveyIds.forEach((uuid) => (myObj[uuid].identification_field_value = identificationFieldValues[uuid]));
+    surveyIds.forEach((uuid) => (myObj[uuid].average_marks = averageMarks[uuid]));
+    surveyIds.forEach((uuid) => (myObj[uuid].amount_of_evaluations = amountOfEvaluations[uuid] ?? 0));
 
-    console.log('myObj:');
-    console.log(myObj);
-
-    return [
-      {
-        uuid: 'uuid1',
-        short_fields_combined: 'short_fields_combined1',
-        evaluated: true,
-        identification_field_value: 'identification_field_value1',
-        average_marks: [1, 2, 3],
-      },
-    ];
+    // convert to array
+    return Object.values(myObj as { [key: string]: SurveysStats });
   }
 }

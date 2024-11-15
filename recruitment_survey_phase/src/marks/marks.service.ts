@@ -170,23 +170,37 @@ export class MarksService {
     return userEvaluations;
   }
 
-  // create(createMarkDto: CreateMarkDto) {
-  //   return 'This action adds a new mark';
-  // }
+  // for surveys survey view panel
+  async getAverageMarksForSurveys(surveyUuids: string[]): Promise<{ [surveyUuid: string]: number[] }> {
+    // Step 1: Fetch averages grouped by survey_uuid and order
+    const rawResults = await this.markRepository
+      .createQueryBuilder('mark')
+      .select('mark.survey_uuid', 'survey_uuid')
+      .addSelect('mark.order', 'order')
+      .addSelect('AVG(mark.number_value)', 'average')
+      .where('mark.survey_uuid IN (:...surveyUuids)', { surveyUuids })
+      .groupBy('mark.survey_uuid')
+      .addGroupBy('mark.order')
+      .orderBy('mark.survey_uuid')
+      .addOrderBy('mark.order')
+      .getRawMany();
 
-  // findAll() {
-  //   return `This action returns all marks`;
-  // }
+    // Step 2: Transform the result into the desired format
+    const result: { [surveyUuid: string]: number[] } = {};
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} mark`;
-  // }
+    rawResults.forEach((row) => {
+      const surveyUuid = row.survey_uuid;
+      const order = parseInt(row.order, 10);
+      const average = parseFloat(row.average);
 
-  // update(id: number, updateMarkDto: UpdateMarkDto) {
-  //   return `This action updates a #${id} mark`;
-  // }
+      if (!result[surveyUuid]) {
+        result[surveyUuid] = [];
+      }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} mark`;
-  // }
+      // Ensure the array is populated in the correct order
+      result[surveyUuid][order] = average;
+    });
+
+    return result;
+  }
 }

@@ -69,4 +69,25 @@ export class CommentsService {
           .map((comment) => comment.survey_uuid);
       });
   }
+
+  // for surveys survey view panel
+  async getAmountOfEvaluationsForSurveys(surveyUuids: string[]): Promise<{ [surveyUuid: string]: number }> {
+    // Step 1: Fetch comment counts grouped by survey_uuid
+    const rawResults = await this.commentRepository
+      .createQueryBuilder('comment')
+      .select('comment.survey_uuid', 'survey_uuid')
+      .addSelect('COUNT(comment.survey_uuid)', 'count')
+      .where('comment.survey_uuid IN (:...surveyUuids)', { surveyUuids })
+      .groupBy('comment.survey_uuid')
+      .getRawMany();
+
+    // Step 2: Transform the result into the desired format
+    const result: { [surveyUuid: string]: number } = {};
+
+    rawResults.forEach((row) => {
+      result[row.survey_uuid] = parseInt(row.count, 10);
+    });
+
+    return result;
+  }
 }
