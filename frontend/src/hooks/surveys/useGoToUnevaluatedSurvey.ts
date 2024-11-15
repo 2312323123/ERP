@@ -22,7 +22,7 @@ const useGoToUnevaluatedSurvey = ({ dashboardIfNoneLeft }: Props = { dashboardIf
         router.navigate('/recruitment-survey-stage/app/survey/' + notEvaluatedOne.uuid)
       } else {
         if (dashboardIfNoneLeft) {
-          router.navigate('/recruitment-survey-stage/app/dashboard')
+          router.navigate('/recruitment-survey-stage/app/surveys') // TODO: once it starts existing, switch to /dashboard instead of /surveys
         } else {
           setDoFetch(false)
           router.navigate('/recruitment-survey-stage/app/survey/')
