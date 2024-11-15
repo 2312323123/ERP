@@ -4,7 +4,6 @@ import { Outlet } from 'react-router-dom'
 import MenuIcon from '@mui/icons-material/Menu' // Import MenuIcon
 import bestLogoWhite from '../../assets/best-logo-white.svg'
 import { Home, Logout } from '@mui/icons-material'
-import DashboardIcon from '@mui/icons-material/Dashboard'
 import AssignmentIcon from '@mui/icons-material/Assignment'
 import HelpIcon from '@mui/icons-material/Help'
 import FeedbackIcon from '@mui/icons-material/Feedback'
