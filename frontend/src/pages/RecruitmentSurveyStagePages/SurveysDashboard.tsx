@@ -1,5 +1,11 @@
+import { NotShowRecruitmentIfSetNotTo } from './NotShowRecruitmentIfSetNotTo'
+
 const SurveysDashboard = () => {
-  return <div>SurveysDashboard</div>
+  return (
+    <NotShowRecruitmentIfSetNotTo>
+      <div>SurveysDashboard</div>
+    </NotShowRecruitmentIfSetNotTo>
+  )
 }
 
 export default SurveysDashboard

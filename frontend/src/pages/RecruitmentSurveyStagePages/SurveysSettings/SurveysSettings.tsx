@@ -4,9 +4,11 @@ import NewRecruitmentPanel from './NewRecruitmentPanel/NewRecruitmentPanel'
 import SaveSettingsButtonPanel from './SaveSettingsButtonPanel/SaveSettingsButtonPanel'
 import RecruitmentSettingsPanel from './RecruitmentSettingsPanel/RecruitmentSettingsPanel'
 import DeleteRecruitmentPanel from './DeleteRecruitmentPanel/DeleteRecruitmentPanel'
-import { Box, Divider } from '@mui/material'
+import { Alert, Box, Divider } from '@mui/material'
 import BigSpinner from './components/BigSpinner'
 import { useGetActiveRecruitmentQuery, useGetAllRecruitmentsQuery } from '../../../services/erp'
+import { useSelector } from 'react-redux'
+import { getRoles } from '../../../store/slices/authSlice'
 
 const SurveysSettings = () => {
   // const allRecruitmentsUuidNameStartDate = useSelector(getAllRecruitmentsUuidNameStartDate)
@@ -25,9 +27,22 @@ const SurveysSettings = () => {
 
   const { data: activeRecruitment } = useGetActiveRecruitmentQuery()
 
+  const roles = useSelector(getRoles)
+
   if (isLoading) return <BigSpinner />
 
-  if (error) return <div>Oh no, there was an error</div>
+  if (error) {
+    if (roles.includes('RECRUITMENT_ADMIN')) {
+      return <div>Oh no, there was an error</div>
+    }
+    return (
+      <Box sx={{ marginBottom: 2 }}>
+        <Alert severity="info" sx={{ width: '100%' }}>
+          Żeby tu wejść, potrzeba uprawnień administratora rekrutacji.
+        </Alert>
+      </Box>
+    )
+  }
 
   if (recruitments?.length === 0) {
     return (

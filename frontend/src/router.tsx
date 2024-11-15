@@ -6,7 +6,6 @@ import OtherPage from './pages/OtherPage'
 import SurveysNavbar from './components/SurveysNavbar/SurveysNavbar'
 import SurveysDashboard from './pages/RecruitmentSurveyStagePages/SurveysDashboard'
 import SurveysSurveys from './pages/RecruitmentSurveyStagePages/SurveysSurveys/SurveysSurveys'
-import SurveysRanks from './pages/RecruitmentSurveyStagePages/SurveysRanks'
 import SurveysHelp from './pages/RecruitmentSurveyStagePages/SurveysHelp'
 import SurveysFeedback from './pages/RecruitmentSurveyStagePages/SurveysFeedback'
 import SurveysSettings from './pages/RecruitmentSurveyStagePages/SurveysSettings/SurveysSettings'
@@ -32,7 +31,6 @@ export const router = createBrowserRouter(
           </Route>
           <Route index path="/recruitment-survey-stage/app/dashboard" element={<SurveysDashboard />} />
           <Route path="/recruitment-survey-stage/app/surveys" element={<SurveysSurveys />} />
-          <Route path="/recruitment-survey-stage/app/ranks" element={<SurveysRanks />} />
           <Route path="/recruitment-survey-stage/app/help" element={<SurveysHelp />} />
           <Route path="/recruitment-survey-stage/app/feedback" element={<SurveysFeedback />} />
           <Route path="/recruitment-survey-stage/app/settings" element={<SurveysSettings />} />

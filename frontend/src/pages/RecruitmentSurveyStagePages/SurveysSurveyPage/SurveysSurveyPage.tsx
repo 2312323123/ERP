@@ -11,6 +11,7 @@ import {
 } from '../../../services/surveyStage'
 import { useParams } from 'react-router-dom'
 import { router } from '../../../router'
+import { NotShowRecruitmentIfSetNotTo } from '../NotShowRecruitmentIfSetNotTo'
 
 interface CustomTabPanelProps {
   children: React.ReactNode
@@ -59,35 +60,37 @@ const SurveysSurveyPage = () => {
 
   return (
     <>
-      <div
-        style={{
-          height: '3rem',
-          overflow: 'hidden',
-          display: 'flex',
-          justifyContent: 'space-around',
-        }}
-      >
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs value={value} onChange={handleChange}>
-            <Tab label="Ankieta" />
-            <Tab disabled={!evaluations} label="Wszystkie oceny" />
-          </Tabs>
-        </Box>
-        <ButtonGroup variant="contained">
-          <Button disabled={!objectWithPreviousSurveyUuid} onClick={previousClick}>
-            Poprzednia
-          </Button>
-          <Button disabled={!objectWithNextSurveyUuid} onClick={nextClick}>
-            Następna
-          </Button>
-        </ButtonGroup>
-      </div>
-      <CustomTabPanel value={value} index={0}>
-        <SurveysSurveyView />
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
-        <AllEvaluationsView />
-      </CustomTabPanel>
+      <NotShowRecruitmentIfSetNotTo>
+        <div
+          style={{
+            height: '3rem',
+            overflow: 'hidden',
+            display: 'flex',
+            justifyContent: 'space-around',
+          }}
+        >
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Tabs value={value} onChange={handleChange}>
+              <Tab label="Ankieta" />
+              <Tab disabled={!evaluations} label="Wszystkie oceny" />
+            </Tabs>
+          </Box>
+          <ButtonGroup variant="contained">
+            <Button disabled={!objectWithPreviousSurveyUuid} onClick={previousClick}>
+              Poprzednia
+            </Button>
+            <Button disabled={!objectWithNextSurveyUuid} onClick={nextClick}>
+              Następna
+            </Button>
+          </ButtonGroup>
+        </div>
+        <CustomTabPanel value={value} index={0}>
+          <SurveysSurveyView />
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={1}>
+          <AllEvaluationsView />
+        </CustomTabPanel>
+      </NotShowRecruitmentIfSetNotTo>
     </>
   )
 }
