@@ -150,12 +150,14 @@ At this moment it might make sense to commit. And then resume.
 
 - create database fields (using i.e. 'generate CRUD' command from the bottom of this README, and then updating the entities) (I was naming services with snake_case, used REST, and set generate CRUD entry points to 'true'); it may make sense to commit immediately after doing that
 - if module's controllers/providers need schema (entity) (and it's very likely), import it like `imports: [TypeOrmModule.forFeature([<schema_name>])],`
+- then I'd comment out the automatically generated endpoints from CRUD controller
+- also remember to give the classes in .entity.ts files the Entity() decorator once you'll be defining the data structure
 - make sure setup-roles endpoint of auth service isn't publicly visible from time to time (which esentially means on `http://localhost:10016/api/auth/setup-roles`) you should see 'This path is not redirected', otherwise it's extermely bad;
 - env variables should just work inside app if specified in docker-compose
 
 in general:
 
-- it's kind of important to check input parameters are always defined or you might get compromised, in auth service this is done using UndefinedCheckPipe for each applicable controller input parameter, so this:
+- it's kind of important to check input parameters are always defined or you might get compromised, in auth service this is done using UndefinedCheckPipe for each applicable controller input parameter (definition can be obtained by copying src/pipes folder from i.e. recruitment_survey_phase), so this:
 
 ```TS
   @Post('/api/auth/setup-roles')
