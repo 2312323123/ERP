@@ -115,6 +115,8 @@ Dockerfile:
 To make it work, you can copy the approach from other nest microservices in nginx.conf. \
 In nginx.conf, each backend microservice has some /api/something/, that is redirected to it, and it has to implement /api/something/ as well.
 
+- also update what nginx depends_on in docker-compose.yml (add the service you're creating unless it's some special one that is supposed not to be there)
+
 ---
 
 #### adding database module
@@ -146,11 +148,13 @@ At this moment it might make sense to commit. And then resume.
 
 #### some more standard steps:
 
-- create database fields (using ie 'generate CRUD' command from the bottom of this README)
-- if module's controllers/providers need schema, import it like `imports: [TypeOrmModule.forFeature([<schema_name>])],`
-- make sure setup-roles endpoint of auth service isn't publicly visible from time to time
-- you may also update what nginx depends_on in docker-compose.yml from time to time
+- create database fields (using i.e. 'generate CRUD' command from the bottom of this README, and then updating the entities) (I was naming services with snake_case, used REST, and set generate CRUD entry points to 'true'); it may make sense to commit immediately after doing that
+- if module's controllers/providers need schema (entity) (and it's very likely), import it like `imports: [TypeOrmModule.forFeature([<schema_name>])],`
+- make sure setup-roles endpoint of auth service isn't publicly visible from time to time (which esentially means on `http://localhost:10016/api/auth/setup-roles`) you should see 'This path is not redirected', otherwise it's extermely bad;
 - env variables should just work inside app if specified in docker-compose
+
+in general:
+
 - it's kind of important to check input parameters are always defined or you might get compromised, in auth service this is done using UndefinedCheckPipe for each applicable controller input parameter, so this:
 
 ```TS
@@ -176,7 +180,7 @@ got replaced by this:
   }
 ```
 
-in some other cases checking this has been moved deeper to service.
+in some other cases checking this has been moved deeper into service.
 
 - add authorisation guards:
   - in service's docker-compose: `- RSA_PUBLIC_KEY_FOR_JWT=${RSA_PUBLIC_KEY_FOR_JWT}`
