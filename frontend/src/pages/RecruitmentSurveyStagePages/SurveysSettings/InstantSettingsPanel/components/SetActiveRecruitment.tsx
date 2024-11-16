@@ -4,8 +4,11 @@ import {
   useGetAllRecruitmentsQuery,
   useSetActiveRecruitmentMutation,
 } from '../../../../../services/erp'
+import useSaveRecruitmentSettings from '../../../../../hooks/surveys/useSaveRecruitmentSettings'
 
 const SetActiveRecruitment = () => {
+  const saveRecruitmentSettings = useSaveRecruitmentSettings()
+
   const { data: activeRecruitment } = useGetActiveRecruitmentQuery()
   const { data: recruitments } = useGetAllRecruitmentsQuery()
 
@@ -17,8 +20,8 @@ const SetActiveRecruitment = () => {
       `Czy chcesz zapisać zmiany w tej rekru, z której wychodzisz? (${activeRecruitment?.name})`,
     )
     if (confirmSave) {
-      // Implement save logic here
-      alert('Changes saved!') // Placeholder for actual save logic
+      saveRecruitmentSettings()
+      alert('Zapisano!') // Placeholder for actual save logic
     }
     return confirmSave
   }
@@ -35,6 +38,8 @@ const SetActiveRecruitment = () => {
       if (confirmExit) {
         setActiveRecruitment(value)
       }
+    } else {
+      setActiveRecruitment(value)
     }
   }
 
