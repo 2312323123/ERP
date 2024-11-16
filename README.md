@@ -428,6 +428,7 @@ and you still need to replace newlines in private key with \n, and then store bo
 - database columns: snake_case
 - ts variables: lowerCamelCase
 - network endpoints urls: kebab-case
+- sending POST data: lowerCamelCase (mostly)
 - ...more?
 
 ### RTK Query accessing data in a nutshell:
