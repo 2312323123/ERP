@@ -67,6 +67,10 @@ export class AppController {
 
     return await this.rolesService.create(createRoleDto);
   }
+  @Get('/api/auth/setup-roles')
+  async getRoles() {
+    return 'You should not be here';
+  }
 
   // anyone can logout if they're logged in, which is checked below
   @Post('/api/auth/logout')
