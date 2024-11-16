@@ -8,5 +8,6 @@ import { InterviewsSetting } from './entities/interviews_setting.entity';
   imports: [TypeOrmModule.forFeature([InterviewsSetting])],
   controllers: [InterviewsSettingsController],
   providers: [InterviewsSettingsService],
+  exports: [InterviewsSettingsService],
 })
 export class InterviewsSettingsModule {}

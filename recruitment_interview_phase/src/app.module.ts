@@ -7,6 +7,7 @@ import { InterviewsSettingsModule } from './interviews_settings/interviews_setti
 import { JwtModule } from '@nestjs/jwt';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './auth/roles.guard';
+import { Interview } from './interviews/entities/interview.entity';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { RolesGuard } from './auth/roles.guard';
         algorithm: 'RS256', // use RS256 algorithm
       },
     }),
+    TypeOrmModule.forFeature([Interview]),
   ],
   controllers: [AppController],
   providers: [

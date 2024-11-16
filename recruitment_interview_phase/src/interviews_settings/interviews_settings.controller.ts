@@ -7,28 +7,28 @@ import { UpdateInterviewsSettingDto } from './dto/update-interviews_setting.dto'
 export class InterviewsSettingsController {
   constructor(private readonly interviewsSettingsService: InterviewsSettingsService) {}
 
-  @Post()
-  create(@Body() createInterviewsSettingDto: CreateInterviewsSettingDto) {
-    return this.interviewsSettingsService.create(createInterviewsSettingDto);
-  }
+  // @Post()
+  // create(@Body() createInterviewsSettingDto: CreateInterviewsSettingDto) {
+  //   return this.interviewsSettingsService.create(createInterviewsSettingDto);
+  // }
 
-  @Get()
-  findAll() {
-    return this.interviewsSettingsService.findAll();
-  }
+  // @Get()
+  // findAll() {
+  //   return this.interviewsSettingsService.findAll();
+  // }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.interviewsSettingsService.findOne(+id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.interviewsSettingsService.findOne(+id);
+  // }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateInterviewsSettingDto: UpdateInterviewsSettingDto) {
-    return this.interviewsSettingsService.update(+id, updateInterviewsSettingDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateInterviewsSettingDto: UpdateInterviewsSettingDto) {
+  //   return this.interviewsSettingsService.update(+id, updateInterviewsSettingDto);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.interviewsSettingsService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.interviewsSettingsService.remove(+id);
+  // }
 }
