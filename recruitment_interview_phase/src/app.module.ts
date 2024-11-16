@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { InterviewsModule } from './interviews/interviews.module';
+import { InterviewsSettingsModule } from './interviews_settings/interviews_settings.module';
 
 @Module({
   imports: [
@@ -15,6 +17,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       autoLoadEntities: true,
       synchronize: true,
     }),
+    InterviewsModule,
+    InterviewsSettingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
