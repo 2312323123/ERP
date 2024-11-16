@@ -12,9 +12,8 @@
   - you need to add this in find to load related tables fields, example in getActiveRecruitmentNameUuid:
     relations: ['recruitment'], // Load the 'recruitment' relationship
 - in case of some weird errors forcing you to import the Repositories the service you import uses, then the better procedure is to:
-    - export service you import, and import the whole module with the service
-    - so the rule of thumb could be `export services, import modules`
-
+  - export service you import, and import the whole module with the service
+  - so the rule of thumb could be `export services, import modules`
 
 ### First thing to know
 
@@ -37,8 +36,8 @@ I have @nestjs/cli installed globally.
 #### creating a new Nest service
 
 In the main project folder: \
-`nest new --strict project-name`
-Then remove .git from newly created folder.
+`nest new --strict project-name --skip-git`
+(I used npm)
 
 #### package.json
 
@@ -85,10 +84,62 @@ Best to keep it uncommented only when using it. Library: `npm i @nestjs/swagger`
 
 ---
 
-#### some more standard steps:
+#### Configuring Dockerfile and docker-compose.yml for the new service
+
+docker-compose.yml:
+
+- Add new db info/actions to content of `db-psql-create_databases.sql` (notice having to replace the same environment variables multiple times), and create the according variables in the main .env file
+- Add new db actions to db-psql-init.sql.
+- Copy docker-compose.yml service, and while doing this, pay attention to set correct stuff
+- Add that it depends_on database service, like:
+
+```yml
+depends_on:
+  - db-psql
+```
+
+- Similar in case you use mongo, add new user with their db and use that, and depends_on makes sense here, too. On Nest.js side, I've set up mongo using their docs: https://docs.nestjs.com/techniques/mongodb, and in docker-compose you can create new user with their database in configs part and then copy approach with env variables for username & password used in surveys microservice if you need mongo for whatever reason
+
+docker-compose.dev.yml & docker-compose.prod.yml:
+- look at the existing approach i.e. for recruitment_survey_phase microservice and once again pay attention to change what you're pasting
+
+Dockerfile:
+
+- create Dockerfile in the new microservice folder
+- you probably can just copy some other working service Dockerfile contents
+
+#### Adding to nginx:
+
+To make it work, you can copy the approach from other nest microservices in nginx.conf. \
+In nginx.conf, each backend microservice has some /api/something/, that is redirected to it, and it has to implement /api/something/ as well.
+
+---
+
+#### adding database module
+
 
 - install TypeORM and Postgres libraries: `npm i @nestjs/typeorm typeorm pg`
-- create database fields
+- I put this in app.module.ts imports array (it's basically from Nest.js docs):
+```TS
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: process.env.DB_PSQL_SERVICE_NAME,
+      port: 5432,
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+      autoLoadEntities: true,
+      synchronize: true,
+    }),
+```
+(docs for some reason say 'Setting synchronize: true shouldn't be used in production - otherwise you can lose production data.' - maybe I'll find out the hard way one day why) \
+At this moment it might make sense to commit.
+
+---
+
+#### some more standard steps:
+
+- create database fields (using ie 'generate CRUD' command from the bottom of this README)
 - if module's controllers/providers need schema, import it like `imports: [TypeOrmModule.forFeature([<schema_name>])],`
 - make sure setup-roles endpoint of auth service isn't publicly visible from time to time
 - you may also update what nginx depends_on in docker-compose.yml from time to time
@@ -184,29 +235,6 @@ and if there is no role required, then chances are some token is being sent as p
 
 ---
 
-#### Configuring Dockerfile and docker-compose.yml for the new service
-
-docker-compose.yml:
-
-- Add new db info/actions to content of both db-psql-create*databases.sql (take note that you have to paste db name and db user \_twice*)
-- Add new db actions to db-psql-init.sql.
-- Add that it depends_on database service, like:
-
-```yml
-depends_on:
-  - db-psql
-```
-
-- Similar in case you use mongo, add new user with their db and use that, and depends_on makes sense here, too. On Nest.js side, I've set up mongo using their docs: https://docs.nestjs.com/techniques/mongodb, and in docker-compose you can create new user with their database in configs part and then copy approach with env variables for username & password used in surveys microservice if you need mongo for whatever reason
-- When you copy docker-compose.yml service, pay attention to set correct stuff
-
-Dockerfile:
-
-- create Dockerfile in new microservice folder
-- you probably can just copy some other working service Dockerfile contents
-
----
-
 #### Some useful Docker commands/info:
 
 To completely remove and restart one service in running docker-compose (in this example nginx): \
@@ -227,11 +255,6 @@ If you changed just ports / or want to add newly created service to running dock
 
 There are three docker-dompose...yml files, because that's the way how I got development and production division to work.
 If you want to not turn off some service, it's probably good to comment it out in both the one you're using and .dev. or .prod., respectively (maybe it would work without the .dev. / .prod. part, not checked).
-
-#### Adding to nginx:
-
-To make it work, you can copy the approach from other nest microservices in nginx.conf. \
-In nginx.conf, each backend microservice has some /api/something/, that is redirected to it, and it has to implement /api/something/ as well.
 
 #### Usage
 
