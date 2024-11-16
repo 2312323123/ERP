@@ -148,6 +148,23 @@ services:
       - db-psql
       - mongo
 
+  recruitment_interview_phase:
+    build:
+      context: ./recruitment_interview_phase
+      dockerfile: Dockerfile
+    networks:
+      - backend
+    environment:
+      - DB_PSQL_SERVICE_NAME=${DB_PSQL_SERVICE_NAME}
+      - DB_NAME=${INTERVIEW_SERVICE_DB_NAME}
+      - DB_USERNAME=${INTERVIEW_SERVICE_DB_USER}
+      - DB_PASSWORD=${INTERVIEW_SERVICE_DB_PASSWORD}
+      - RSA_PUBLIC_KEY_FOR_JWT=${RSA_PUBLIC_KEY_FOR_JWT}
+    expose:
+      - "3000" # documentation purposes
+    depends_on:
+      - db-psql
+
   frontend:
     build:
       context: ./frontend # Specify the build context (directory where the Dockerfile is located)
@@ -227,6 +244,15 @@ configs:
       CREATE USER "${SURVEY_SERVICE_DB_USER}" WITH PASSWORD '${SURVEY_SERVICE_DB_PASSWORD}';
       -- Grant privileges on the database
       GRANT ALL PRIVILEGES ON DATABASE "${SURVEY_SERVICE_DB_NAME}" TO "${SURVEY_SERVICE_DB_USER}";
+
+      -- interview_phase microservice
+      -- Create the database
+      CREATE DATABASE "${INTERVIEW_SERVICE_DB_NAME}";
+      ALTER DATABASE "${INTERVIEW_SERVICE_DB_NAME}" SET TIME ZONE 'Europe/Warsaw';
+      -- Create the user if it doesn't exist
+      CREATE USER "${INTERVIEW_SERVICE_DB_USER}" WITH PASSWORD '${INTERVIEW_SERVICE_DB_PASSWORD}';
+      -- Grant privileges on the database
+      GRANT ALL PRIVILEGES ON DATABASE "${INTERVIEW_SERVICE_DB_NAME}" TO "${INTERVIEW_SERVICE_DB_USER}";
   db-psql-init.sql:
     content: |
       -- first microservice
@@ -240,6 +266,12 @@ configs:
       \c "${SURVEY_SERVICE_DB_NAME}"
       -- Grant privileges on the public schema
       GRANT ALL PRIVILEGES ON SCHEMA public TO "${SURVEY_SERVICE_DB_USER}";
+
+      -- interview_phase microservice
+      -- Connect to the newly created database
+      \c "${INTERVIEW_SERVICE_DB_NAME}"
+      -- Grant privileges on the public schema
+      GRANT ALL PRIVILEGES ON SCHEMA public TO "${INTERVIEW_SERVICE_DB_USER}";
 
   pgadmin-pgpass:
     content: db-psql:5432:*:${POSTGRES_USER}:${POSTGRES_PASSWORD}

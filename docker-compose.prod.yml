@@ -15,6 +15,10 @@ services:
     build:
       target: production # in Dockerfile
 
+  recruitment_interview_phase:
+    build:
+      target: production # in Dockerfile
+
   frontend:
     build:
       target: production # in Dockerfile

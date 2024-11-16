@@ -35,6 +35,17 @@ services:
     stdin_open: true
     tty: true
 
+  recruitment_interview_phase:
+    build:
+      target: development # in Dockerfile
+    # ports:
+    #   - "3000:3000" # Expose the NestJS application port
+    volumes:
+      - ./recruitment_interview_phase:/app
+      - /app/node_modules
+    stdin_open: true
+    tty: true
+
   frontend:
     build:
       target: development # in Dockerfile
