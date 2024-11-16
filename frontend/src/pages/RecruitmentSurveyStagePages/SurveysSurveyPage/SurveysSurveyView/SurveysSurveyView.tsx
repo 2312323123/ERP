@@ -9,7 +9,12 @@ import VerticalSliderButton from './components/VerticalButtonSlider'
 import useIsDesktop from '../../../../utils/useIsDesktop'
 import HorizontalButtonSlider from './components/HorizontalButtonSlider'
 import SurveyDisplay from './components/SurveyDisplay'
-import { useGetAllEvaluationsQuery, useGetCriteriaQuery, useGetSurveyQuery } from '../../../../services/surveyStage'
+import {
+  SurveyResponses,
+  useGetAllEvaluationsQuery,
+  useGetCriteriaQuery,
+  useGetSurveyQuery,
+} from '../../../../services/surveyStage'
 import { useParams } from 'react-router-dom'
 import EvaluationForm from '../../../../components/EvaluationForm'
 import { Box } from '@mui/material'
@@ -93,6 +98,13 @@ const SurveysSurveyView = () => {
     setShowEvaluateButton(false)
   }
 
+  // to not show fields that are set not to be displayed for survey evaluation
+  const filterSurveyResponses = (responses: SurveyResponses): SurveyResponses => {
+    const fieldsNotToShow = evaluationCriteria?.fieldsNotToShow || []
+
+    return responses.filter((response) => !fieldsNotToShow.includes(response.question))
+  }
+
   return (
     <>
       <div ref={outerDivRef} className={styles.outerDiv}>
@@ -112,7 +124,9 @@ const SurveysSurveyView = () => {
               overflowY: 'auto',
             }}
           >
-            {!error2 && !isLoading2 && survey && survey.responses && <SurveyDisplay responses={survey.responses} />}
+            {!error2 && !isLoading2 && survey && survey.responses && (
+              <SurveyDisplay responses={filterSurveyResponses(survey.responses)} />
+            )}
           </div>
           <div
             style={{

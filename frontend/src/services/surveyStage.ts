@@ -2,9 +2,10 @@ import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQueryWithReauth } from './baseQueryWithReauth'
 import { SurveySettingsImportedForEvaluation } from './erp'
 
+export type SurveyResponses = Array<{ question: string; type: string; answer: string | string[] | null }>
 interface Survey {
   uuid: string
-  responses: Array<{ question: string; type: string; answer: string | string[] | null }>
+  responses: SurveyResponses
   timestamp: Date
 }
 
