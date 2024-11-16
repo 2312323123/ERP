@@ -2,9 +2,10 @@ import { jwtDecode } from 'jwt-decode'
 import { router } from '../router'
 import { Button } from '@mui/material'
 import { useSelector } from 'react-redux'
-import { getAccessToken } from '../store/slices/authSlice'
+import { getAccessToken, getRoles } from '../store/slices/authSlice'
 import { useGetActiveRecruitmentQuery } from '../services/erp'
 import useGoToUnevaluatedSurvey from '../hooks/surveys/useGoToUnevaluatedSurvey'
+import { useSnackbar } from '../hooks/useSnackbar'
 
 async function hashValue(value: string) {
   const encoder = new TextEncoder()
@@ -27,7 +28,18 @@ export const TakeMeToSurveyPhase = () => {
   const id = jwtDecode<{ id: string }>(accessToken).id
   const actionIfNotFirstVisit = useGoToUnevaluatedSurvey({ dashboardIfNoneLeft: true })
 
+  const snackbar = useSnackbar()
+  const roles = useSelector(getRoles)
+
   const takeMeToSurveyPhase = async () => {
+    if (!data) {
+      snackbar('Brak aktywnej rekrutacji!', 'info')
+      if (roles.includes('RECRUITMENT_ADMIN')) {
+        router.navigate('/recruitment-survey-stage/app/settings')
+      }
+      return
+    }
+
     const item = `'erp_recruitment_survey_instruction_seen_${await hashValue(`${id}${data?.uuid}`)}'`
 
     // check if variable is set
