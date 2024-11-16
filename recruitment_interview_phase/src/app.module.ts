@@ -4,6 +4,9 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { InterviewsModule } from './interviews/interviews.module';
 import { InterviewsSettingsModule } from './interviews_settings/interviews_settings.module';
+import { JwtModule } from '@nestjs/jwt';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './auth/roles.guard';
 
 @Module({
   imports: [
@@ -19,8 +22,20 @@ import { InterviewsSettingsModule } from './interviews_settings/interviews_setti
     }),
     InterviewsModule,
     InterviewsSettingsModule,
+    JwtModule.register({
+      publicKey: process.env.RSA_PUBLIC_KEY_FOR_JWT, // your public RSA key
+      signOptions: {
+        algorithm: 'RS256', // use RS256 algorithm
+      },
+    }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+  ],
 })
 export class AppModule {}

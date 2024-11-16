@@ -184,7 +184,7 @@ in some other cases checking this has been moved deeper into service.
 
 - add authorisation guards:
   - in service's docker-compose: `- RSA_PUBLIC_KEY_FOR_JWT=${RSA_PUBLIC_KEY_FOR_JWT}`
-  - in the service: `npm install @nestjs/jwt`
+  - in the service: `npm install @nestjs/jwt` (and after npm install you usually have to re-run compose so it installs there as well) (or maybe it was hard-resetting the specific service which has helped?)
   - copy the whole `/src/auth` folder from i.e. recruitment_survey_phase
   - add new app.module.ts imports:
 
