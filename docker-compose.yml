@@ -188,6 +188,7 @@ services:
     depends_on:
       - auth_and_permissions
       - recruitment_survey_phase
+      - recruitment_interview_phase
       - frontend
       - mongo_express
       # maybe putting pgadmin here can make it cooperate with nginx...
