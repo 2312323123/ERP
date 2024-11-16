@@ -36,8 +36,9 @@ I have @nestjs/cli installed globally.
 #### creating a new Nest service
 
 In the main project folder: \
-`nest new --strict project-name --skip-git`
-(I used npm)
+`nest new --strict project-name`
+(I used npm) \
+and immediately after remove .git from the new directory (the approach with --skip-git sadly didn't create `.gitignore`, not sure what's worse)
 
 #### package.json
 
@@ -101,6 +102,7 @@ depends_on:
 - Similar in case you use mongo, add new user with their db and use that, and depends_on makes sense here, too. On Nest.js side, I've set up mongo using their docs: https://docs.nestjs.com/techniques/mongodb, and in docker-compose you can create new user with their database in configs part and then copy approach with env variables for username & password used in surveys microservice if you need mongo for whatever reason
 
 docker-compose.dev.yml & docker-compose.prod.yml:
+
 - look at the existing approach i.e. for recruitment_survey_phase microservice and once again pay attention to change what you're pasting
 
 Dockerfile:
@@ -117,9 +119,9 @@ In nginx.conf, each backend microservice has some /api/something/, that is redir
 
 #### adding database module
 
-
 - install TypeORM and Postgres libraries: `npm i @nestjs/typeorm typeorm pg`
 - I put this in app.module.ts imports array (it's basically from Nest.js docs):
+
 ```TS
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -132,8 +134,13 @@ In nginx.conf, each backend microservice has some /api/something/, that is redir
       synchronize: true,
     }),
 ```
+
 (docs for some reason say 'Setting synchronize: true shouldn't be used in production - otherwise you can lose production data.' - maybe I'll find out the hard way one day why) \
-At this moment it might make sense to commit.
+At this moment it might make sense to commit. And then resume.
+
+- to test the service works, you may run docker-compose.dev with the command specified somewhere in this readme.
+  - in my case, I had the comfort of being able to hard-reset the postgres microservice along with the database when the new service didn't want to connect... you might want to find an other way to update the system to make it connect without nuking the existing thing
+  - Once it's actually run without errors you can put the base path from nginx.conf into @Get() in app.controller.ts and try to open localhost:theportfromnginx/basepathfromnginx and see Hello, World! just to confirm, and have a starting point.
 
 ---
 
