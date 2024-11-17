@@ -395,4 +395,23 @@ export class RecruitmentsService {
       where: { uuid },
     });
   }
+
+  // for recruitment_interview_phase use only
+  async getFieldToDistinctTheSurvey(): Promise<string> {
+    const { recruitment_uuid: uuid } = (await this.activeRecruitmentRepository.find())[0];
+
+    if (!uuid) {
+      throw new NotFoundException('No active recruitment found');
+    }
+
+    const recruitment = await this.recruitmentRepository.findOne({
+      where: { uuid },
+    });
+
+    if (!recruitment) {
+      throw new NotFoundException('No recruitment found');
+    }
+
+    return recruitment.field_to_distinct_the_survey;
+  }
 }

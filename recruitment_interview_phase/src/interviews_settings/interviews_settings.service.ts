@@ -26,6 +26,6 @@ export class InterviewsSettingsService {
   }
 
   async get() {
-    return await this.interviewsSettingRepository.findOne({});
+    return (await this.interviewsSettingRepository.find({ take: 1 }))?.[0]?.field_to_distinct_the_survey_2;
   }
 }

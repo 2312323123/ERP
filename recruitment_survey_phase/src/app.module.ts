@@ -21,6 +21,7 @@ import { InitRolesService } from './init_roles/init_roles.service';
 import { HttpModule } from '@nestjs/axios';
 import { MongooseModule } from '@nestjs/mongoose';
 import { SurveysModule } from './surveys/surveys.module';
+import { ForInterviewsModule } from './for_interviews/for_interviews.module';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { SurveysModule } from './surveys/surveys.module';
     }),
     HttpModule,
     SurveysModule,
+    ForInterviewsModule,
   ],
   controllers: [AppController],
   providers: [

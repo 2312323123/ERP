@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Headers, Post, Put } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Roles } from './auth/roles.decorator';
 import { UndefinedCheckPipe } from './pipes/undefined-check.pipe';
@@ -9,28 +9,31 @@ import { UpdateInterviewDto } from './interviews/dto/update-interview.dto';
 import { InterviewsSettingsService } from './interviews_settings/interviews_settings.service';
 
 export interface InterviewsMainPage {
-  interviews: Array<{
-    survey_uuid: string;
-    fieldToDistinctTheSurvey1Value: string;
-    fieldToDistinctTheSurvey2Value: string | undefined;
-    interviewerId: string | undefined;
-    helper1Id: string | undefined;
-    helper2Id: string | undefined;
-    interviewerOpinion: string | undefined;
-    helper1Opinion: string | undefined;
-    helper2Opinion: string | undefined;
-  }>;
-}
-
-export interface InterviewsSettingsPage {
+  fieldToDistinctTheSurvey1: string;
   fieldToDistinctTheSurvey2: string;
   interviews: Array<{
     survey_uuid: string;
     fieldToDistinctTheSurvey1Value: string;
     fieldToDistinctTheSurvey2Value: string | undefined;
-    interviewerId: string | undefined;
-    helper1Id: string | undefined;
-    helper2Id: string | undefined;
+    interviewerId: string | null;
+    helper1Id: string | null;
+    helper2Id: string | null;
+    interviewerOpinion: string | null;
+    helper1Opinion: string | null;
+    helper2Opinion: string | null;
+  }>;
+}
+
+export interface InterviewsSettingsPage {
+  fieldToDistinctTheSurvey1: string;
+  fieldToDistinctTheSurvey2: string;
+  interviews: Array<{
+    survey_uuid: string;
+    fieldToDistinctTheSurvey1Value: string;
+    fieldToDistinctTheSurvey2Value: string | undefined;
+    interviewerId: string | null;
+    helper1Id: string | null;
+    helper2Id: string | null;
   }>;
   notInterviewed: Array<{
     // includes the potential interviews for people from current recruitment who are not in the interviews list
@@ -87,13 +90,13 @@ export class AppController {
 
   @Roles('USER')
   @Get('/api/interviews-main-page')
-  async getInterviewMainPage(): Promise<InterviewsMainPage | void> {
-    return this.appService.getInterviewsMainPage();
+  async getInterviewMainPage(@Headers('Authorization') authHeader: string): Promise<InterviewsMainPage | void> {
+    return this.appService.getInterviewsMainPage(authHeader); // Pass authHeader to the service if needed
   }
 
-  // @Roles('RECRUITMENT_ADMIN')
-  // @Get('/api/interviews-settings-page')
-  // async getInterviewSettingsPage(): Promise<any> {
-  //   return this.interviewsSettingsService.get();
-  // }
+  @Roles('RECRUITMENT_ADMIN')
+  @Get('/api/interviews-settings-page')
+  async getInterviewSettingsPage(@Headers('Authorization') authHeader: string): Promise<InterviewsSettingsPage | void> {
+    return this.appService.getInterviewsSettingsPage(authHeader);
+  }
 }

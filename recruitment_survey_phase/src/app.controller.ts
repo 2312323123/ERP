@@ -13,10 +13,14 @@ import { Roles } from './auth/roles.decorator';
 import { Survey } from './surveys/schemas/survey.schema';
 import { UserId } from './auth/user-id.decorator';
 import { UserEvaluation } from './marks/marks.service';
+import { ForInterviewsService } from './for_interviews/for_interviews.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    private readonly appService: AppService,
+    private readonly forInterviewsService: ForInterviewsService,
+  ) {}
 
   // @Get('/api/surveys/hello')
   // getHello1(): string {
@@ -210,5 +214,23 @@ export class AppController {
   @Get('/api/surveys/surveys-stats-list')
   async getSurveyStatsList(@UserId() userId: string): Promise<SurveysStatsList> {
     return this.appService.getSurveysStatsList(userId);
+  }
+
+  // for recruitment_interview_phase use only
+  @Roles('USER')
+  @Post('/api/surveys/recruits-distinct-fields')
+  async getRecruitsDistinctFields(
+    @Body('settings', UndefinedCheckPipe) settings: { fieldToDistinctTheSurvey2Value: string },
+    @Body('survey_uuids', UndefinedCheckPipe) survey_uuids: string[],
+  ) {
+    return this.forInterviewsService.getRecruitsDistinctFields({ settings, survey_uuids });
+  }
+  // for recruitment_interview_phase use only
+  @Roles('USER')
+  @Post('/api/surveys/recruits-distinct-fields-all')
+  async getAllRecruitsDistinctFields(
+    @Body('settings', UndefinedCheckPipe) settings: { fieldToDistinctTheSurvey2Value: string },
+  ) {
+    return this.forInterviewsService.getRecruitsDistinctFields({ settings });
   }
 }

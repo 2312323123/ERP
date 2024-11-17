@@ -8,6 +8,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './auth/roles.guard';
 import { Interview } from './interviews/entities/interview.entity';
+import { RetrieveSurveysDistinctiveFieldsService } from './retrieve_surveys_distinctive_fields/retrieve_surveys_distinctive_fields.service';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -30,6 +32,7 @@ import { Interview } from './interviews/entities/interview.entity';
       },
     }),
     TypeOrmModule.forFeature([Interview]),
+    HttpModule,
   ],
   controllers: [AppController],
   providers: [
@@ -38,6 +41,7 @@ import { Interview } from './interviews/entities/interview.entity';
       provide: APP_GUARD,
       useClass: RolesGuard,
     },
+    RetrieveSurveysDistinctiveFieldsService,
   ],
 })
 export class AppModule {}
