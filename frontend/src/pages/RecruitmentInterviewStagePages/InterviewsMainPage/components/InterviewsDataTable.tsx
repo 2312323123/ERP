@@ -9,6 +9,9 @@ import { ChooseUser } from './ChooseUser'
 import useCreateInterview from '../../../../hooks/interviews/useCreateInterview'
 import useDeleteInterview from '../../../../hooks/interviews/useDeleteInterview'
 import ChosenUser from './ChosenUser'
+import { useSelector } from 'react-redux'
+import { getId } from '../../../../store/slices/authSlice'
+import { Box } from '@mui/material'
 
 export interface Interviews {
   fieldToDistinctTheSurvey1: string
@@ -66,6 +69,8 @@ export function InterviewsDataTable({
   const { deleteInterview } = useDeleteInterview()
   // const { isDeleteInterviewLoading, deleteInterview } = useDeleteInterview() // TODO: use this
 
+  const myId = useSelector(getId)
+
   const [search, setSearch] = useState('')
 
   const columns2: GridColDef[] = useMemo(() => {
@@ -76,15 +81,20 @@ export function InterviewsDataTable({
           headerName: interviews.fieldToDistinctTheSurvey1,
           width: 125,
           renderCell: (params) => (
-            <Link to={`/recruitment-survey-stage/app/survey/${params.id}`} title={params.value}>
-              {params.value}
-            </Link>
+            <Box sx={{ height: '3rem', display: 'flex', alignItems: 'center' }}>
+              <Link to={`/recruitment-survey-stage/app/survey/${params.id}`} title={params.value}>
+                {params.value}
+              </Link>
+            </Box>
           ),
         },
         {
           field: 'fieldToDistinctTheSurvey2Value',
           headerName: interviews.fieldToDistinctTheSurvey2,
           width: 150,
+          renderCell: (params) => (
+            <Box sx={{ height: '3rem', display: 'flex', alignItems: 'center' }}>{params.value}</Box>
+          ),
         },
         {
           field: 'interviewerId',
@@ -132,7 +142,7 @@ export function InterviewsDataTable({
           ),
         },
         {
-          field: 'dupa',
+          field: 'id', // does nothing but is needed cause MuI
           headerName: 'Zmiana decyzji',
           width: 200,
           renderCell: (params) => (
@@ -156,15 +166,20 @@ export function InterviewsDataTable({
           headerName: interviews.fieldToDistinctTheSurvey1,
           width: 125,
           renderCell: (params) => (
-            <Link to={`/recruitment-survey-stage/app/survey/${params.id}`} title={params.value}>
-              {params.value}
-            </Link>
+            <Box sx={{ height: '3rem', display: 'flex', alignItems: 'center' }}>
+              <Link to={`/recruitment-survey-stage/app/survey/${params.id}`} title={params.value}>
+                {params.value}
+              </Link>
+            </Box>
           ),
         },
         {
           field: 'fieldToDistinctTheSurvey2Value',
           headerName: interviews.fieldToDistinctTheSurvey2,
           width: 150,
+          renderCell: (params) => (
+            <Box sx={{ height: '3rem', display: 'flex', alignItems: 'center' }}>{params.value}</Box>
+          ),
         },
         {
           field: 'ranking',
@@ -193,33 +208,44 @@ export function InterviewsDataTable({
           headerName: interviews.fieldToDistinctTheSurvey1,
           width: 125,
           renderCell: (params) => (
-            <Link to={`/recruitment-survey-stage/app/survey/${params.id}`} title={params.value}>
-              {params.value}
-            </Link>
+            <Box sx={{ height: '3rem', display: 'flex', alignItems: 'center' }}>
+              <Link to={`/recruitment-survey-stage/app/survey/${params.id}`} title={params.value}>
+                {params.value}
+              </Link>
+            </Box>
           ),
         },
         {
           field: 'fieldToDistinctTheSurvey2Value',
           headerName: interviews.fieldToDistinctTheSurvey2,
           width: 150,
+          renderCell: (params) => (
+            <Box sx={{ height: '3rem', display: 'flex', alignItems: 'center' }}>{params.value}</Box>
+          ),
         },
         {
           field: 'interviewerId',
           headerName: 'prowadzący',
-          width: 300,
-          renderCell: (params) => <ChosenUser user={usersObject[params.value ?? '']} />,
+          width: 325,
+          renderCell: (params) => (
+            <ChosenUser user={usersObject[params.value ?? '']} myId={myId} opinion={params.id as string} />
+          ),
         },
         {
           field: 'helper1Id',
           headerName: 'pomocnik 1',
-          width: 300,
-          renderCell: (params) => <ChosenUser user={usersObject[params.value ?? '']} />,
+          width: 325,
+          renderCell: (params) => (
+            <ChosenUser user={usersObject[params.value ?? '']} myId={myId} opinion={params.id as string} />
+          ),
         },
         {
           field: 'helper2Id',
           headerName: 'pomocnik 2',
-          width: 300,
-          renderCell: (params) => <ChosenUser user={usersObject[params.value ?? '']} />,
+          width: 325,
+          renderCell: (params) => (
+            <ChosenUser user={usersObject[params.value ?? '']} myId={myId} opinion={params.id as string} />
+          ),
         },
       ]
     }
@@ -232,6 +258,7 @@ export function InterviewsDataTable({
     isCreateInterviewLoading,
     usersArray,
     usersObject,
+    myId,
   ])
 
   const dataForTable = interviews?.interviews?.map((interview) => {
@@ -279,7 +306,7 @@ export function InterviewsDataTable({
       />
 
       {/* Data Table */}
-      <DataGrid rows={filteredData || []} columns={columns2} sx={{ border: 0 }} />
+      <DataGrid rows={filteredData || []} columns={columns2} sx={{ border: 0 }} getRowHeight={() => 'auto'} />
     </Paper>
   )
 }
