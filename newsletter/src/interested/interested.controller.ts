@@ -7,28 +7,28 @@ import { UpdateInterestedDto } from './dto/update-interested.dto';
 export class InterestedController {
   constructor(private readonly interestedService: InterestedService) {}
 
-  @Post()
-  create(@Body() createInterestedDto: CreateInterestedDto) {
-    return this.interestedService.create(createInterestedDto);
-  }
+  // @Post()
+  // create(@Body() createInterestedDto: CreateInterestedDto) {
+  //   return this.interestedService.create(createInterestedDto);
+  // }
 
-  @Get()
-  findAll() {
-    return this.interestedService.findAll();
-  }
+  // @Get()
+  // findAll() {
+  //   return this.interestedService.findAll();
+  // }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.interestedService.findOne(+id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.interestedService.findOne(+id);
+  // }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateInterestedDto: UpdateInterestedDto) {
-    return this.interestedService.update(+id, updateInterestedDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateInterestedDto: UpdateInterestedDto) {
+  //   return this.interestedService.update(+id, updateInterestedDto);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.interestedService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.interestedService.remove(+id);
+  // }
 }
