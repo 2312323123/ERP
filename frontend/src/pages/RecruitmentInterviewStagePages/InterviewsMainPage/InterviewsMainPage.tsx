@@ -2,7 +2,6 @@ import { useMemo } from 'react'
 import { useGetInterviewMainPageQuery, useGetUsersIdsNamesPicturesQuery } from '../../../services/interviewStage'
 import { NotShowRecruitmentIfSetNotTo } from '../../RecruitmentSurveyStagePages/NotShowRecruitmentIfSetNotTo'
 import BigSpinner from '../../RecruitmentSurveyStagePages/SurveysSettings/components/BigSpinner'
-import { SurveysDataTable } from '../../RecruitmentSurveyStagePages/SurveysSurveys/components/SurveysDataTable'
 import { Interviews, InterviewsDataTable } from './components/InterviewsDataTable'
 import { UserIdNamePicture } from '../../../services/surveyStage'
 
@@ -36,7 +35,6 @@ const InterviewsMainPage = () => {
         usersArray={usersArray ?? []}
         usersObject={usersObject}
       />
-      <SurveysDataTable />
     </NotShowRecruitmentIfSetNotTo>
   )
 }

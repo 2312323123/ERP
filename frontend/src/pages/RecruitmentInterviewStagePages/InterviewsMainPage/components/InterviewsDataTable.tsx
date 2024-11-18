@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom'
 import { ChooseUser } from './ChooseUser'
 import useCreateInterview from '../../../../hooks/interviews/useCreateInterview'
 import useDeleteInterview from '../../../../hooks/interviews/useDeleteInterview'
+import ChosenUser from './ChosenUser'
 
 export interface Interviews {
   fieldToDistinctTheSurvey1: string
@@ -188,11 +189,6 @@ export function InterviewsDataTable({
     } else {
       return [
         {
-          field: 'ranking',
-          headerName: 'Ranking',
-          width: 70,
-        },
-        {
           field: 'fieldToDistinctTheSurvey1Value',
           headerName: interviews.fieldToDistinctTheSurvey1,
           width: 125,
@@ -208,25 +204,22 @@ export function InterviewsDataTable({
           width: 150,
         },
         {
-          field: 'amountOfEvaluations',
+          field: 'interviewerId',
           headerName: 'prowadzący',
           width: 300,
+          renderCell: (params) => <ChosenUser user={usersObject[params.value ?? '']} />,
         },
         {
-          field: 'evaluated',
+          field: 'helper1Id',
           headerName: 'pomocnik 1',
           width: 300,
-          valueGetter: (value, row) => (row.evaluated ? '✅' : ''),
+          renderCell: (params) => <ChosenUser user={usersObject[params.value ?? '']} />,
         },
         {
-          field: 'ranking',
+          field: 'helper2Id',
           headerName: 'pomocnik 2',
           width: 300,
-          renderCell: (params) => (
-            <Link to={`/recruitment-survey-stage/app/survey/${params.id}`} title={params.value}>
-              {params.value}
-            </Link>
-          ),
+          renderCell: (params) => <ChosenUser user={usersObject[params.value ?? '']} />,
         },
       ]
     }
@@ -238,6 +231,7 @@ export function InterviewsDataTable({
     deleteInterview,
     isCreateInterviewLoading,
     usersArray,
+    usersObject,
   ])
 
   const dataForTable = interviews?.interviews?.map((interview) => {

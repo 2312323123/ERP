@@ -6,6 +6,7 @@ import { useGetInterviewSettingsPageQuery, useGetUsersIdsNamesPicturesQuery } fr
 import { useMemo } from 'react'
 import { Interviews, InterviewsDataTable } from './InterviewsMainPage/components/InterviewsDataTable'
 import { UserIdNamePicture } from '../../services/surveyStage'
+import { SurveysDataTable } from '../RecruitmentSurveyStagePages/SurveysSurveys/components/SurveysDataTable'
 
 const InterviewsSettingsPage = () => {
   const { data: settingsPage, isLoading: settingsLoading, error } = useGetInterviewSettingsPageQuery() // interviews in settingsPage are jus the same but without opinions
@@ -88,6 +89,10 @@ const InterviewsSettingsPage = () => {
           />
         </>
       )}
+      <Typography variant="h5" component="h1" sx={{ margin: '1rem' }}>
+        Ranking ankiet:
+      </Typography>
+      <SurveysDataTable />
     </div>
   )
 }
