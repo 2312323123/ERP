@@ -251,15 +251,19 @@ and if there is no role required, then chances are some token is being sent as p
 #### Some useful Docker commands/info:
 
 To completely remove and restart one service in running docker-compose (in this example nginx): \
-old way: `docker-compose rm -svf frontend; docker-compose up -d --build frontend` \
+old way: `docker-compose rm -svf frontend; docker-compose up -d --build frontend`
 
-new dev way (run from main folder): `docker-compose -f docker-compose.yml -f docker-compose.dev.yml rm -svf frontend; docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build frontend` \
-hard resetting:
-`docker-compose -f docker-compose.yml -f docker-compose.dev.yml rm -svf db-psql; docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build db-psql` \
-`docker-compose -f docker-compose.yml -f docker-compose.dev.yml rm -svf frontend; docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build frontend` \
-`docker-compose -f docker-compose.yml -f docker-compose.dev.yml rm -svf recruitment_survey_phase; docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build recruitment_survey_phase` \
+hard resetting - dev (run from main folder): \
+`docker-compose -f docker-compose.yml -f docker-compose.dev.yml rm -svf frontend; docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build frontend`
 
-new prod way (run from main folder): `docker-compose -f docker-compose.yml -f docker-compose.prod.yml rm -svf frontend; docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build frontend`
+`docker-compose -f docker-compose.yml -f docker-compose.dev.yml rm -svf db-psql; docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build db-psql`
+
+`docker-compose -f docker-compose.yml -f docker-compose.dev.yml rm -svf frontend; docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build frontend`
+
+`docker-compose -f docker-compose.yml -f docker-compose.dev.yml rm -svf recruitment_survey_phase; docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build recruitment_survey_phase`
+
+hard resetting - prod (run from main folder): \
+`docker-compose -f docker-compose.yml -f docker-compose.prod.yml rm -svf frontend; docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build frontend`
 
 If you changed just ports / or want to add newly created service to running docker compose: \
 `docker-compose up -d`
