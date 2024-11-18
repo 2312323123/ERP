@@ -1,7 +1,7 @@
 import { createBrowserRouter, createRoutesFromElements, Navigate, Route } from 'react-router-dom'
 import Login from './pages/login/Login'
 import Navbar from './components/Navbar'
-import Home from './pages/Home'
+import Home from './pages/Home/Home'
 import OtherPage from './pages/OtherPage'
 import SurveysNavbar from './components/SurveysNavbar/SurveysNavbar'
 import SurveysDashboard from './pages/RecruitmentSurveyStagePages/SurveysDashboard'

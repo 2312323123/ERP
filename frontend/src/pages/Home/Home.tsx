@@ -1,14 +1,15 @@
 import { Button, ListItem, Stack } from '@mui/material'
-import { router } from '../router'
-import { TakeMeToSurveyPhase } from '../utils/TakeMeToSurveyPhase'
-import { logNetworkError, NetworkError } from '../utils/logNetworkError'
-import { logNetworkSuccess } from '../utils/logNetworkSuccess'
+import { router } from '../../router'
+import { TakeMeToSurveyPhase } from '../../utils/TakeMeToSurveyPhase'
+import { logNetworkError, NetworkError } from '../../utils/logNetworkError'
+import { logNetworkSuccess } from '../../utils/logNetworkSuccess'
 import axios from 'axios'
-import MinimumReduxUseExample from '../components/MinimumReduxUseExample'
+import MinimumReduxUseExample from '../../components/MinimumReduxUseExample'
 import { jwtDecode } from 'jwt-decode'
-import { apiPathBase } from '../config/constants'
+import { apiPathBase } from '../../config/constants'
 import { useSelector } from 'react-redux'
-import { getAccessToken, getRefreshToken } from '../store/slices/authSlice'
+import { getAccessToken, getRefreshToken } from '../../store/slices/authSlice'
+import { OfficeStatusPanel } from './components/OfficeStatusPanel'
 
 const Home = () => {
   const refreshToken = useSelector(getRefreshToken)
@@ -64,7 +65,17 @@ const Home = () => {
           </Button>
         </ListItem>
         <ListItem>
-          <Button variant="contained" color="primary">
+          <OfficeStatusPanel />
+        </ListItem>
+        <ListItem>
+          <Button
+            component="a"
+            href="https://docs.google.com/spreadsheets/d/1sDq1-w4yadCCTrt9m_wI8laGh9lUyG96AWmpdMFnPzA/edit?gid=527260512&usp=sharing"
+            target="_blank"
+            rel="noopener noreferrer"
+            variant="contained"
+            color="primary"
+          >
             Feedback
           </Button>
         </ListItem>
