@@ -38,7 +38,7 @@ I have @nestjs/cli installed globally.
 In the main project folder: \
 `nest new --strict project-name`
 (I used npm) \
-and immediately after remove .git from the new directory (the approach with --skip-git sadly didn't create `.gitignore`, not sure what's worse)
+and immediately after remove the (hidden) `.git` folder from the new directory (the approach with --skip-git sadly didn't create `.gitignore`, not sure what's worse)
 
 #### package.json
 

@@ -19,6 +19,10 @@ services:
     build:
       target: production # in Dockerfile
 
+  newsletter:
+    build:
+      target: production # in Dockerfile
+
   frontend:
     build:
       target: production # in Dockerfile

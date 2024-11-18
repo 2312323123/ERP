@@ -165,6 +165,23 @@ services:
     depends_on:
       - db-psql
 
+  newsletter:
+    build:
+      context: ./newsletter
+      dockerfile: Dockerfile
+    networks:
+      - backend
+    environment:
+      - DB_PSQL_SERVICE_NAME=${DB_PSQL_SERVICE_NAME}
+      - DB_NAME=${NEWSLETTER_SERVICE_DB_NAME}
+      - DB_USERNAME=${NEWSLETTER_SERVICE_DB_USER}
+      - DB_PASSWORD=${NEWSLETTER_SERVICE_DB_PASSWORD}
+      - RSA_PUBLIC_KEY_FOR_JWT=${RSA_PUBLIC_KEY_FOR_JWT}
+    expose:
+      - "3000" # documentation purposes
+    depends_on:
+      - db-psql
+
   frontend:
     build:
       context: ./frontend # Specify the build context (directory where the Dockerfile is located)
@@ -189,6 +206,7 @@ services:
       - auth_and_permissions
       - recruitment_survey_phase
       - recruitment_interview_phase
+      - newsletter
       - frontend
       - mongo_express
       # maybe putting pgadmin here can make it cooperate with nginx...
@@ -254,6 +272,15 @@ configs:
       CREATE USER "${INTERVIEW_SERVICE_DB_USER}" WITH PASSWORD '${INTERVIEW_SERVICE_DB_PASSWORD}';
       -- Grant privileges on the database
       GRANT ALL PRIVILEGES ON DATABASE "${INTERVIEW_SERVICE_DB_NAME}" TO "${INTERVIEW_SERVICE_DB_USER}";
+
+      -- newsletter microservice
+      -- Create the database
+      CREATE DATABASE "${NEWSLETTER_SERVICE_DB_NAME}";
+      ALTER DATABASE "${NEWSLETTER_SERVICE_DB_NAME}" SET TIME ZONE 'Europe/Warsaw';
+      -- Create the user if it doesn't exist
+      CREATE USER "${NEWSLETTER_SERVICE_DB_USER}" WITH PASSWORD '${NEWSLETTER_SERVICE_DB_PASSWORD}';
+      -- Grant privileges on the database
+      GRANT ALL PRIVILEGES ON DATABASE "${NEWSLETTER_SERVICE_DB_NAME}" TO "${NEWSLETTER_SERVICE_DB_USER}";
   db-psql-init.sql:
     content: |
       -- first microservice
@@ -273,6 +300,12 @@ configs:
       \c "${INTERVIEW_SERVICE_DB_NAME}"
       -- Grant privileges on the public schema
       GRANT ALL PRIVILEGES ON SCHEMA public TO "${INTERVIEW_SERVICE_DB_USER}";
+
+      -- newsletter microservice
+      -- Connect to the newly created database
+      \c "${NEWSLETTER_SERVICE_DB_NAME}"
+      -- Grant privileges on the public schema
+      GRANT ALL PRIVILEGES ON SCHEMA public TO "${NEWSLETTER_SERVICE_DB_USER}";
 
   pgadmin-pgpass:
     content: db-psql:5432:*:${POSTGRES_USER}:${POSTGRES_PASSWORD}
