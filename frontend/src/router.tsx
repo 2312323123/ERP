@@ -13,6 +13,10 @@ import PathChangeListener from './utils/PathChangeListener'
 import AppRoles from './pages/AppRoles/AppRoles'
 import Survey from './pages/RecruitmentSurveyStagePages/Survey'
 import SurveysSurveyPage from './pages/RecruitmentSurveyStagePages/SurveysSurveyPage/SurveysSurveyPage'
+import InterviewsNavbar from './components/InterviewsNavbar/InterviewsNavbar'
+import InterviewsSettingsPage from './pages/RecruitmentInterviewStagePages/InterviewsSettingsPage'
+import InterviewsFeedback from './pages/RecruitmentInterviewStagePages/InterviewsFeedback'
+import InterviewsMainPage from './pages/RecruitmentInterviewStagePages/InterviewsMainPage/InterviewsMainPage'
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -34,6 +38,13 @@ export const router = createBrowserRouter(
           <Route path="/recruitment-survey-stage/app/help" element={<SurveysHelp />} />
           <Route path="/recruitment-survey-stage/app/feedback" element={<SurveysFeedback />} />
           <Route path="/recruitment-survey-stage/app/settings" element={<SurveysSettings />} />
+        </Route>
+      </Route>
+      <Route path="/recruitment-interview-stage">
+        <Route path="/recruitment-interview-stage/app" element={<InterviewsNavbar />}>
+          <Route index path="/recruitment-interview-stage/app/main-page" element={<InterviewsMainPage />} />
+          <Route path="/recruitment-interview-stage/app/feedback" element={<InterviewsFeedback />} />
+          <Route path="/recruitment-interview-stage/app/settings" element={<InterviewsSettingsPage />} />
         </Route>
       </Route>
     </Route>,

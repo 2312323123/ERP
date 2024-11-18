@@ -7,6 +7,7 @@ const initialState = {
   refreshToken: '',
   accessTokenExp: 0,
   loggedIn: false,
+  id: '',
   roles: [] as string[],
 }
 
@@ -28,6 +29,7 @@ const authSlice = createSlice({
       state.refreshToken = action.payload.refreshToken
       state.accessTokenExp = exp
       state.loggedIn = true
+      state.id = jwtDecode<{ id: string }>(action.payload.accessToken)?.id ?? ''
       state.roles = jwtDecode<{ roles: string[] }>(action.payload.accessToken)?.roles ?? []
     },
     saveRefreshedAccessToken: (state, action) => {
@@ -49,4 +51,5 @@ export const getAccessToken = (state: RootState) => state.auth.accessToken
 export const getRefreshToken = (state: RootState) => state.auth.refreshToken
 export const getAccessTokenExp = (state: RootState) => state.auth.accessTokenExp
 export const getLoggedIn = (state: RootState) => state.auth.loggedIn
+export const getId = (state: RootState) => state.auth.id
 export const getRoles = (state: RootState) => state.auth.roles

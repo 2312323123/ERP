@@ -55,6 +55,15 @@ const Home = () => {
           <TakeMeToSurveyPhase />
         </ListItem>
         <ListItem>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => router.navigate('/recruitment-interview-stage/app/main-page')}
+          >
+            Rozmowy
+          </Button>
+        </ListItem>
+        <ListItem>
           <Button variant="contained" color="primary">
             Feedback
           </Button>

@@ -15,7 +15,7 @@ export interface SurveyEvaluationToSend {
   comment: string
 }
 
-interface UserIdNamePicture {
+export interface UserIdNamePicture {
   id: string
   name: string
   picture: string

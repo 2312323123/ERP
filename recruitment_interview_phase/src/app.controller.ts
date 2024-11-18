@@ -58,7 +58,7 @@ export class AppController {
   }
 
   @Roles('RECRUITMENT_ADMIN')
-  @Post('/api/interview')
+  @Post('/api/interviews/interview')
   async createInterview(
     @Body('createInterviewDto', UndefinedCheckPipe) createInterviewDto: CreateInterviewDto,
   ): Promise<void> {
@@ -66,7 +66,7 @@ export class AppController {
   }
 
   @Roles('USER')
-  @Put('/api/interview')
+  @Put('/api/interviews/interview')
   async setOpinion(
     @UserId() userId: string,
     @Body('updateInterviewDto', UndefinedCheckPipe) updateInterviewDto: UpdateInterviewDto,
@@ -75,13 +75,13 @@ export class AppController {
   }
 
   @Roles('RECRUITMENT_ADMIN')
-  @Delete('/api/interview')
+  @Delete('/api/interviews/interview')
   async deleteInterview(@Body('recruit_uuid', UndefinedCheckPipe) recruit_uuid: string): Promise<void> {
     return this.interviewsService.delete(recruit_uuid);
   }
 
   @Roles('RECRUITMENT_ADMIN')
-  @Post('/api/interview-identification-field-2')
+  @Post('/api/interviews/interview-identification-field-2')
   async setInterviewIdentificationField2(
     @Body('interviewIdentificationField2', UndefinedCheckPipe) interviewIdentificationField2: string,
   ): Promise<void> {
@@ -89,13 +89,13 @@ export class AppController {
   }
 
   @Roles('USER')
-  @Get('/api/interviews-main-page')
+  @Get('/api/interviews/interviews-main-page')
   async getInterviewMainPage(@Headers('Authorization') authHeader: string): Promise<InterviewsMainPage | void> {
     return this.appService.getInterviewsMainPage(authHeader); // Pass authHeader to the service if needed
   }
 
   @Roles('RECRUITMENT_ADMIN')
-  @Get('/api/interviews-settings-page')
+  @Get('/api/interviews/interviews-settings-page')
   async getInterviewSettingsPage(@Headers('Authorization') authHeader: string): Promise<InterviewsSettingsPage | void> {
     return this.appService.getInterviewsSettingsPage(authHeader);
   }

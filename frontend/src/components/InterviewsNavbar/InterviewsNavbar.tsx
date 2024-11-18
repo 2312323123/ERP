@@ -4,15 +4,12 @@ import { Outlet } from 'react-router-dom'
 import MenuIcon from '@mui/icons-material/Menu' // Import MenuIcon
 import bestLogoWhite from '../../assets/best-logo-white.svg'
 import { Home, Logout } from '@mui/icons-material'
-import AssignmentIcon from '@mui/icons-material/Assignment'
-import HelpIcon from '@mui/icons-material/Help'
 import FeedbackIcon from '@mui/icons-material/Feedback'
 import SettingsIcon from '@mui/icons-material/Settings'
 import { useGetActiveRecruitmentQuery } from '../../services/erp'
 import FactCheckIcon from '@mui/icons-material/FactCheck'
-import SurveysNavbarButton from './SurveysNavbarButton'
 import useLogout from '../../hooks/auth/useLogout'
-import useGoToUnevaluatedSurvey from '../../hooks/surveys/useGoToUnevaluatedSurvey'
+import SurveysNavbarButton from '../SurveysNavbar/SurveysNavbarButton'
 
 const drawerWidth = 240
 
@@ -24,7 +21,7 @@ interface Props {
   window?: () => Window
 }
 
-const SurveysNavbar = (props: Props) => {
+const InterviewsNavbar = (props: Props) => {
   // Mui Responsive drawer & React Router Outlet
 
   const { window } = props
@@ -48,7 +45,6 @@ const SurveysNavbar = (props: Props) => {
 
   const { data: activeRecruitment } = useGetActiveRecruitmentQuery()
   const logout = useLogout()
-  const evaluateClick = useGoToUnevaluatedSurvey()
 
   const drawer = (
     <div>
@@ -60,25 +56,18 @@ const SurveysNavbar = (props: Props) => {
       <Divider />
       {/* TODO: User icon + role shall go here */}
       <List>
-        <SurveysNavbarButton action={() => evaluateClick()} text="Oceniam" iconElement={<FactCheckIcon />} />
-        <SurveysNavbarButton path="/recruitment-survey-stage/app/help" text="Jak oceniać" iconElement={<HelpIcon />} />
         <SurveysNavbarButton
-          path="/recruitment-survey-stage/app/surveys"
-          text="Ankiety"
-          iconElement={<AssignmentIcon />}
+          path="/recruitment-interview-stage/app/main-page"
+          text="Rozmowy"
+          iconElement={<FactCheckIcon />}
         />
-        {/* <SurveysNavbarButton
-          path="/recruitment-survey-stage/app/dashboard"
-          text="Statystyki"
-          iconElement={<DashboardIcon />}
-        /> */}
         <SurveysNavbarButton
-          path="/recruitment-survey-stage/app/feedback"
+          path="/recruitment-interview-stage/app/feedback"
           text="Feedback"
           iconElement={<FeedbackIcon />}
         />
         <SurveysNavbarButton
-          path="/recruitment-survey-stage/app/settings"
+          path="/recruitment-interview-stage/app/settings"
           text="Ustawienia"
           iconElement={<SettingsIcon />}
         />
@@ -116,7 +105,7 @@ const SurveysNavbar = (props: Props) => {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" noWrap component="div">
-              ankiety - rekrutacja {activeRecruitment?.name ?? '- brak rekrutacji w systemie!'}
+              rozmowy - rekrutacja {activeRecruitment?.name ?? '- brak rekrutacji w systemie!'}
             </Typography>
           </Toolbar>
         </AppBar>
@@ -158,4 +147,4 @@ const SurveysNavbar = (props: Props) => {
   )
 }
 
-export default SurveysNavbar
+export default InterviewsNavbar

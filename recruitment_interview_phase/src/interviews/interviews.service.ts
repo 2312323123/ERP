@@ -13,7 +13,16 @@ export class InterviewsService {
     if (!createInterviewDto.recruit_uuid) {
       throw new Error('recruit_uuid is required');
     }
-    if (await this.findOneOrError(createInterviewDto.recruit_uuid)) {
+
+    // get entry to update or set to create
+    let toUpdate;
+    try {
+      toUpdate = await this.findOneOrError(createInterviewDto.recruit_uuid);
+    } catch {
+      toUpdate = null;
+    }
+
+    if (toUpdate) {
       // update
       await this.interviewRepository.update(createInterviewDto.recruit_uuid, createInterviewDto);
       return;

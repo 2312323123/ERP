@@ -7,6 +7,7 @@ import { authApi } from '../services/auth'
 import snackbarReducer from './slices/snackbarSlice'
 import { surveyStageApi } from '../services/surveyStage'
 import surveyTabsReducer from './slices/surveyStage/surveyTabsSlice'
+import { interviewStageApi } from '../services/interviewStage'
 
 // Create the Redux store
 export const store = configureStore({
@@ -19,9 +20,14 @@ export const store = configureStore({
     snackbar: snackbarReducer,
     [surveyStageApi.reducerPath]: surveyStageApi.reducer,
     surveyTabs: surveyTabsReducer,
+    [interviewStageApi.reducerPath]: interviewStageApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(erpApi.middleware).concat(authApi.middleware).concat(surveyStageApi.middleware), // Add middlewares
+    getDefaultMiddleware()
+      .concat(erpApi.middleware)
+      .concat(authApi.middleware)
+      .concat(surveyStageApi.middleware)
+      .concat(interviewStageApi.middleware), // Add middlewares
 })
 
 // Optional: Set up typed hooks (useDispatch, useSelector)

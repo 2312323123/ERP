@@ -61,7 +61,7 @@ export const TakeMeToSurveyPhase = () => {
 
   return (
     <Button variant="contained" color="primary" onClick={takeMeToSurveyPhase} disabled={isLoading || !id}>
-      Oceniaczka
+      Ankiety
     </Button>
   )
 }
