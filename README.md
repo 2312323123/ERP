@@ -150,6 +150,29 @@ At this moment it might make sense to commit. And then resume.
 
 - create database fields (using i.e. 'generate CRUD' command from the bottom of this README, and then updating the entities) (I was naming services with snake_case, used REST, and set generate CRUD entry points to 'true'); it may make sense to commit immediately after doing that
 - if module's controllers/providers need schema (entity) (and it's very likely), import it like `imports: [TypeOrmModule.forFeature([<schema_name>])],`
+  and it's smart to export the service, so in general this:
+
+```TS
+@Module({
+  controllers: [TasksController],
+  providers: [TasksService],
+})
+export class TasksModule {}
+```
+
+turns into this:
+
+```TS
+@Module({
+  imports: [TypeOrmModule.forFeature([Task])],
+  controllers: [TasksController],
+  providers: [TasksService],
+  exports: [TasksService],
+})
+export class TasksModule {}
+
+```
+
 - then I'd comment out the automatically generated endpoints from CRUD controller
 - also remember to give the classes in .entity.ts files the Entity() decorator once you'll be defining the data structure
 - make sure setup-roles endpoint of auth service isn't publicly visible from time to time (which esentially means on `http://localhost:10016/api/auth/setup-roles`) you should see 'This path is not redirected', otherwise it's extermely bad;
@@ -261,6 +284,8 @@ hard resetting - dev (run from main folder): \
 `docker-compose -f docker-compose.yml -f docker-compose.dev.yml rm -svf frontend; docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build frontend`
 
 `docker-compose -f docker-compose.yml -f docker-compose.dev.yml rm -svf recruitment_survey_phase; docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build recruitment_survey_phase`
+
+`docker-compose -f docker-compose.yml -f docker-compose.dev.yml rm -svf newsletter; docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build newsletter`
 
 hard resetting - prod (run from main folder): \
 `docker-compose -f docker-compose.yml -f docker-compose.prod.yml rm -svf frontend; docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build frontend`
