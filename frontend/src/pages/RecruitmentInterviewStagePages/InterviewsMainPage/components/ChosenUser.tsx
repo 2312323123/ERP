@@ -1,19 +1,39 @@
 import { Box, Avatar, Typography, TextareaAutosize, Button } from '@mui/material'
 import { UserIdNamePicture } from '../../../../services/surveyStage'
 import { useState } from 'react'
+import { UpdateInterviewDto } from '../../../../services/interviewStage'
 
 interface Props {
   user: UserIdNamePicture | undefined
   opinion: string
   myId: string
+  recruitId: string | undefined
+  callback?: (value: UpdateInterviewDto) => void
+  fieldImSetting: 'interviewer_review' | 'helper_1_review' | 'helper_2_review' | undefined
 }
 
-const ChosenUser = ({ user, opinion, myId }: Props) => {
+const ChosenUser = ({ user, opinion, myId, recruitId, callback, fieldImSetting }: Props) => {
   const [editingMode, setEditingMode] = useState(false)
   const [editingOpinionText, setEditingOpinionText] = useState(opinion ?? '')
 
+  const handleSave = () => {
+    setEditingMode(!editingMode)
+
+    const myDto = {
+      recruit_uuid: recruitId,
+      ...(fieldImSetting ? { [fieldImSetting]: editingOpinionText } : null),
+    } as UpdateInterviewDto
+
+    callback?.(myDto)
+  }
+
+  const handleCancel = () => {
+    setEditingOpinionText(opinion)
+    setEditingMode(!editingMode)
+  }
+
   return (
-    <div style={{ margin: '0.25rem', minHeight: '2.5rem' }}>
+    <div style={{ margin: '0.25rem', minHeight: '2.5rem' }} onKeyDown={(e) => e.stopPropagation()}>
       {user && (
         <Box component="li" display="flex" alignItems="center" justifyContent="space-between" gap={2} mb={0.5}>
           <Box display="flex" alignItems="center">
@@ -36,14 +56,19 @@ const ChosenUser = ({ user, opinion, myId }: Props) => {
             )}
 
             {editingMode && (
-              <Button
-                onClick={() => setEditingMode(!editingMode)}
-                variant="contained"
-                color="primary"
-                sx={{ color: '#eee' }}
-              >
-                Zapisz
-              </Button>
+              <>
+                <Button
+                  onClick={handleSave}
+                  variant="contained"
+                  color="primary"
+                  sx={{ color: '#eee', marginRight: '0.5rem' }}
+                >
+                  Zapisz
+                </Button>
+                <Button onClick={handleCancel} variant="contained" color="secondary" sx={{ color: '#eee' }}>
+                  Anuluj
+                </Button>
+              </>
             )}
           </Box>
         </Box>

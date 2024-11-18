@@ -37,30 +37,30 @@ export class InterviewsService {
 
     // update interviewer_review
     if (updateInterviewDto.interviewer_review) {
-      if (userId !== updateInterviewDto.interviewer_uuid) {
-        throw new Error('You are not allowed to update this field');
-      }
       const interview = await this.findOneOrError(updateInterviewDto.recruit_uuid);
+      if (userId !== interview.interviewer_uuid) {
+        throw new Error('You are not allowed to update this field 0');
+      }
       interview.interviewer_review = updateInterviewDto.interviewer_review;
       await this.interviewRepository.update(updateInterviewDto.recruit_uuid, interview);
     }
 
     // update helper_1_review
     if (updateInterviewDto.helper_1_review) {
-      if (userId !== updateInterviewDto.helper_1_uuid) {
-        throw new Error('You are not allowed to update this field');
-      }
       const interview = await this.findOneOrError(updateInterviewDto.recruit_uuid);
+      if (userId !== interview.helper_1_uuid) {
+        throw new Error('You are not allowed to update this field 1');
+      }
       interview.helper_1_review = updateInterviewDto.helper_1_review;
       await this.interviewRepository.update(updateInterviewDto.recruit_uuid, interview);
     }
 
     // update helper_2_review
     if (updateInterviewDto.helper_2_review) {
-      if (userId !== updateInterviewDto.helper_2_uuid) {
-        throw new Error('You are not allowed to update this field');
-      }
       const interview = await this.findOneOrError(updateInterviewDto.recruit_uuid);
+      if (userId !== interview.helper_2_uuid) {
+        throw new Error('You are not allowed to update this field 2');
+      }
       interview.helper_2_review = updateInterviewDto.helper_2_review;
       await this.interviewRepository.update(updateInterviewDto.recruit_uuid, interview);
     }

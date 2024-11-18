@@ -2,12 +2,6 @@ import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQueryWithReauth } from './baseQueryWithReauth'
 import { UserIdNamePicture } from './surveyStage'
 
-interface Opinion {
-  surveyUuid: string
-  marks: number[]
-  comment: string
-}
-
 interface InterviewsMainPage {
   fieldToDistinctTheSurvey1: string
   fieldToDistinctTheSurvey2: string
@@ -49,6 +43,12 @@ export interface CreateInterviewDto {
   helper_2_uuid?: string
 }
 
+export interface UpdateInterviewDto extends CreateInterviewDto {
+  interviewer_review?: string
+  helper_1_review?: string
+  helper_2_review?: string
+}
+
 // Define a service using a base URL and expected endpoints
 export const interviewStageApi = createApi({
   reducerPath: 'interviewStageApi',
@@ -76,15 +76,11 @@ export const interviewStageApi = createApi({
         { type: 'InterviewRecruitment', id: 'SETTINGS_PAGE' },
       ],
     }),
-    setOpinion: builder.mutation<void, Opinion>({
-      query: ({ surveyUuid, marks, comment }: Opinion) => ({
+    setOpinion: builder.mutation<void, UpdateInterviewDto>({
+      query: (updateInterviewDto: UpdateInterviewDto) => ({
         url: 'api/interviews/interview',
         method: 'PUT',
-        body: {
-          survey_uuid: surveyUuid,
-          marks,
-          comment,
-        },
+        body: { updateInterviewDto },
       }),
       invalidatesTags: [{ type: 'InterviewRecruitment', id: 'MAIN_PAGE' }],
     }),

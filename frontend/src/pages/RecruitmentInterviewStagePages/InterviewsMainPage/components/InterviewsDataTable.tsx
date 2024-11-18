@@ -12,6 +12,7 @@ import ChosenUser from './ChosenUser'
 import { useSelector } from 'react-redux'
 import { getId } from '../../../../store/slices/authSlice'
 import { Box, useMediaQuery, useTheme } from '@mui/material'
+import useSetInterviewOpinion from '../../../../hooks/interviews/useSetInterviewOpinion'
 
 export interface Interviews {
   fieldToDistinctTheSurvey1: string
@@ -68,6 +69,8 @@ export function InterviewsDataTable({
   const { isCreateInterviewLoading, createInterview } = useCreateInterview()
   const { deleteInterview } = useDeleteInterview()
   // const { isDeleteInterviewLoading, deleteInterview } = useDeleteInterview() // TODO: use this
+  const { setOpinion } = useSetInterviewOpinion()
+  // const { isSetOpinionLoading, setOpinion } = useSetInterviewOpinion() // TODO: use this
 
   const myId = useSelector(getId)
 
@@ -238,6 +241,9 @@ export function InterviewsDataTable({
                 interviews?.interviews?.find((interview) => interview.survey_uuid === params.id)?.interviewerOpinion ??
                 ''
               }
+              recruitId={params.id as string}
+              fieldImSetting="interviewer_review"
+              callback={setOpinion}
             />
           ),
         },
@@ -252,6 +258,9 @@ export function InterviewsDataTable({
               opinion={
                 interviews?.interviews?.find((interview) => interview.survey_uuid === params.id)?.helper1Opinion ?? ''
               }
+              recruitId={params.id as string}
+              fieldImSetting="helper_1_review"
+              callback={setOpinion}
             />
           ),
         },
@@ -266,6 +275,9 @@ export function InterviewsDataTable({
               opinion={
                 interviews?.interviews?.find((interview) => interview.survey_uuid === params.id)?.helper2Opinion ?? ''
               }
+              recruitId={params.id as string}
+              fieldImSetting="helper_2_review"
+              callback={setOpinion}
             />
           ),
         },
@@ -282,6 +294,7 @@ export function InterviewsDataTable({
     usersObject,
     myId,
     isPhone,
+    setOpinion,
   ])
 
   const dataForTable = interviews?.interviews?.map((interview) => {
