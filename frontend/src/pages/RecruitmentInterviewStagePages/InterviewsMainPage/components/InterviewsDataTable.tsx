@@ -11,7 +11,7 @@ import useDeleteInterview from '../../../../hooks/interviews/useDeleteInterview'
 import ChosenUser from './ChosenUser'
 import { useSelector } from 'react-redux'
 import { getId } from '../../../../store/slices/authSlice'
-import { Box } from '@mui/material'
+import { Box, useMediaQuery, useTheme } from '@mui/material'
 
 export interface Interviews {
   fieldToDistinctTheSurvey1: string
@@ -70,6 +70,9 @@ export function InterviewsDataTable({
   // const { isDeleteInterviewLoading, deleteInterview } = useDeleteInterview() // TODO: use this
 
   const myId = useSelector(getId)
+
+  const theme = useTheme()
+  const isPhone = useMediaQuery(theme.breakpoints.down('sm'))
 
   const [search, setSearch] = useState('')
 
@@ -226,25 +229,44 @@ export function InterviewsDataTable({
         {
           field: 'interviewerId',
           headerName: 'prowadzący',
-          width: 325,
+          width: isPhone ? 325 : 500,
           renderCell: (params) => (
-            <ChosenUser user={usersObject[params.value ?? '']} myId={myId} opinion={params.id as string} />
+            <ChosenUser
+              user={usersObject[params.value ?? '']}
+              myId={myId}
+              opinion={
+                interviews?.interviews?.find((interview) => interview.survey_uuid === params.id)?.interviewerOpinion ??
+                ''
+              }
+            />
           ),
         },
         {
           field: 'helper1Id',
           headerName: 'pomocnik 1',
-          width: 325,
+          width: isPhone ? 325 : 500,
           renderCell: (params) => (
-            <ChosenUser user={usersObject[params.value ?? '']} myId={myId} opinion={params.id as string} />
+            <ChosenUser
+              user={usersObject[params.value ?? '']}
+              myId={myId}
+              opinion={
+                interviews?.interviews?.find((interview) => interview.survey_uuid === params.id)?.helper1Opinion ?? ''
+              }
+            />
           ),
         },
         {
           field: 'helper2Id',
           headerName: 'pomocnik 2',
-          width: 325,
+          width: isPhone ? 325 : 500,
           renderCell: (params) => (
-            <ChosenUser user={usersObject[params.value ?? '']} myId={myId} opinion={params.id as string} />
+            <ChosenUser
+              user={usersObject[params.value ?? '']}
+              myId={myId}
+              opinion={
+                interviews?.interviews?.find((interview) => interview.survey_uuid === params.id)?.helper2Opinion ?? ''
+              }
+            />
           ),
         },
       ]
@@ -259,6 +281,7 @@ export function InterviewsDataTable({
     usersArray,
     usersObject,
     myId,
+    isPhone,
   ])
 
   const dataForTable = interviews?.interviews?.map((interview) => {

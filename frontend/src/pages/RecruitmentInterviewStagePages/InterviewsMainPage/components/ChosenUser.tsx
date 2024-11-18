@@ -48,6 +48,18 @@ const ChosenUser = ({ user, opinion, myId }: Props) => {
           </Box>
         </Box>
       )}
+      {!editingMode && (
+        <Typography
+          variant="body2"
+          sx={{
+            whiteSpace: 'pre-wrap',
+            wordBreak: 'break-word',
+          }}
+        >
+          {editingOpinionText}
+        </Typography>
+      )}
+
       {editingMode && (
         <TextareaAutosize
           minRows={3}
