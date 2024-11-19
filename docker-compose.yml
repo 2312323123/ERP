@@ -258,6 +258,7 @@ configs:
     content: |
       /*
         login to superuser: docker exec -it erp-db-psql-1 psql -U <user_name_from_docker_compose_env_file>
+        or: docker-compose exec -it db-psql psql -U <user_name_from_docker_compose_env_file>
         login to user: docker exec -it erp-db-psql-1 psql -U <user_name> -d <db_name>
 
         using '-' in env variables here is discouraged as it requires escaping
