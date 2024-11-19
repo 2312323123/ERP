@@ -75,7 +75,7 @@ const PostForm = () => {
             <Typography variant="body1" component="h6">
               widoczne do:
             </Typography>
-            <CoolDatePicker value={date} setValue={setDate} />
+            <CoolDatePicker value={date} setValue={setDate as (value: Date | null) => void} />
           </Box>
           <Button
             sx={{ margin: '0.25rem', width: '20ch' }}
