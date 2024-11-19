@@ -48,7 +48,7 @@ I like to add this command to "scripts" for dev purposes: \
 #### Hot reload:
 
 We have already added --watch in package.json. \
-One more thing is to add watchOptions to tsconfig.json at the same level as compilerOptions are:
+One more thing is to add watchOptions to `tsconfig.json` at the same level as compilerOptions are:
 
 ```json
   "watchOptions": {
@@ -115,14 +115,14 @@ Dockerfile:
 To make it work, you can copy the approach from other nest microservices in nginx.conf. \
 In nginx.conf, each backend microservice has some /api/something/, that is redirected to it, and it has to implement /api/something/ as well.
 
-- also update what nginx depends_on in docker-compose.yml (add the service you're creating unless it's some special one that is supposed not to be there)
+- also update what nginx `depends_on` in `docker-compose.yml` (add the service you're creating unless it's some special one that is supposed not to be there)
 
 ---
 
 #### adding database module
 
-- install TypeORM and Postgres libraries: `npm i @nestjs/typeorm typeorm pg`
-- I put this in app.module.ts imports array (it's basically from Nest.js docs):
+- install TypeORM and Postgres libraries: `npm i @nestjs/typeorm typeorm pg` (in new microservice folder)
+- I put this in `src/app.module.ts` imports array (it's basically from Nest.js docs):
 
 ```TS
     TypeOrmModule.forRoot({
