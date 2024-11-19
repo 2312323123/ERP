@@ -32,7 +32,7 @@ const SurveysSurveyView = () => {
   const [outerDivHeight, setOuterDivHeight] = useState(0)
   const { uuid } = useParams() // Get the 'id' parameter from the route
   const { data: survey, error: error2, isLoading: isLoading2 } = useGetSurveyQuery(uuid ?? '')
-  const { data: evaluationCriteria, error: error1, isLoading: isLoading1 } = useGetCriteriaQuery()
+  const { data: evaluationCriteria } = useGetCriteriaQuery()
   // evaluationCriteria: gradingInstruction, fieldsNotToShow, fieldToDistinctTheSurvey, evaluationCriteria, markTags
 
   // to load one's own evaluation into the form
@@ -109,6 +109,7 @@ const SurveysSurveyView = () => {
     <>
       <div ref={outerDivRef} className={styles.outerDiv}>
         {/* known error, not sure how to fix it */}
+        {/* @ts-expect-error: Ignore TypeScript error for SplitPane */}
         <SplitPane
           pane1Style={{ overflowY: 'auto' }}
           pane2Style={{ overflowY: 'auto' }}

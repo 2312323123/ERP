@@ -47,7 +47,7 @@ const EvaluationsSummary = ({
 
         {/* Column for Marks */}
         <Box pr={2} textAlign="left">
-          {criteria.evaluationCriteria.map((criterion, index: number) => (
+          {criteria.evaluationCriteria.map((_, index: number) => (
             <Box key={index} mb={1}>
               <Typography variant="body1">{averages[index]?.toFixed(2) || 'N/A'}</Typography>
             </Box>

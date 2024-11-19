@@ -37,7 +37,7 @@ const columns2: GridColDef[] = [
     field: 'evaluated',
     headerName: 'Oceniono?',
     width: 130,
-    valueGetter: (value, row) => (row.evaluated ? '✅' : ''),
+    valueGetter: (_, row) => (row.evaluated ? '✅' : ''),
   },
 ]
 
@@ -63,7 +63,7 @@ export function SurveysDataTable() {
     }
   }, [criteria])
 
-  let displayData = data?.map((item, index) => {
+  let displayData = data?.map((item) => {
     return {
       id: item.uuid,
       rekrut: item.identification_field_value,
