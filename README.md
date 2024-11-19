@@ -287,6 +287,9 @@ hard resetting - dev (run from main folder): \
 
 `docker-compose -f docker-compose.yml -f docker-compose.dev.yml rm -svf newsletter; docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build newsletter`
 
+to rerun service separately to see just its logs:
+`docker-compose -f docker-compose.yml -f docker-compose.dev.yml down frontend; docker-compose -f docker-compose.yml -f docker-compose.dev.yml up frontend`
+
 hard resetting - prod (run from main folder): \
 `docker-compose -f docker-compose.yml -f docker-compose.prod.yml rm -svf frontend; docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build frontend`
 
