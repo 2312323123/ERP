@@ -140,9 +140,11 @@ In nginx.conf, each backend microservice has some /api/something/, that is redir
 (docs for some reason say 'Setting synchronize: true shouldn't be used in production - otherwise you can lose production data.' - maybe I'll find out the hard way one day why) \
 At this moment it might make sense to commit. And then resume.
 
+- (before running first time you may also `npm install @nestjs/jwt` to have easier life in a later part of the instruction)
 - to test the service works, you may run docker-compose.dev with the command specified somewhere in this readme.
   - in my case, I had the comfort of being able to hard-reset the postgres microservice along with the database when the new service didn't want to connect... you might want to find an other way to update the system to make it connect without nuking the existing thing
-  - Once it's actually run without errors you can put the base path from nginx.conf into @Get() in app.controller.ts and try to open localhost:theportfromnginx/basepathfromnginx and see Hello, World! just to confirm, and have a starting point.
+    - one way seems to be using `docker-compose exec -it db-psql psql -U <user_name_from_docker_compose_env_file>` (you can see it as a comment in docker-compose.yml), and then manually replacing .env variables and pasting new parts of `db-psql-create_databases.sql` in the console (once done, `exit`)
+  - Once it has actually run without errors, you can put the new service base path from `nginx.conf` into `@Get()` in `src/app.controller.ts` and try to open `localhost:theportfromnginx/basepathfromnginx` and see `Hello, World!` just to confirm, and have a starting point.
 
 ---
 
