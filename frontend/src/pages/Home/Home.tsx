@@ -96,12 +96,12 @@ const Home = () => {
         </ListItem>
         <ListItem>
           <Button onClick={giveDwaciekSuperadmin} variant="contained" color="primary">
-            Daj Dwaćkowi superadmina
+            Daj Maćkowi superadmina
           </Button>
         </ListItem>
         <ListItem>
           <Button onClick={takeAwayDwaciekSuperadmin} variant="contained" color="primary">
-            Zabierz Dwaćkowi superadmina
+            Zabierz Maćkowi superadmina
           </Button>
         </ListItem>
 

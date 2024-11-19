@@ -21,14 +21,8 @@ export class AppController {
   // }
 
   @Roles('USER')
-  @Get('/api/newsletter/dupa')
-  getHello2(): string {
-    return this.appService.getHello();
-  }
-
-  @Roles('USER')
   @Get('/api/newsletter/tasks')
-  async getTasks(): Promise<TaskForExport[]> {
+  async getTasks(): Promise<TaskForExport[] | { msg: string }> {
     return await this.tasksService.getTasks();
   }
 

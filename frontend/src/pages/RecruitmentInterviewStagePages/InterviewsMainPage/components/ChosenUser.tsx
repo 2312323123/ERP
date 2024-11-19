@@ -1,7 +1,8 @@
-import { Box, Avatar, Typography, TextareaAutosize, Button } from '@mui/material'
+import { Box, Typography, TextareaAutosize, Button } from '@mui/material'
 import { UserIdNamePicture } from '../../../../services/surveyStage'
 import { useState } from 'react'
 import { UpdateInterviewDto } from '../../../../services/interviewStage'
+import UserPictureName from '../../../../components/UserPictureName'
 
 interface Props {
   user: UserIdNamePicture | undefined
@@ -36,12 +37,7 @@ const ChosenUser = ({ user, opinion, myId, recruitId, callback, fieldImSetting }
     <div style={{ margin: '0.25rem', minHeight: '2.5rem' }} onKeyDown={(e) => e.stopPropagation()}>
       {user && (
         <Box component="li" display="flex" alignItems="center" justifyContent="space-between" gap={2} mb={0.5}>
-          <Box display="flex" alignItems="center">
-            <Avatar src={user.picture} alt={user.name} sx={{ marginRight: '0.75rem' }} />
-            <Typography variant="body1" color="text.primary">
-              {user.name}
-            </Typography>
-          </Box>
+          <UserPictureName picture={user.picture} name={user.name} />
 
           <Box>
             {!editingMode && myId === user.id && (
