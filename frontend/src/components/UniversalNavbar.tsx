@@ -1,29 +1,26 @@
 import { AppBar, Box, CssBaseline, Divider, Drawer, IconButton, List, Toolbar, Typography } from '@mui/material'
-import { useState } from 'react'
+import { ReactElement, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import MenuIcon from '@mui/icons-material/Menu' // Import MenuIcon
-import bestLogoWhite from '../../assets/best-logo-white.svg'
+import bestLogoWhite from '../assets/best-logo-white.svg'
 import { Home, Logout } from '@mui/icons-material'
-import FeedbackIcon from '@mui/icons-material/Feedback'
-import SettingsIcon from '@mui/icons-material/Settings'
-import { useGetActiveRecruitmentQuery } from '../../services/erp'
-import FactCheckIcon from '@mui/icons-material/FactCheck'
-import useLogout from '../../hooks/auth/useLogout'
-import SurveysNavbarButton from '../SurveysNavbar/SurveysNavbarButton'
+import SurveysNavbarButton from './SurveysNavbar/SurveysNavbarButton'
+import useLogout from '../hooks/auth/useLogout'
 
 const drawerWidth = 240
 
-interface Props {
+export interface UniversalNavbarProps {
   /**
    * Injected by the documentation to work in an iframe.
    * Remove this when copying and pasting into your project.
    */
   window?: () => Window
+  topBarContent: ReactElement
+  navbarButtons: ReactElement
 }
 
-const InterviewsNavbar = (props: Props) => {
+const UniversalNavbar = (props: UniversalNavbarProps) => {
   // Mui Responsive drawer & React Router Outlet
-
   const { window } = props
   const [mobileOpen, setMobileOpen] = useState(false)
   const [isClosing, setIsClosing] = useState(false)
@@ -43,7 +40,6 @@ const InterviewsNavbar = (props: Props) => {
     }
   }
 
-  const { data: activeRecruitment } = useGetActiveRecruitmentQuery()
   const logout = useLogout()
 
   const drawer = (
@@ -55,23 +51,7 @@ const InterviewsNavbar = (props: Props) => {
       </Toolbar>
       <Divider />
       {/* TODO: User icon + role shall go here */}
-      <List>
-        <SurveysNavbarButton
-          path="/recruitment-interview-stage/app/main-page"
-          text="Rozmowy"
-          iconElement={<FactCheckIcon />}
-        />
-        <SurveysNavbarButton
-          path="/recruitment-interview-stage/app/feedback"
-          text="Feedback"
-          iconElement={<FeedbackIcon />}
-        />
-        <SurveysNavbarButton
-          path="/recruitment-interview-stage/app/settings"
-          text="Ustawienia"
-          iconElement={<SettingsIcon />}
-        />
-      </List>
+      <List>{props.navbarButtons}</List>
       <Divider />
       <List>
         <SurveysNavbarButton path="/home" text="Wróć do panelu głównego" iconElement={<Home />} />
@@ -105,7 +85,7 @@ const InterviewsNavbar = (props: Props) => {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" noWrap component="div">
-              rozmowy - rekrutacja {activeRecruitment?.name ?? '- brak rekrutacji w systemie!'}
+              {props.topBarContent}
             </Typography>
           </Toolbar>
         </AppBar>
@@ -147,4 +127,4 @@ const InterviewsNavbar = (props: Props) => {
   )
 }
 
-export default InterviewsNavbar
+export default UniversalNavbar

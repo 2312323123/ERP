@@ -3,7 +3,6 @@ import Login from './pages/login/Login'
 import Navbar from './components/Navbar'
 import Home from './pages/Home/Home'
 import OtherPage from './pages/OtherPage'
-import SurveysNavbar from './components/SurveysNavbar/SurveysNavbar'
 import SurveysDashboard from './pages/RecruitmentSurveyStagePages/SurveysDashboard'
 import SurveysSurveys from './pages/RecruitmentSurveyStagePages/SurveysSurveys/SurveysSurveys'
 import SurveysHelp from './pages/RecruitmentSurveyStagePages/SurveysHelp'
@@ -13,10 +12,14 @@ import PathChangeListener from './utils/PathChangeListener'
 import AppRoles from './pages/AppRoles/AppRoles'
 import Survey from './pages/RecruitmentSurveyStagePages/Survey'
 import SurveysSurveyPage from './pages/RecruitmentSurveyStagePages/SurveysSurveyPage/SurveysSurveyPage'
-import InterviewsNavbar from './components/InterviewsNavbar/InterviewsNavbar'
 import InterviewsSettingsPage from './pages/RecruitmentInterviewStagePages/InterviewsSettingsPage'
 import InterviewsFeedback from './pages/RecruitmentInterviewStagePages/InterviewsFeedback'
 import InterviewsMainPage from './pages/RecruitmentInterviewStagePages/InterviewsMainPage/InterviewsMainPage'
+import UniversalNavbar from './components/UniversalNavbar'
+import { SurveysNavbarButtons } from './components/SurveysNavbar/SurveysNavbarButtons'
+import { SurveysNavbarText } from './components/SurveysNavbar/SurveysNavbarText'
+import { InterviewsNavbarButtons } from './components/InterviewsNavbar/InterviewsNavbarButtons'
+import { InterviewsNavbarText } from './components/InterviewsNavbar/InterviewsNavbarText'
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -29,7 +32,10 @@ export const router = createBrowserRouter(
       </Route>
       <Route path="/app-roles" element={<AppRoles />}></Route>
       <Route path="/recruitment-survey-stage">
-        <Route path="/recruitment-survey-stage/app" element={<SurveysNavbar />}>
+        <Route
+          path="/recruitment-survey-stage/app"
+          element={<UniversalNavbar topBarContent={<SurveysNavbarText />} navbarButtons={<SurveysNavbarButtons />} />}
+        >
           <Route path="/recruitment-survey-stage/app/survey" element={<Survey />}>
             <Route path="/recruitment-survey-stage/app/survey/:uuid" element={<SurveysSurveyPage />} />
           </Route>
@@ -41,7 +47,12 @@ export const router = createBrowserRouter(
         </Route>
       </Route>
       <Route path="/recruitment-interview-stage">
-        <Route path="/recruitment-interview-stage/app" element={<InterviewsNavbar />}>
+        <Route
+          path="/recruitment-interview-stage/app"
+          element={
+            <UniversalNavbar topBarContent={<InterviewsNavbarText />} navbarButtons={<InterviewsNavbarButtons />} />
+          }
+        >
           <Route index path="/recruitment-interview-stage/app/main-page" element={<InterviewsMainPage />} />
           <Route path="/recruitment-interview-stage/app/feedback" element={<InterviewsFeedback />} />
           <Route path="/recruitment-interview-stage/app/settings" element={<InterviewsSettingsPage />} />
