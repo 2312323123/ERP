@@ -182,6 +182,23 @@ services:
     depends_on:
       - db-psql
 
+  availability:
+    build:
+      context: ./availability
+      dockerfile: Dockerfile
+    networks:
+      - backend
+    environment:
+      - DB_PSQL_SERVICE_NAME=${DB_PSQL_SERVICE_NAME}
+      - DB_NAME=${AVAILABILITY_SERVICE_DB_NAME}
+      - DB_USERNAME=${AVAILABILITY_SERVICE_DB_USER}
+      - DB_PASSWORD=${AVAILABILITY_SERVICE_DB_PASSWORD}
+      - RSA_PUBLIC_KEY_FOR_JWT=${RSA_PUBLIC_KEY_FOR_JWT}
+    expose:
+      - "3000" # documentation purposes
+    depends_on:
+      - db-psql
+
   frontend:
     build:
       context: ./frontend # Specify the build context (directory where the Dockerfile is located)
@@ -207,6 +224,7 @@ services:
       - recruitment_survey_phase
       - recruitment_interview_phase
       - newsletter
+      - availability
       - frontend
       - mongo_express
       # maybe putting pgadmin here can make it cooperate with nginx...
@@ -281,6 +299,15 @@ configs:
       CREATE USER "${NEWSLETTER_SERVICE_DB_USER}" WITH PASSWORD '${NEWSLETTER_SERVICE_DB_PASSWORD}';
       -- Grant privileges on the database
       GRANT ALL PRIVILEGES ON DATABASE "${NEWSLETTER_SERVICE_DB_NAME}" TO "${NEWSLETTER_SERVICE_DB_USER}";
+
+      -- availability microservice
+      -- Create the database
+      CREATE DATABASE "${AVAILABILITY_SERVICE_DB_NAME}";
+      ALTER DATABASE "${AVAILABILITY_SERVICE_DB_NAME}" SET TIME ZONE 'Europe/Warsaw';
+      -- Create the user if it doesn't exist
+      CREATE USER "${AVAILABILITY_SERVICE_DB_USER}" WITH PASSWORD '${AVAILABILITY_SERVICE_DB_PASSWORD}';
+      -- Grant privileges on the database
+      GRANT ALL PRIVILEGES ON DATABASE "${AVAILABILITY_SERVICE_DB_NAME}" TO "${AVAILABILITY_SERVICE_DB_USER}";
   db-psql-init.sql:
     content: |
       -- first microservice
@@ -306,6 +333,12 @@ configs:
       \c "${NEWSLETTER_SERVICE_DB_NAME}"
       -- Grant privileges on the public schema
       GRANT ALL PRIVILEGES ON SCHEMA public TO "${NEWSLETTER_SERVICE_DB_USER}";
+
+      -- availability microservice
+      -- Connect to the newly created database
+      \c "${AVAILABILITY_SERVICE_DB_NAME}"
+      -- Grant privileges on the public schema
+      GRANT ALL PRIVILEGES ON SCHEMA public TO "${AVAILABILITY_SERVICE_DB_USER}";
 
   pgadmin-pgpass:
     content: db-psql:5432:*:${POSTGRES_USER}:${POSTGRES_PASSWORD}
