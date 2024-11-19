@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useGetIsSomeoneInTheOfficeQuery } from '../../services/isSomeoneInTheOffice'
 import { useSnackbar } from '../useSnackbar'
 
@@ -15,10 +15,6 @@ export const useIsSomeoneInTheOffice = () => {
     if (data === false) return 'no'
     return 'unknown'
   }, [data, error, isLoading])
-
-  useEffect(() => {
-    console.log('isSomeoneInTheOfficeState:', isSomeoneInTheOfficeState)
-  }, [isSomeoneInTheOfficeState])
 
   const loggedRefetch = useCallback(async () => {
     await refetch()

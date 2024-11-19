@@ -68,6 +68,11 @@ const Home = () => {
           <OfficeStatusPanel />
         </ListItem>
         <ListItem>
+          <Button variant="contained" color="primary" onClick={() => router.navigate('/newsletter/main-page')}>
+            Newsletter
+          </Button>
+        </ListItem>
+        <ListItem>
           <Button
             component="a"
             href="https://docs.google.com/spreadsheets/d/1sDq1-w4yadCCTrt9m_wI8laGh9lUyG96AWmpdMFnPzA/edit?gid=527260512&usp=sharing"
@@ -76,7 +81,7 @@ const Home = () => {
             variant="contained"
             color="primary"
           >
-            Feedback
+            Feedback ogólny
           </Button>
         </ListItem>
         <ListItem>

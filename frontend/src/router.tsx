@@ -20,6 +20,10 @@ import { SurveysNavbarButtons } from './components/SurveysNavbar/SurveysNavbarBu
 import { SurveysNavbarText } from './components/SurveysNavbar/SurveysNavbarText'
 import { InterviewsNavbarButtons } from './components/InterviewsNavbar/InterviewsNavbarButtons'
 import { InterviewsNavbarText } from './components/InterviewsNavbar/InterviewsNavbarText'
+import { NewsletterNavbarButtons } from './components/NewsletterNavbar/NewsletterNavbarButtons'
+import { NewsletterNavbarText } from './components/NewsletterNavbar/NewsletterNavbarText'
+import NewsletterFeedback from './pages/NewsletterPages/NewsletterFeedback'
+import { NewsletterMainPage } from './pages/NewsletterPages/NewsletterMainPage/NewsletterMainPage'
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -57,6 +61,15 @@ export const router = createBrowserRouter(
           <Route path="/recruitment-interview-stage/app/feedback" element={<InterviewsFeedback />} />
           <Route path="/recruitment-interview-stage/app/settings" element={<InterviewsSettingsPage />} />
         </Route>
+      </Route>
+      <Route
+        path="/newsletter/"
+        element={
+          <UniversalNavbar topBarContent={<NewsletterNavbarText />} navbarButtons={<NewsletterNavbarButtons />} />
+        }
+      >
+        <Route index path="/newsletter/main-page" element={<NewsletterMainPage />} />
+        <Route path="/newsletter/feedback" element={<NewsletterFeedback />} />
       </Route>
     </Route>,
   ),
