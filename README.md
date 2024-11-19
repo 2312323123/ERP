@@ -160,14 +160,14 @@ At this moment it might make sense to commit. And then resume.
 export class TasksModule {}
 ```
 
-turns into this:
+turns into this: (exporting TypeOrmModule automatically lets you use Repository in a direct way in other modules where that module will be imported)
 
 ```TS
 @Module({
   imports: [TypeOrmModule.forFeature([Task])],
   controllers: [TasksController],
   providers: [TasksService],
-  exports: [TasksService],
+  exports: [TasksService, TypeOrmModule],
 })
 export class TasksModule {}
 
