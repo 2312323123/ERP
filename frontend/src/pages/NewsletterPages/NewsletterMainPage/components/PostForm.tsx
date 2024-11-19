@@ -3,11 +3,24 @@ import { TextField, Button, Box, Typography } from '@mui/material'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import CoolDatePicker from '../../../../components/CoolDatePicker'
+import useCreateNewsletterTask from '../../../../hooks/newsletter/useCreateNewsletterTask'
+import { ExportedTask } from '../../../../services/newsletter'
 
 const PostForm = () => {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
-  const [date, setDate] = React.useState<Date | null>(new Date())
+  const [date, setDate] = React.useState<Date>(new Date())
+
+  const { createNewsletterTask, isCreateNewsletterTaskLoading } = useCreateNewsletterTask()
+
+  const handleSubmit = () => {
+    const data: ExportedTask = {
+      name: title,
+      description,
+      visible_until: date,
+    }
+    createNewsletterTask(data)
+  }
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -68,10 +81,8 @@ const PostForm = () => {
             sx={{ margin: '0.25rem', width: '20ch' }}
             variant="contained"
             color="primary"
-            onClick={() => {
-              // Your create logic here
-              console.log({ title, description, date })
-            }}
+            onClick={handleSubmit}
+            disabled={isCreateNewsletterTaskLoading}
           >
             Stwórz
           </Button>

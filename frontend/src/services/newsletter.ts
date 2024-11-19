@@ -14,7 +14,7 @@ export interface ImportedTask {
   ]
 }
 
-interface ExportedTask {
+export interface ExportedTask {
   name: string
   description: string
   visible_until: Date
@@ -33,7 +33,7 @@ export const newsletterApi = createApi({
       query: (exportedTask: ExportedTask) => ({
         url: 'api/newsletter/task',
         method: 'POST',
-        body: { exportedTask },
+        body: { taskForImport: exportedTask },
       }),
       invalidatesTags: [{ type: 'Newsletter', id: 'ALL_TASKS' }],
     }),
