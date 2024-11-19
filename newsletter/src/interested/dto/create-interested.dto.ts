@@ -1,1 +1,4 @@
-export class CreateInterestedDto {}
+export class CreateInterestedDto {
+  uuid: string;
+  person_id: string;
+}

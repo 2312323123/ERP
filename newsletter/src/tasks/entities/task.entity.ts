@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Interested } from 'src/interested/entities/interested.entity';
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Task {
@@ -16,6 +17,9 @@ export class Task {
 
   @Column({ type: 'timestamptz' })
   visible_until: Date;
+
+  @OneToMany(() => Interested, (interested) => interested.task)
+  interested: Interested[];
 
   // to get previous/next evaluation done by the user
   @CreateDateColumn({ type: 'timestamptz' })

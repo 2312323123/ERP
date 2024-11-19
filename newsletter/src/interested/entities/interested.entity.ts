@@ -1,9 +1,12 @@
 import { Task } from 'src/tasks/entities/task.entity';
-import { Column, CreateDateColumn, Entity, ManyToOne } from 'typeorm';
+import { CreateDateColumn, Entity, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Interested {
-  @Column()
+  @PrimaryGeneratedColumn('uuid')
+  uuid_for_primary_column_sake: string;
+
+  @PrimaryColumn()
   person_id: string;
 
   @ManyToOne(() => Task, (task) => task.uuid)

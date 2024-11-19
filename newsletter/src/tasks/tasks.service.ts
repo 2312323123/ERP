@@ -1,26 +1,48 @@
 import { Injectable } from '@nestjs/common';
-import { CreateTaskDto } from './dto/create-task.dto';
-import { UpdateTaskDto } from './dto/update-task.dto';
+import { TaskForExport, TaskForImport } from './interfaces/task.interface';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Task } from './entities/task.entity';
+import { Repository } from 'typeorm';
+import { Interested } from 'src/interested/entities/interested.entity';
 
 @Injectable()
 export class TasksService {
-  create(createTaskDto: CreateTaskDto) {
-    return 'This action adds a new task';
+  constructor(
+    @InjectRepository(Task) private taskRepository: Repository<Task>,
+    @InjectRepository(Interested) private interestedRepository: Repository<Interested>,
+  ) {}
+
+  async getTasks(): Promise<TaskForExport[]> {
+    const currentTimestamp = new Date();
+
+    const tasks = await this.taskRepository
+      .createQueryBuilder('task')
+      .leftJoinAndSelect('task.interested', 'interested')
+      .where('task.visible_until > :currentTimestamp', { currentTimestamp })
+      .orderBy('task.createdAt', 'DESC')
+      .addOrderBy('interested.createdAt', 'ASC')
+      .getMany();
+
+    return tasks.map((task) => ({
+      uuid: task.uuid,
+      name: task.name,
+      description: task.description,
+      author_id: task.author_id,
+      visible_until: task.visible_until,
+      interested: task.interested.map((interest) => ({
+        user_id: interest.person_id,
+      })),
+    })) as TaskForExport[];
   }
 
-  findAll() {
-    return `This action returns all tasks`;
-  }
+  async createTask(userId: string, createTaskDto: TaskForImport): Promise<void> {
+    const newTask = this.taskRepository.create({
+      name: createTaskDto.name,
+      description: createTaskDto.description,
+      visible_until: createTaskDto.visible_until,
+      author_id: userId,
+    });
 
-  findOne(id: number) {
-    return `This action returns a #${id} task`;
-  }
-
-  update(id: number, updateTaskDto: UpdateTaskDto) {
-    return `This action updates a #${id} task`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} task`;
+    await this.taskRepository.save(newTask);
   }
 }
