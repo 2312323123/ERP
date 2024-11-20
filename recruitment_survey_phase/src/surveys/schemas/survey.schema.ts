@@ -20,7 +20,14 @@ export class Survey {
   @Prop({
     type: [
       {
-        question: { type: String, required: true },
+        question: {
+          type: String,
+          validate: {
+            validator: (value: string) => value !== null && value !== undefined, // Ensure not null or undefined
+            message: 'Question cannot be null or undefined',
+          },
+          default: '', // Optional: Set a default empty string if required
+        },
         type: { type: String, required: true },
         answer: { type: mongoose.Schema.Types.Mixed, required: false }, // Use Mixed to allow different types
       },
