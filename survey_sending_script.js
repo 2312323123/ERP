@@ -34,7 +34,7 @@ function sendSomething(something) {
     headers: {
       Authorization: `Bearer ${surveySendingToken}`,
     },
-    payload: JSON.stringify(something),
+    payload: JSON.stringify({ responses: something }),
   };
   UrlFetchApp.fetch(endpointURL, options);
 }
