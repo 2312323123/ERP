@@ -419,6 +419,7 @@ CMD [ "npm", "run", "dev" ]
 
 #### some more frontend notes
 
+- when installing something new in npm, there is a need to add --legacy-peer-deps flag, because of split-pane using something like React 16
 - you may want to set up different Google clientId (here in main.tsx) in your frontend
 - example slice to copy approach: surveySettingsPageSlice.tsx
 - example network call to copy approach: // TODO: check if not outdated
