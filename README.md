@@ -289,6 +289,8 @@ hard resetting - dev (run from main folder): \
 
 `docker-compose -f docker-compose.yml -f docker-compose.dev.yml rm -svf newsletter; docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build newsletter`
 
+`docker-compose -f docker-compose.yml -f docker-compose.dev.yml rm -svf mongo; docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build mongo`
+
 to rerun service separately to see just its logs:
 `docker-compose -f docker-compose.yml -f docker-compose.dev.yml down frontend; docker-compose -f docker-compose.yml -f docker-compose.dev.yml up frontend`
 
