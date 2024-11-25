@@ -1,9 +1,19 @@
 import { Button } from '@mui/material'
-import { set } from 'date-fns'
 import { useState } from 'react'
 import AvailableTimes from 'react-available-times'
 
-const AvlTest = () => {
+interface UserAvailibilityInfo {
+  id: string
+  availability: { start: number; end: number }[]
+}
+// for many users: UserAvailibilityInfo[] (and in putput attached and sorted by name by some internal method)
+
+const AvlTest = ({
+  databaseAvailability = [
+    { start: 0, end: 100 },
+    { start: 200, end: 300 },
+  ],
+}) => {
   const loadMoreEvents = (calendarId, start, end) => {
     console.log('calendarId:')
     console.log(calendarId)
@@ -22,15 +32,26 @@ const AvlTest = () => {
     ],
   ])
 
-  const [dupa, setDupa] = useState([
-    { start: 0, end: 100 },
-    { start: 200, end: 300 },
-  ])
+  const [state, setState] = useState(databaseAvailability ?? [])
+
+  const setDupaWithFiltering = (selections) => {
+    const dupa2 = selections.filter((el) => el.start < el.end)
+
+    if (dupa2.length < selections.length) {
+      reset(dupa2)
+    }
+
+    setState(dupa2)
+  }
 
   const [show, setShow] = useState(true)
 
-  const reset = () => {
-    setDupa([{ start: 0, end: 100 }])
+  const reset = (toSomething) => {
+    if (toSomething) {
+      setState(toSomething)
+    } else {
+      setState([{ start: 0, end: 100 }])
+    }
     setShow(false)
     setTimeout(() => setShow(true), 0)
   }
@@ -63,11 +84,11 @@ const AvlTest = () => {
               // })
               console.log(selections)
               // setSelections(selections)
-              setDupa(selections)
+              setDupaWithFiltering(selections)
             }}
             // initialSelections={selections}
             // initialSelections={[{ start: 0, end: 100 }]}
-            initialSelections={dupa}
+            initialSelections={state}
             onEventsRequested={({ calendarId, start, end, callback }) => {
               loadMoreEvents(calendarId, start, end) //.then(callback)
             }}
@@ -80,8 +101,8 @@ const AvlTest = () => {
         )}
       </div>
       <div>
-        <h4>dupa</h4>
-        {dupa.map((el) => (
+        <h4>state</h4>
+        {state.map((el) => (
           <div>{JSON.stringify(el)}</div>
         ))}
       </div>
