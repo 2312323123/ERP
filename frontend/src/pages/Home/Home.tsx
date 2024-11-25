@@ -10,6 +10,7 @@ import { apiPathBase } from '../../config/constants'
 import { useSelector } from 'react-redux'
 import { getAccessToken, getRefreshToken } from '../../store/slices/authSlice'
 import { OfficeStatusPanel } from './components/OfficeStatusPanel'
+import AvlTest from '../../components/AvlTest'
 
 const Home = () => {
   const refreshToken = useSelector(getRefreshToken)
@@ -104,7 +105,7 @@ const Home = () => {
             Zabierz Maćkowi superadmina
           </Button>
         </ListItem>
-
+        <AvlTest />
         <MinimumReduxUseExample />
       </Stack>
     </>
