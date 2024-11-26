@@ -4,7 +4,7 @@ import { useGetAvailabilityQuery } from '../../../services/availability'
 import { useDispatch, useSelector } from 'react-redux'
 import { getId } from '../../../store/slices/authSlice'
 import { useEffect, useRef } from 'react'
-import { getSettingsAvailability, setSettingsAvailability } from '../../../store/slices/availabilitySlice'
+import { setSettingsAvailability } from '../../../store/slices/availabilitySlice'
 
 export const AvailabilitySettings = () => {
   const myId = useSelector(getId)
