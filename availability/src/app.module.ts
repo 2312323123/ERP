@@ -3,6 +3,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AvailabilitiesModule } from './availabilities/availabilities.module';
+import { JwtModule } from '@nestjs/jwt';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './auth/roles.guard';
 
 @Module({
   imports: [
@@ -17,8 +20,20 @@ import { AvailabilitiesModule } from './availabilities/availabilities.module';
       synchronize: true,
     }),
     AvailabilitiesModule,
+    JwtModule.register({
+      publicKey: process.env.RSA_PUBLIC_KEY_FOR_JWT, // your public RSA key
+      signOptions: {
+        algorithm: 'RS256', // use RS256 algorithm
+      },
+    }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+  ],
 })
 export class AppModule {}
