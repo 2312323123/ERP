@@ -4,7 +4,8 @@ import { useGetAvailabilityQuery } from '../../../services/availability'
 import { useDispatch, useSelector } from 'react-redux'
 import { getId } from '../../../store/slices/authSlice'
 import { useEffect, useRef } from 'react'
-import { setSettingsAvailability } from '../../../store/slices/availabilitySlice'
+import { getSettingsAvailability, setSettingsAvailability } from '../../../store/slices/availabilitySlice'
+import { useUpdateUserAvailability } from '../../../hooks/availability/useUpdateUserAvailability'
 
 export const AvailabilitySettings = () => {
   const myId = useSelector(getId)
@@ -13,9 +14,11 @@ export const AvailabilitySettings = () => {
 
   const dispatch = useDispatch()
 
+  const { isUpdateUserAvailabilityLoading, updateUserAvailability } = useUpdateUserAvailability()
+
   useEffect(() => {
     if (databaseAvailability) {
-      dispatch(setSettingsAvailability(databaseAvailability[0].availability))
+      dispatch(setSettingsAvailability(databaseAvailability[0]?.availability || []))
       formRef.current?.reset()
     }
   }, [databaseAvailability, dispatch])
@@ -27,9 +30,16 @@ export const AvailabilitySettings = () => {
 
   const reset = () => {
     if (databaseAvailability) {
-      dispatch(setSettingsAvailability(databaseAvailability[0].availability))
+      dispatch(setSettingsAvailability(databaseAvailability[0]?.availability || []))
       formRef.current?.reset()
     }
+  }
+
+  const settingsAvailability = useSelector(getSettingsAvailability)
+  const save = () => {
+    updateUserAvailability({
+      availability: settingsAvailability,
+    })
   }
 
   return (
@@ -49,7 +59,13 @@ export const AvailabilitySettings = () => {
         <Typography variant="h5" mr={5}>
           Zaznacz, kiedy na pewno nie możesz:
         </Typography>
-        <Button sx={{ marginRight: '1rem' }} variant="contained" color="primary">
+        <Button
+          onClick={save}
+          disabled={isUpdateUserAvailabilityLoading}
+          sx={{ marginRight: '1rem' }}
+          variant="contained"
+          color="primary"
+        >
           Zapisz
         </Button>
         <Button onClick={clear} sx={{ marginRight: '1rem', color: 'white' }} variant="contained" color="secondary">
