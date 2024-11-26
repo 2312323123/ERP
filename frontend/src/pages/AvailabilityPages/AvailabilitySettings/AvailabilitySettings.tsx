@@ -6,6 +6,7 @@ import { getId } from '../../../store/slices/authSlice'
 import { useEffect, useRef } from 'react'
 import { getSettingsAvailability, setSettingsAvailability } from '../../../store/slices/availabilitySlice'
 import { useUpdateUserAvailability } from '../../../hooks/availability/useUpdateUserAvailability'
+import { geAvailabilitytComplement } from './components/getAvailabilityComplement'
 
 export const AvailabilitySettings = () => {
   const myId = useSelector(getId)
@@ -18,7 +19,7 @@ export const AvailabilitySettings = () => {
 
   useEffect(() => {
     if (databaseAvailability) {
-      dispatch(setSettingsAvailability(databaseAvailability[0]?.availability || []))
+      dispatch(setSettingsAvailability(geAvailabilitytComplement(databaseAvailability[0]?.availability) || []))
       formRef.current?.reset()
     }
   }, [databaseAvailability, dispatch])
@@ -38,7 +39,7 @@ export const AvailabilitySettings = () => {
   const settingsAvailability = useSelector(getSettingsAvailability)
   const save = () => {
     updateUserAvailability({
-      availability: settingsAvailability,
+      availability: geAvailabilitytComplement(settingsAvailability),
     })
   }
 
