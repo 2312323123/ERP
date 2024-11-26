@@ -12,6 +12,7 @@ export interface FormHandle {
 export const NonavailabilityInputForm = forwardRef<FormHandle>((_, ref) => {
   const initialSelections = useSelector(getSettingsAvailability)
   const [show, setShow] = useState(true)
+  const dispatch = useDispatch()
 
   const reset = () => {
     setShow(false)
@@ -20,10 +21,10 @@ export const NonavailabilityInputForm = forwardRef<FormHandle>((_, ref) => {
 
   const setSelectedCorrectly = (selections: _Availability) => {
     const correctSelections = selections.filter((el) => el.start < el.end)
+    dispatch(setSettingsAvailability(correctSelections))
     if (correctSelections.length < selections.length) {
-      // setToSomething(correctSelections)
+      setTimeout(reset, 0)
     }
-    // dispatch(setSettingsAvailability(correctSelections))
   }
 
   useImperativeHandle(ref, () => ({
