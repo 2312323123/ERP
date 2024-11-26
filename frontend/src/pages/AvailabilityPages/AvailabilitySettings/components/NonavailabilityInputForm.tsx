@@ -1,22 +1,19 @@
-import { useState } from 'react'
+import { forwardRef, useImperativeHandle, useState } from 'react'
 import { _Availability } from '../../../../services/availability'
 import { useDispatch, useSelector } from 'react-redux'
 import { getSettingsAvailability, setSettingsAvailability } from '../../../../store/slices/availabilitySlice'
 import AvailableTimes from 'react-available-times'
 import styles from './NonavailabilityInputForm.module.css'
 
-export const NonavailabilityInputForm = () => {
+export interface FormHandle {
+  reset: () => void
+}
+
+export const NonavailabilityInputForm = forwardRef<FormHandle>((_, ref) => {
+  const initialSelections = useSelector(getSettingsAvailability)
   const [show, setShow] = useState(true)
 
-  const selected = useSelector(getSettingsAvailability)
-  const dispatch = useDispatch()
-
-  const reset = (toSomething: _Availability) => {
-    if (toSomething) {
-      dispatch(setSettingsAvailability(toSomething))
-    } else {
-      dispatch(setSettingsAvailability(selected))
-    }
+  const reset = () => {
     setShow(false)
     setTimeout(() => setShow(true), 0)
   }
@@ -24,14 +21,19 @@ export const NonavailabilityInputForm = () => {
   const setSelectedCorrectly = (selections: _Availability) => {
     const correctSelections = selections.filter((el) => el.start < el.end)
     if (correctSelections.length < selections.length) {
-      reset(correctSelections)
+      // setToSomething(correctSelections)
     }
-    dispatch(setSettingsAvailability(correctSelections))
+    // dispatch(setSettingsAvailability(correctSelections))
   }
+
+  useImperativeHandle(ref, () => ({
+    reset,
+    // setToSomething,
+  }))
 
   return (
     <div>
-      <pre>{JSON.stringify(selected)}</pre>
+      <div>{JSON.stringify(initialSelections)}</div>
       <div style={{ height: '700px' }} className={styles.ratContainer}>
         {show && (
           <AvailableTimes
@@ -39,7 +41,7 @@ export const NonavailabilityInputForm = () => {
             onChange={(selections: _Availability) => {
               setSelectedCorrectly(selections)
             }}
-            initialSelections={selected}
+            initialSelections={initialSelections}
             height={700}
             recurring={true}
           />
@@ -47,4 +49,4 @@ export const NonavailabilityInputForm = () => {
       </div>
     </div>
   )
-}
+})

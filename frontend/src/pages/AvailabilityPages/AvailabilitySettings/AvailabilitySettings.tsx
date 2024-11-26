@@ -1,19 +1,22 @@
 import { Box, Button, Typography } from '@mui/material'
-import { NonavailabilityInputForm } from './components/NonavailabilityInputForm'
+import { FormHandle, NonavailabilityInputForm } from './components/NonavailabilityInputForm'
 import { useGetAvailabilityQuery } from '../../../services/availability'
 import { useDispatch, useSelector } from 'react-redux'
 import { getId } from '../../../store/slices/authSlice'
-import { useEffect } from 'react'
-import { setSettingsAvailability } from '../../../store/slices/availabilitySlice'
+import { useEffect, useRef } from 'react'
+import { getSettingsAvailability, setSettingsAvailability } from '../../../store/slices/availabilitySlice'
 
 export const AvailabilitySettings = () => {
   const myId = useSelector(getId)
   const { data: databaseAvailability } = useGetAvailabilityQuery([myId])
+  const formRef = useRef<FormHandle | null>(null)
 
   const dispatch = useDispatch()
+
   useEffect(() => {
     if (databaseAvailability) {
-      dispatch(setSettingsAvailability(databaseAvailability))
+      dispatch(setSettingsAvailability(databaseAvailability[0].availability))
+      formRef.current?.reset()
     }
   }, [databaseAvailability, dispatch])
 
@@ -44,7 +47,7 @@ export const AvailabilitySettings = () => {
         </Button>
       </Box>
       <Box m={1}>
-        <NonavailabilityInputForm />
+        <NonavailabilityInputForm ref={formRef} />
         <Box sx={{ height: '25vh' }} />
       </Box>
     </>
