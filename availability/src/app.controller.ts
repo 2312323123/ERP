@@ -27,7 +27,10 @@ export class AppController {
 
   @Roles('USER')
   @Get('/api/availability')
-  async getAvailability(@Query('ids', UndefinedCheckPipe) ids: string | string[]): Promise<UserAvailabilityInfo[]> {
+  async getAvailability(@Query('ids') ids: string | string[]): Promise<UserAvailabilityInfo[]> {
+    if (!ids) {
+      return [];
+    }
     if (typeof ids === 'string') {
       ids = [ids];
     }

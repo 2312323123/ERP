@@ -17,7 +17,7 @@ export const availabilityApi = createApi({
   baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
     getAvailability: builder.query<UserAvailibilityInfo[], string[]>({
-      query: (ids) => `api/availability/${ids ? '?' : ''}${ids.map((id) => `ids=${id}`).join('&')}`,
+      query: (ids) => `api/availability/${ids.length ? '?' : ''}${ids.map((id) => `ids=${id}`).join('&')}`,
       providesTags: [{ type: 'Availability', id: 'GET_AVAILABILITY' }],
     }),
     updateUserAvailability: builder.mutation<UserAvailibilityInfo, { availability: _Availability }>({
