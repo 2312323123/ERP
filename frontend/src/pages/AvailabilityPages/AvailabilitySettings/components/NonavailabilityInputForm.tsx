@@ -34,7 +34,6 @@ export const NonavailabilityInputForm = forwardRef<FormHandle>((_, ref) => {
 
   return (
     <div>
-      <div>{JSON.stringify(initialSelections)}</div>
       <div style={{ height: '700px' }} className={styles.ratContainer}>
         {show && (
           <AvailableTimes
