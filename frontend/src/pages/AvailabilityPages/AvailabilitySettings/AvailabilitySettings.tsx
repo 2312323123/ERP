@@ -20,6 +20,18 @@ export const AvailabilitySettings = () => {
     }
   }, [databaseAvailability, dispatch])
 
+  const clear = () => {
+    dispatch(setSettingsAvailability([]))
+    formRef.current?.reset()
+  }
+
+  const reset = () => {
+    if (databaseAvailability) {
+      dispatch(setSettingsAvailability(databaseAvailability[0].availability))
+      formRef.current?.reset()
+    }
+  }
+
   return (
     <>
       <Box
@@ -31,6 +43,7 @@ export const AvailabilitySettings = () => {
           alignItems: 'center',
           boxShadow: '1px 1px 3px #ccc',
           background: 'white',
+          zIndex: 1,
         }}
       >
         <Typography variant="h5" mr={5}>
@@ -39,10 +52,10 @@ export const AvailabilitySettings = () => {
         <Button sx={{ marginRight: '1rem' }} variant="contained" color="primary">
           Zapisz
         </Button>
-        <Button sx={{ marginRight: '1rem', color: 'white' }} variant="contained" color="secondary">
+        <Button onClick={clear} sx={{ marginRight: '1rem', color: 'white' }} variant="contained" color="secondary">
           Wyczyść
         </Button>
-        <Button sx={{ marginRight: '1rem', color: 'white' }} variant="contained" color="secondary">
+        <Button onClick={reset} sx={{ marginRight: '1rem', color: 'white' }} variant="contained" color="secondary">
           Resetuj
         </Button>
       </Box>
