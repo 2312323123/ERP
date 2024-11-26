@@ -1,12 +1,12 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQueryWithReauth } from './baseQueryWithReauth'
 
-type _Availability = {
+export type _Availability = {
   start: number
   end: number
 }[]
 
-interface UserAvailibilityInfo {
+export interface UserAvailibilityInfo {
   id: string
   availability: _Availability
 }

@@ -74,6 +74,11 @@ const Home = () => {
           </Button>
         </ListItem>
         <ListItem>
+          <Button variant="contained" color="primary" onClick={() => router.navigate('/availability/browser')}>
+            Dostępność
+          </Button>
+        </ListItem>
+        <ListItem>
           <Button
             component="a"
             href="https://docs.google.com/spreadsheets/d/1sDq1-w4yadCCTrt9m_wI8laGh9lUyG96AWmpdMFnPzA/edit?gid=527260512&usp=sharing"

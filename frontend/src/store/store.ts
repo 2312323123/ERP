@@ -11,6 +11,7 @@ import { interviewStageApi } from '../services/interviewStage'
 import { isSomeoneInTheOfficeApi } from '../services/isSomeoneInTheOffice'
 import { newsletterApi } from '../services/newsletter'
 import { availabilityApi } from '../services/availability'
+import settingsAvailabilityReducer from './slices/availabilitySlice'
 
 // Create the Redux store
 export const store = configureStore({
@@ -27,6 +28,7 @@ export const store = configureStore({
     [isSomeoneInTheOfficeApi.reducerPath]: isSomeoneInTheOfficeApi.reducer,
     [newsletterApi.reducerPath]: newsletterApi.reducer,
     [availabilityApi.reducerPath]: availabilityApi.reducer,
+    availability: settingsAvailabilityReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()

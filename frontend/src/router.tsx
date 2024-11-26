@@ -24,6 +24,11 @@ import { NewsletterNavbarButtons } from './components/NewsletterNavbar/Newslette
 import { NewsletterNavbarText } from './components/NewsletterNavbar/NewsletterNavbarText'
 import NewsletterFeedback from './pages/NewsletterPages/NewsletterFeedback'
 import { NewsletterMainPage } from './pages/NewsletterPages/NewsletterMainPage/NewsletterMainPage'
+import { AvailabilityNavbarText } from './components/AvailabilityNavbar/AvailabilityNavbarText'
+import { AvailabilityNavbarButtons } from './components/AvailabilityNavbar/NewsletterNavbarButtons'
+import AvailabilityFeedback from './pages/AvailabilityPages/AvailabilityFeedback'
+import { AvailabilityBrowser } from './pages/AvailabilityPages/AvailabilityBrowser/AvailabilityBrowser'
+import { AvailabilitySettings } from './pages/AvailabilityPages/AvailabilitySettings/AvailabilitySettings'
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -70,6 +75,16 @@ export const router = createBrowserRouter(
       >
         <Route index path="/newsletter/main-page" element={<NewsletterMainPage />} />
         <Route path="/newsletter/feedback" element={<NewsletterFeedback />} />
+      </Route>
+      <Route
+        path="/availability/"
+        element={
+          <UniversalNavbar topBarContent={<AvailabilityNavbarText />} navbarButtons={<AvailabilityNavbarButtons />} />
+        }
+      >
+        <Route index path="/availability/browser" element={<AvailabilityBrowser />} />
+        <Route path="/availability/feedback" element={<AvailabilityFeedback />} />
+        <Route path="/availability/settings" element={<AvailabilitySettings />} />
       </Route>
     </Route>,
   ),
