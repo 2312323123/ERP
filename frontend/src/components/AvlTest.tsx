@@ -2,9 +2,14 @@ import { Button } from '@mui/material'
 import { useState } from 'react'
 import AvailableTimes from 'react-available-times'
 
+type _Availability = {
+  start: number
+  end: number
+}[]
+
 interface UserAvailibilityInfo {
   id: string
-  availability: { start: number; end: number }[]
+  availability: _Availability
 }
 // for many users: UserAvailibilityInfo[] (and in putput attached and sorted by name by some internal method)
 
