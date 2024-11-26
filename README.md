@@ -176,7 +176,7 @@ export class TasksModule {}
 ```
 
 - then I'd comment out the automatically generated endpoints from CRUD controller
-- also remember to give the classes in .entity.ts files the Entity() decorator once you'll be defining the data structure
+- also remember to give the classes in .entity.ts files the @Entity() decorator once you'll be defining the data structure
 - make sure setup-roles endpoint of auth service isn't publicly visible from time to time (which esentially means on `http://localhost:10016/api/auth/setup-roles`) you should see 'This path is not redirected', otherwise it's extermely bad;
 - env variables should just work inside app if specified in docker-compose
 
@@ -268,7 +268,7 @@ and if there is no role required, then chances are some token is being sent as p
   - then copy init roles contents from some other service, i.e. auth_and_permissions one
   - if it doesn't see nest/axios in here `import { HttpService } from '@nestjs/axios';`, then for me restarting IDE after trying everything else has helped
   - and also you have to put `HttpModule` from @nestjs/axios among app.module.ts imports array
-- also important: using the guard injects a the new parameter `user_id` into the body of the request. It's already in auth folder you were recommended to copy, and you it in controller like `async getSmth(@UserId() userId: string) {}`
+- also important: using the guard injects a the new parameter `user_id` into the body of the request. It's already in auth folder you were recommended to copy, and you use it in controller like `async getSmth(@UserId() userId: string) {}`
 - to skip authorization: `@Roles('skip')`
 
 ---
