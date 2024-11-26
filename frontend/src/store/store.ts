@@ -10,6 +10,7 @@ import surveyTabsReducer from './slices/surveyStage/surveyTabsSlice'
 import { interviewStageApi } from '../services/interviewStage'
 import { isSomeoneInTheOfficeApi } from '../services/isSomeoneInTheOffice'
 import { newsletterApi } from '../services/newsletter'
+import { availabilityApi } from '../services/availability'
 
 // Create the Redux store
 export const store = configureStore({
@@ -25,6 +26,7 @@ export const store = configureStore({
     [interviewStageApi.reducerPath]: interviewStageApi.reducer,
     [isSomeoneInTheOfficeApi.reducerPath]: isSomeoneInTheOfficeApi.reducer,
     [newsletterApi.reducerPath]: newsletterApi.reducer,
+    [availabilityApi.reducerPath]: availabilityApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -33,7 +35,8 @@ export const store = configureStore({
       .concat(surveyStageApi.middleware)
       .concat(interviewStageApi.middleware)
       .concat(isSomeoneInTheOfficeApi.middleware)
-      .concat(newsletterApi.middleware), // Add middlewares
+      .concat(newsletterApi.middleware)
+      .concat(availabilityApi.middleware), // Add middlewares
 })
 
 // Optional: Set up typed hooks (useDispatch, useSelector)
