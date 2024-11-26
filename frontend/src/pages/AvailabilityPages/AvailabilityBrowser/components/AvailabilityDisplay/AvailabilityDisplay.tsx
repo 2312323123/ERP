@@ -20,6 +20,8 @@ export const AvailabilityDisplay = ({ availabilities, usersIdsNamesPictures }: P
         <AvailabilitySummary />
       </Box>
       <Box sx={{ height: '25vh' }} />
+      availabilities:
+      <pre>{JSON.stringify(availabilities, null, 2)}</pre>
     </Box>
   )
 }

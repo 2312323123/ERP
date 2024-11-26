@@ -1,6 +1,37 @@
+import { useCallback, useEffect, useState } from 'react'
 import styles from './AvailabilityGrid.module.css'
+import { debounce, throttle } from 'lodash'
+
+const positionToTime = ({ x, y }: { x: number; y: number }) => {
+  const day = Math.floor(x / (1000 / 7))
+  const time = (y * 1440) / 800
+  const totalTime = time + day * 1440
+  return totalTime
+}
 
 export const AvailabilityGrid = () => {
+  const [position, setPosition] = useState({ x: 0, y: 0 })
+
+  // Debounced and throttled handler
+  const updatePosition = useCallback(
+    throttle(
+      debounce((offsetX: number, offsetY: number) => {
+        setPosition({ x: offsetX, y: offsetY })
+      }, 100), // Debounce: wait 100ms
+      200, // Throttle: at most every 200ms
+    ),
+    [],
+  )
+
+  const handleMouseMove = (event) => {
+    const { offsetX, offsetY } = event.nativeEvent
+    updatePosition(offsetX, offsetY)
+  }
+
+  useEffect(() => {
+    console.log('position:', positionToTime(position))
+  }, [position])
+
   return (
     <div className={styles.containerDiv}>
       <div className={styles.gridTimes}>
@@ -87,7 +118,7 @@ export const AvailabilityGrid = () => {
           <div className={styles.gridHeaderElement}>Sobota</div>
           <div className={styles.gridHeaderElement}>Niedziela</div>
         </div>
-        <div className={styles.gridDiv}></div>
+        <div className={styles.gridDiv} onMouseMove={handleMouseMove}></div>
       </div>
     </div>
   )

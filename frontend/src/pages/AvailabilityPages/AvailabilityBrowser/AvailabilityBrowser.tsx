@@ -5,10 +5,12 @@ import { getSelectedUsers } from '../../../store/slices/availabilitySlice'
 import { useSelector } from 'react-redux'
 import { useGetAvailabilityQuery } from '../../../services/availability'
 import { useEffect } from 'react'
+import { useGetUsersIdsNamesPicturesQuery } from '../../../services/interviewStage'
 
 export const AvailabilityBrowser = () => {
   const selectedUsers = useSelector(getSelectedUsers)
   const { data: availabilities, refetch } = useGetAvailabilityQuery(selectedUsers, { refetchOnMountOrArgChange: true })
+  const { data: usersIdsNamesPictures } = useGetUsersIdsNamesPicturesQuery()
 
   useEffect(() => {
     console.log('selectedUsers:')
@@ -19,12 +21,10 @@ export const AvailabilityBrowser = () => {
 
   return (
     <div>
-      selectedUsers:
-      <pre>{JSON.stringify(selectedUsers, null, 2)}</pre>
-      availabilities:
-      <pre>{JSON.stringify(availabilities, null, 2)}</pre>
       <AvailabilityUserSelector />
-      <AvailabilityDisplay />
+      {availabilities && usersIdsNamesPictures && (
+        <AvailabilityDisplay availabilities={availabilities} usersIdsNamesPictures={usersIdsNamesPictures} />
+      )}
       <Box sx={{ height: '25vh' }} />
     </div>
   )
