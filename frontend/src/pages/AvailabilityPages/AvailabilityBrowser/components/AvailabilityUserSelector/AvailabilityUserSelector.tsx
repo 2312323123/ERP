@@ -1,4 +1,4 @@
-import { Accordion, AccordionSummary, Typography, AccordionDetails, Box, Avatar } from '@mui/material'
+import { Accordion, AccordionSummary, Typography, AccordionDetails, Box } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { useGetUsersIdsNamesPicturesQuery } from '../../../../../services/interviewStage'
 import { useDispatch, useSelector } from 'react-redux'
