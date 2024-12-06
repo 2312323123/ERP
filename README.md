@@ -291,11 +291,15 @@ hard resetting - dev (run from main folder): \
 
 `docker-compose -f docker-compose.yml -f docker-compose.dev.yml rm -svf mongo; docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build mongo`
 
+`docker-compose -f docker-compose.yml -f docker-compose.dev.yml rm -svf nginx; docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build nginx`
+
 to rerun service separately to see just its logs:
 `docker-compose -f docker-compose.yml -f docker-compose.dev.yml down frontend; docker-compose -f docker-compose.yml -f docker-compose.dev.yml up frontend`
 
 hard resetting - prod (run from main folder): \
 `docker-compose -f docker-compose.yml -f docker-compose.prod.yml rm -svf frontend; docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build frontend`
+
+`docker-compose -f docker-compose.yml -f docker-compose.prod.yml rm -svf db-psql; docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build db-psql`
 
 If you changed just ports / or want to add newly created service to running docker compose: \
 `docker-compose up -d`
