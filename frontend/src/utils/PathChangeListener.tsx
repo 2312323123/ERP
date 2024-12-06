@@ -1,8 +1,10 @@
 import { useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
+import useRememberAppCredentialsAndUrl from './useRememberAppCredentialsAndUrl'
 
 const PathChangeListener = () => {
   const location = useLocation()
+  useRememberAppCredentialsAndUrl()
 
   useEffect(() => {
     // This code will run every time the path changes
