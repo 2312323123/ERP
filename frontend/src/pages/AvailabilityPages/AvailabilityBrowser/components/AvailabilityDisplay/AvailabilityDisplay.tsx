@@ -32,7 +32,7 @@ export const AvailabilityDisplay = ({ availabilities, usersIdsNamesPictures }: P
     [],
   )
 
-  const handleMouseMove = (event) => {
+  const handleMouseMove = (event: React.MouseEvent) => {
     const { offsetX, offsetY } = event.nativeEvent
     updatePosition(offsetX, offsetY)
   }

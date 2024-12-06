@@ -1,6 +1,17 @@
+import { _Availability } from '../../../../../../services/availability'
 import styles from './AvailabilityGrid.module.css'
 
-const availabilityToRect = ({ start, end }) => {
+interface Props {
+  start: number
+  end: number
+}
+
+interface ReturnFuncProps {
+  handleMouseMove: (event: React.MouseEvent) => void
+  allAvailabilities: _Availability
+}
+
+const availabilityToRect = ({ start, end }: Props) => {
   // console.log('========================:')
 
   // console.log('start:')
@@ -35,7 +46,7 @@ const availabilityToRect = ({ start, end }) => {
   )
 }
 
-export const AvailabilityGrid = ({ handleMouseMove, allAvailabilities }) => {
+export const AvailabilityGrid = ({ handleMouseMove, allAvailabilities }: ReturnFuncProps) => {
   return (
     <div className={styles.containerDiv}>
       <div className={styles.gridTimes}>

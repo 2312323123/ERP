@@ -1,6 +1,7 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 import UserInfo from './UserInfo'
 import { useGetAccountCreationRequestsQuery } from '../../../services/auth'
+import { useHideForPresentation } from '../../../hooks/useHideForPresentation'
 
 export interface AccountCreationRequest {
   email: string
@@ -15,10 +16,11 @@ export interface AccountCreationRequest {
 const AccountCreationRequests = () => {
   // [{role, description}, ...]
   const { data: allAccountCreationRequests } = useGetAccountCreationRequestsQuery()
+  const isVisible = useHideForPresentation()
 
   return (
     <>
-      <div>AccountCreationRequests</div>
+      {isVisible && <div>AccountCreationRequests</div>}
       <Typography variant="h3" component="h3">
         Prośby o wstęp
       </Typography>

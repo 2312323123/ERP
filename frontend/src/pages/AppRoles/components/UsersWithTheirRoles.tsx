@@ -3,6 +3,7 @@ import UserInfoNoButtons from './UserInfoNoButtons'
 import RoleButtonOwned from './RoleButtonOwned'
 import RoleButtonNotOwned from './RoleButtonNotOwned'
 import { useGetUsersWithTheirRolesQuery } from '../../../services/auth'
+import { useHideForPresentation } from '../../../hooks/useHideForPresentation'
 
 export interface UserWithTheirRoles {
   createdAt: string
@@ -18,10 +19,11 @@ export interface UserWithTheirRoles {
 
 const UsersWithTheirRoles = ({ allRolesRoles }: { allRolesRoles: string[] }) => {
   const { data: allUsersWithTheirRoles, isLoading } = useGetUsersWithTheirRolesQuery()
+  const isVisible = useHideForPresentation()
 
   return (
     <>
-      <div>UsersWithTheirRoles</div>
+      {isVisible && <div>UsersWithTheirRoles</div>}
       <Typography variant="h3" component="h3">
         Role użytkowników
       </Typography>

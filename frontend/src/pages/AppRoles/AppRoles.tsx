@@ -5,17 +5,19 @@ import AccountCreationRequests from './components/AccountCreationRequests'
 import UsersWithTheirRoles from './components/UsersWithTheirRoles'
 import { useGetAllRolesQuery } from '../../services/auth'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
+import { useHideForPresentation } from '../../hooks/useHideForPresentation'
 
 const AppRoles = () => {
   // [{role, description}, ...]
   const { data: allRoles, error, isLoading } = useGetAllRolesQuery()
+  const isVisible = useHideForPresentation()
 
   if (error) {
     if ((error as FetchBaseQueryError).status === 401) {
       return (
         <>
           <Button variant="contained" color="primary" onClick={() => router.navigate('/home')}>
-            Back to Home
+            Wróć na stronę główną
           </Button>
           <div>Forbidden</div>
         </>
@@ -24,7 +26,7 @@ const AppRoles = () => {
       return (
         <>
           <Button variant="contained" color="primary" onClick={() => router.navigate('/home')}>
-            Back to Home
+            Wróć na stronę główną
           </Button>
           <div>Error:</div>
           <pre>{JSON.stringify(error, null, 2)}</pre>
@@ -38,19 +40,19 @@ const AppRoles = () => {
   }
 
   return (
-    <>
+    <Box m={3}>
       <Button variant="contained" color="primary" onClick={() => router.navigate('/home')}>
-        Back to Home
+        Wróć na stronę główną
       </Button>
       <br />
       <br />
-      <div>AppRoles</div>
+      {isVisible && <div>AppRoles</div>}
       {allRoles && <RolesTable allRoles={allRoles} />}
       <Box my={2} /> {/* Spacer with margin on the y-axis */}
       <AccountCreationRequests />
       <Box my={2} /> {/* Spacer with margin on the y-axis */}
       {allRoles && <UsersWithTheirRoles allRolesRoles={allRoles.map((role) => role.role)} />}
-    </>
+    </Box>
   )
 }
 

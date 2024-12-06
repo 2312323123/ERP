@@ -33,6 +33,8 @@ export const OfficeStatusPanel: React.FC = () => {
         borderRadius: 2,
         backgroundColor: statusColors[status],
         boxShadow: 2,
+        width: '80%',
+        justifySelf: 'center',
       }}
     >
       <Typography variant="h6" gutterBottom>

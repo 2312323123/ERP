@@ -60,7 +60,13 @@ export const TakeMeToSurveyPhase = () => {
   }
 
   return (
-    <Button variant="contained" color="primary" onClick={takeMeToSurveyPhase} disabled={isLoading || !id}>
+    <Button
+      sx={{ minHeight: '150px', fontSize: '1.1rem' }}
+      variant="contained"
+      color="primary"
+      onClick={takeMeToSurveyPhase}
+      disabled={isLoading || !id}
+    >
       Ankiety
     </Button>
   )

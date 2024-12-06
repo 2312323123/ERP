@@ -3,14 +3,15 @@ import { GoogleOAuthProvider } from '@react-oauth/google'
 // import viteLogo from '/vite.svg'
 import { useState } from 'react'
 import axios from 'axios'
-import { useDispatch } from 'react-redux'
-import { saveTokens } from '../../store/slices/authSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { getLoggedIn, saveTokens } from '../../store/slices/authSlice'
 import { apiPathBase } from '../../config/constants'
 import { logNetworkError, NetworkError } from '../../utils/logNetworkError'
 import { logNetworkSuccess } from '../../utils/logNetworkSuccess'
 import { useGoogleAuth } from '../../hooks/auth/useGoogleAuth'
 import { router } from '../../router'
 import { Box, Typography, Button } from '@mui/material'
+import { useHideForPresentation } from '../../hooks/useHideForPresentation'
 
 const Login = () => {
   const [receivedIdToken, setReceivedIdToken] = useState('')
@@ -101,6 +102,9 @@ const Login = () => {
     }
   }
 
+  const isVisible = useHideForPresentation()
+  const isLoggedIn = useSelector(getLoggedIn)
+
   return (
     // <div className={styles.loginPage}>
     <Box
@@ -140,11 +144,23 @@ const Login = () => {
           >
             Zaloguj przy użyciu Google
           </Button>
-          <div>
-            <button onClick={giveMeSuperadmin}>Give Me admin (stupid way)</button>
-            <button onClick={acceptDwaciekStupidWay}>Let Me in (stupid way)</button>
-            <button onClick={() => router.navigate('/home')}>Go Home</button>
-          </div>
+          <Button
+            onClick={() => router.navigate('/home')}
+            fullWidth
+            variant="contained"
+            color="secondary"
+            sx={{ mt: 2 }}
+            disabled={!isLoggedIn}
+          >
+            Idź do strony głównej
+          </Button>
+          {isVisible && (
+            <div>
+              <button onClick={giveMeSuperadmin}>Give Me admin (stupid way)</button>
+              <button onClick={acceptDwaciekStupidWay}>Let Me in (stupid way)</button>
+              <button onClick={() => router.navigate('/home')}>Go Home</button>
+            </div>
+          )}
           {receivedIdToken && (
             <div>
               <div>Nie masz jeszcze konta!</div>

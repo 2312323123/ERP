@@ -12,7 +12,7 @@ export const NewsletterMainPage = () => {
       <Typography variant="h4" component="h1" sx={{ margin: '1rem' }}>
         Nadchodzące zadania
       </Typography>
-      {data ? <NewsletterAccordion data={data} /> : <Typography>Brak zadań</Typography>}
+      {data ? <NewsletterAccordion data={data} /> : <Typography m={2}>Brak zadań</Typography>}
       <Box sx={{ height: '50vh' }} />
     </div>
   )

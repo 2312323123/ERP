@@ -7,7 +7,7 @@ import UserSelect from './components/UserSelect'
 import { UserIdNamePicture } from '../../../../../services/surveyStage'
 
 export const AvailabilityUserSelector = () => {
-  const { data: usersArray, isLoading: isLoadingUsers } = useGetUsersIdsNamesPicturesQuery()
+  const { data: usersArray } = useGetUsersIdsNamesPicturesQuery()
   const selectedUsers = useSelector(getSelectedUsers)
   const dispatch = useDispatch()
 
