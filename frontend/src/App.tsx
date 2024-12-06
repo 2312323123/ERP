@@ -44,7 +44,12 @@ function App() {
     if (!loggedIn) {
       router.navigate('/login')
     } else {
-      router.navigate('/home')
+      const path = localStorage.getItem('rememberedPath')
+      if (path) {
+        router.navigate(path)
+      } else {
+        router.navigate('/home')
+      }
     }
   }, [loggedIn])
 

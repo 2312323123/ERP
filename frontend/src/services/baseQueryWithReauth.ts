@@ -33,7 +33,17 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
   }
 
   let result
-  const { accessToken, refreshToken, accessTokenExp } = (api.getState() as RootState).auth
+  let { accessToken, refreshToken, accessTokenExp } = (api.getState() as RootState).auth
+  if (!accessToken || !refreshToken) {
+    const rememberedAccessToken = localStorage.getItem('accessToken')
+    const rememberedRefreshToken = localStorage.getItem('refreshToken')
+    const rememberedAccessTokenExp = localStorage.getItem('accessTokenExp')
+    if (rememberedAccessToken && rememberedRefreshToken && rememberedAccessTokenExp) {
+      accessToken = rememberedAccessToken
+      refreshToken = rememberedRefreshToken
+      accessTokenExp = parseInt(rememberedAccessTokenExp)
+    }
+  }
 
   // if access token is expired, refresh it
   if (isTokenExpired(accessTokenExp)) {
