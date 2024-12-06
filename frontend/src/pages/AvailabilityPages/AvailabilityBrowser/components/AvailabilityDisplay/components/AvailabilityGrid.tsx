@@ -1,37 +1,41 @@
-import { useCallback, useEffect, useState } from 'react'
 import styles from './AvailabilityGrid.module.css'
-import { debounce, throttle } from 'lodash'
 
-const positionToTime = ({ x, y }: { x: number; y: number }) => {
-  const day = Math.floor(x / (1000 / 7))
-  const time = (y * 1440) / 800
-  const totalTime = time + day * 1440
-  return totalTime
+const availabilityToRect = ({ start, end }) => {
+  // console.log('========================:')
+
+  // console.log('start:')
+  // console.log(start)
+  // console.log('end:')
+  // console.log(end)
+
+  const x = Math.floor(start / 1440) * (1000 / 7)
+  const width = 1000 / 7
+  const height = ((end - start) * 800) / 1440
+  const y = ((start % 1440) * 800) / 1440
+  // console.log('x:')
+  // console.log(x)
+  // console.log('width:')
+  // console.log(width)
+  // console.log('height:')
+  // console.log(height)
+  // console.log('y:')
+  // console.log(y)
+
+  return (
+    <div
+      style={{
+        backgroundColor: 'rgba(0, 255, 0, 0.4)',
+        position: 'absolute',
+        left: x + 'px',
+        top: y + 'px',
+        width: width + 'px',
+        height: height + 'px',
+      }}
+    ></div>
+  )
 }
 
-export const AvailabilityGrid = () => {
-  const [position, setPosition] = useState({ x: 0, y: 0 })
-
-  // Debounced and throttled handler
-  const updatePosition = useCallback(
-    throttle(
-      debounce((offsetX: number, offsetY: number) => {
-        setPosition({ x: offsetX, y: offsetY })
-      }, 100), // Debounce: wait 100ms
-      200, // Throttle: at most every 200ms
-    ),
-    [],
-  )
-
-  const handleMouseMove = (event) => {
-    const { offsetX, offsetY } = event.nativeEvent
-    updatePosition(offsetX, offsetY)
-  }
-
-  useEffect(() => {
-    console.log('position:', positionToTime(position))
-  }, [position])
-
+export const AvailabilityGrid = ({ handleMouseMove, allAvailabilities }) => {
   return (
     <div className={styles.containerDiv}>
       <div className={styles.gridTimes}>
@@ -109,7 +113,7 @@ export const AvailabilityGrid = () => {
         </div>
       </div>
       <div>
-        <div className={styles.gridHeader}>
+        <div className={styles.gridHeader} style={{ zIndex: 1 }}>
           <div className={styles.gridHeaderElement}>Poniedziałek</div>
           <div className={styles.gridHeaderElement}>Wtorek</div>
           <div className={styles.gridHeaderElement}>Środa</div>
@@ -118,7 +122,9 @@ export const AvailabilityGrid = () => {
           <div className={styles.gridHeaderElement}>Sobota</div>
           <div className={styles.gridHeaderElement}>Niedziela</div>
         </div>
-        <div className={styles.gridDiv} onMouseMove={handleMouseMove}></div>
+        <div className={styles.gridDiv} onMouseMove={handleMouseMove} style={{ position: 'relative' }}>
+          {allAvailabilities.map((availability) => availabilityToRect(availability))}
+        </div>
       </div>
     </div>
   )
