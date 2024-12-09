@@ -10,11 +10,12 @@ const RolesTable = ({ allRoles }: Props) => {
       <Typography variant="h3" component="h3">
         Role
       </Typography>
+
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>some bs column</TableCell>
+              {/* <TableCell>some bs column</TableCell> */}
               <TableCell align="right">role</TableCell>
               <TableCell align="left">Description</TableCell>
             </TableRow>
@@ -23,9 +24,9 @@ const RolesTable = ({ allRoles }: Props) => {
             {allRoles &&
               allRoles.map((row) => (
                 <TableRow key={row.role}>
-                  <TableCell component="th" scope="row">
+                  {/* <TableCell component="th" scope="row">
                     {row.role}
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell align="right">{row.role}</TableCell>
                   <TableCell align="left">{row.description}</TableCell>
                 </TableRow>

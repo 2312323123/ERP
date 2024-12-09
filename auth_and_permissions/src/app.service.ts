@@ -231,12 +231,13 @@ export class AppService {
     // send email to user
     const to = accountCreationRequest.email;
     const subject = '[BEST ERP] Prośba o utworzenie konta została zaakceptowana.';
-    const text = `Cześć, <br/><br/>
-		Podaję Twoje dane do logowania do systemu do bestowania: <br/><br/>
-		Po prostu zaloguj się używając swojego konta Google. <br/><br/>
-		Znajduje się to tu: <a href="https://erp.best.krakow.pl">erp.best.krakow.pl</a> <br/><br/>
-		Pozdrawiamy<br/>
-		CT Rekrutacji<br/>`;
+    const text = `Cześć,
+Podaję Twoje dane do logowania do systemu ERP:
+Po prostu zaloguj się używając swojego konta Google.
+Znajduje się to tu: <a href="https://erp.best.krakow.pl">erp.best.krakow.pl</a>
+Pozdrawiamy
+Zespół IT Stowarzyszenia`;
+		// CT Rekrutacji<br/>`;
     await this.emailService.sendEmail(to, subject, text);
 
     // create user in db
@@ -263,11 +264,11 @@ export class AppService {
     const to = accountCreationRequest.email;
     const subject = '[BEST ERP] Prośba o utworzenie konta zaginęła.';
     const text = `Cześć, <br/><br/>
-		Wygląda na to, że dalej nie masz dostępu do systemu do bestowania. <br/><br/>
-    Jeśli uważasz, że to błąd, skontaktuj się z administratorem. <br/><br/>
-		Aplikacja znajduje się tu: <a href="https://erp.best.krakow.pl">erp.best.krakow.pl</a> <br/><br/>
-		Pozdrawiamy<br/>
-		CT Rekrutacji<br/>`;
+Wygląda na to, że dalej nie masz dostępu do systemu ERP. <br/><br/>
+Jeśli uważasz, że to błąd, skontaktuj się z administratorem. <br/><br/>
+Aplikacja znajduje się tu: <a href="https://erp.best.krakow.pl">erp.best.krakow.pl</a> <br/><br/>
+Pozdrawiamy<br/>
+CT Rekrutacji<br/>`;
     await this.emailService.sendEmail(to, subject, text);
 
     // return some 201

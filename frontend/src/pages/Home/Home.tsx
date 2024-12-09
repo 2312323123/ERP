@@ -78,6 +78,8 @@ const Home = () => {
           m: 2,
         }}
       >
+        <TakeMeToSurveyPhase />
+
         <Button
           sx={{ minHeight: '150px', fontSize: '1.1rem' }}
           variant="contained"
@@ -87,8 +89,6 @@ const Home = () => {
         >
           Rozmowy
         </Button>
-
-        <TakeMeToSurveyPhase />
 
         <OfficeStatusPanel />
 

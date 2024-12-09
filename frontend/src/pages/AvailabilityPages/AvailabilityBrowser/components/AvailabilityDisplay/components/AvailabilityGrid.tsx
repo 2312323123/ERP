@@ -41,6 +41,7 @@ const availabilityToRect = ({ start, end }: Props) => {
         top: y + 'px',
         width: width + 'px',
         height: height + 'px',
+        pointerEvents: 'none',
       }}
     ></div>
   )

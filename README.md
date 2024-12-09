@@ -301,6 +301,8 @@ hard resetting - prod (run from main folder): \
 
 `docker-compose -f docker-compose.yml -f docker-compose.prod.yml rm -svf db-psql; docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build db-psql`
 
+`docker-compose -f docker-compose.yml -f docker-compose.prod.yml rm -svf recruitment_survey_phase; docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build recruitment_survey_phase`
+
 If you changed just ports / or want to add newly created service to running docker compose: \
 `docker-compose up -d`
 
