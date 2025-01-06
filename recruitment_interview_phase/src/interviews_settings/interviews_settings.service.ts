@@ -15,7 +15,7 @@ export class InterviewsSettingsService {
     }
 
     // if table empty, create
-    const interviewsSetting = await this.interviewsSettingRepository.findOne({});
+    const interviewsSetting = (await this.interviewsSettingRepository.find({ take: 1 }))[0];
 
     if (!interviewsSetting) {
       await this.interviewsSettingRepository.save({ field_to_distinct_the_survey_2 });

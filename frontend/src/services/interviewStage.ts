@@ -84,13 +84,12 @@ export const interviewStageApi = createApi({
       }),
       invalidatesTags: [{ type: 'InterviewRecruitment', id: 'MAIN_PAGE' }],
     }),
-    setInterviewIdentificationField2: builder.mutation<void, { surveyUuid: string; value: string }>({
-      query: ({ surveyUuid, value }) => ({
+    setInterviewIdentificationField2: builder.mutation<void, string>({
+      query: (interviewIdentificationField2) => ({
         url: 'api/interviews/interview-identification-field-2',
         method: 'POST',
         body: {
-          survey_uuid: surveyUuid,
-          value,
+          interviewIdentificationField2,
         },
       }),
       invalidatesTags: [
