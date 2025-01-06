@@ -1,5 +1,5 @@
 import { Container, Box, Typography, TextField, Button, Alert, Snackbar } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import { useCreateRecruitmentMutation } from '../../../../services/erp'
 import CopyFrom from './components/CopyFrom'
 import {
@@ -21,7 +21,11 @@ const NewRecruitmentPanel = ({ isFirstRecruitment }: Props) => {
   const [touched, setTouched] = useState(false) // Track if the button was clicked
 
   const recruitmentToCopyFrom = useSelector(getRecruitmentToCopyFrom)
-  const handleCreateRecruitment = () => {
+  const handleCreateRecruitment = (event: FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>) => {
+    if (event) {
+      event.preventDefault()
+    }
+
     setTouched(true) // Mark the field as touched when the button is clicked
 
     if (!recruitmentName) {
@@ -52,30 +56,32 @@ const NewRecruitmentPanel = ({ isFirstRecruitment }: Props) => {
           Stwórz {isFirstRecruitment ? 'pierwszą' : 'nową'} rekrutację
         </Typography>
 
-        <TextField
-          fullWidth
-          label="Nazwa"
-          value={recruitmentName}
-          onChange={(e) => setRecruitmentName(e.target.value)}
-          variant="outlined"
-          margin="normal"
-          required
-          error={touched && !recruitmentName} // Show error only after button click
-          helperText={touched && !recruitmentName ? 'Nazwa jest wymagana' : ''}
-        />
+        <form onSubmit={handleCreateRecruitment}>
+          <TextField
+            fullWidth
+            label="Nazwa"
+            value={recruitmentName}
+            onChange={(e) => setRecruitmentName(e.target.value)}
+            variant="outlined"
+            margin="normal"
+            required
+            error={touched && !recruitmentName} // Show error only after button click
+            helperText={touched && !recruitmentName ? 'Nazwa jest wymagana' : ''}
+          />
 
-        <CopyFrom isFirstRecruitment={isFirstRecruitment} />
+          <CopyFrom isFirstRecruitment={isFirstRecruitment} />
 
-        <div>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleCreateRecruitment}
-            disabled={isLoading} // Disable if required field is empty
-          >
-            Stwórz
-          </Button>
-        </div>
+          <div>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleCreateRecruitment}
+              disabled={isLoading} // Disable if required field is empty
+            >
+              Stwórz
+            </Button>
+          </div>
+        </form>
 
         <Snackbar open={isError} autoHideDuration={6000} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
           <Alert severity="error" sx={{ width: '100%' }}>
