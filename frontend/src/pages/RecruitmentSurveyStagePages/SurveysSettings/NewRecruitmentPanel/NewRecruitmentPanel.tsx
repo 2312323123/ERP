@@ -21,7 +21,7 @@ const NewRecruitmentPanel = ({ isFirstRecruitment }: Props) => {
   const [touched, setTouched] = useState(false) // Track if the button was clicked
 
   const recruitmentToCopyFrom = useSelector(getRecruitmentToCopyFrom)
-  const handleCreateRecruitment = (event: FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>) => {
+  const handleCreateRecruitment = (event: FormEvent<HTMLFormElement>) => {
     if (event) {
       event.preventDefault()
     }
@@ -75,7 +75,7 @@ const NewRecruitmentPanel = ({ isFirstRecruitment }: Props) => {
             <Button
               variant="contained"
               color="primary"
-              onClick={handleCreateRecruitment}
+              type="submit"
               disabled={isLoading} // Disable if required field is empty
             >
               Stwórz
