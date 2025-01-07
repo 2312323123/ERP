@@ -28,7 +28,7 @@ const AccountCreationRequests = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Request</TableCell>
+              <TableCell>Prośba</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

@@ -31,9 +31,9 @@ const UsersWithTheirRoles = ({ allRolesRoles }: { allRolesRoles: string[] }) => 
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Request</TableCell>
-              <TableCell align="left">Owned roles</TableCell>
-              <TableCell align="left">Not owned roles</TableCell>
+              <TableCell>Użytkownik</TableCell>
+              <TableCell align="left">Posiadane role</TableCell>
+              <TableCell align="left">Nie posiadane role</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

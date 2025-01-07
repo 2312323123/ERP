@@ -16,8 +16,8 @@ const RolesTable = ({ allRoles }: Props) => {
           <TableHead>
             <TableRow>
               {/* <TableCell>some bs column</TableCell> */}
-              <TableCell align="right">role</TableCell>
-              <TableCell align="left">Description</TableCell>
+              <TableCell align="right">Rola</TableCell>
+              <TableCell align="left">Opis</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

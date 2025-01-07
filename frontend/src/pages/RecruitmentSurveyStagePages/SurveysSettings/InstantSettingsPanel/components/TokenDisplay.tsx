@@ -1,5 +1,5 @@
 import { VisibilityOff, Visibility, ContentCopy } from '@mui/icons-material'
-import { Box, Typography, TextField, InputAdornment, IconButton } from '@mui/material'
+import { Box, Typography, TextField, InputAdornment, IconButton, Link } from '@mui/material'
 import { useState } from 'react'
 import { useGetActiveRecruitmentQuery, useGetActiveRecruitmentSettingsQuery } from '../../../../../services/erp'
 
@@ -13,7 +13,7 @@ const TokenDisplay = () => {
 
   const handleCopyToClipboard = () => {
     navigator.clipboard.writeText(activeRecruitmentSettings?.token ?? '')
-    alert('Copied to clipboard!')
+    alert('Skopiowano do schowka!')
   }
 
   return (
@@ -41,6 +41,13 @@ const TokenDisplay = () => {
           },
         }}
       />
+
+      <Link
+        href="https://docs.google.com/document/d/1mGAQi4MeKBuy0oI1T9Nao1eIQkG7CfyB2zBxUSS-2NM/edit?usp=sharing"
+        target="_blank"
+      >
+        Instrukcja, jak sprawić, żeby przesyłanie ankiet działało
+      </Link>
     </Box>
   )
 }
