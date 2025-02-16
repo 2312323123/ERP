@@ -1,0 +1,7 @@
+db_postgres/db_data
+db_postgres/.env
+db_postgres/init-db/create_databases.sql
+pgadmin/pgadmin_data
+.env
+**/node_modules
+backups/*

@@ -1,0 +1,5 @@
+.ratContainer {
+  :global(.rat-TimeSlot_component) {
+    background-color: rgb(201 40 40 / 70%);
+  }
+}

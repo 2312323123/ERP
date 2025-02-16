@@ -1,0 +1,38 @@
+# this is the docker-compose file for production
+# to run:
+# docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --build -d
+
+# and if you want to just build it:
+# docker-compose -f docker-compose.yml -f docker-compose.prod.yml build
+# docker compose -f docker-compose.yml -f docker-compose.prod.yml build
+# and if you want then to just run it:
+# docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --no-build
+# docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --no-build
+services:
+  # backup_service:
+  #   build:
+  #     target: production # in Dockerfile
+
+  auth_and_permissions:
+    build:
+      target: production # in Dockerfile
+
+  recruitment_survey_phase:
+    build:
+      target: production # in Dockerfile
+
+  recruitment_interview_phase:
+    build:
+      target: production # in Dockerfile
+
+  newsletter:
+    build:
+      target: production # in Dockerfile
+
+  availability:
+    build:
+      target: production # in Dockerfile
+
+  frontend:
+    build:
+      target: production # in Dockerfile

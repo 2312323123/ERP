@@ -1,0 +1,7 @@
+.iconButtonContainer {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: min-content;
+  transform: translate(-50%, -51%);
+}
